@@ -1,0 +1,30 @@
+<%= form_for(@developer_session) do |f| %>
+
+  <h2>Log In</h2>
+
+  <% if @developer_session.errors.any? %>
+    <div id="error_explanation">
+      <h2>Could not log in:</h2>
+      <ul>
+      <% @developer_session.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Login" %>
+  </div>
+
+<% end %>

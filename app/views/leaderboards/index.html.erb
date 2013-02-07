@@ -1,0 +1,45 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %>  <span>/</span>  Leaderboards</h1>
+  <%= link_to new_app_leaderboard_path(@app), {:class => 'header_button'} do %>
+    <i class="icon-plus"></i> Add a New Leaderboard
+  <% end %>
+</div>
+
+<div class="one_col">
+  <table class="box">
+    <tr>
+      <th>Icon</th>
+      <th>Name</th>
+      <th>ID</th>
+      <th>In Development?</th>
+      <th></th>
+    </tr>
+
+  <% if @leaderboards.empty? %>
+    <tr>
+        <td colspan="4">There are no leaderboards for this app. <%= link_to 'Add a New Leaderboard', new_app_leaderboard_path(@app) %></td>
+    </tr>
+  <% else %>
+    <% @leaderboards.each do |leaderboard| %>
+      <tr>
+        <td class="icon"><%= image_tag leaderboard.icon.url, {:class=> 'leaderboard_icon'} if leaderboard.icon.file? %></td>
+        <td class="name"><%= link_to leaderboard.name, [@app, leaderboard] %></td>
+        <td class="id"><%= leaderboard.id %></td>
+        <td><%= leaderboard.in_development %></td>
+        <td class="manage">
+          <%= link_to edit_app_leaderboard_path(@app, leaderboard) do %>
+            <i class="icon-edit"></i> Edit
+          <% end %>
+          <%= link_to [@app, leaderboard], method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <i class="icon-remove"></i> Destroy
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+
+  <% end %>
+
+  </table>
+</div>
+
+<%# link_to 'Back', app_path(@app) %>

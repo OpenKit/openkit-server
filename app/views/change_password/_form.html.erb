@@ -1,0 +1,32 @@
+<%= form_for(@change_password, :url => change_password_index_path) do |f| %>
+  <% if @change_password.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@change_password.errors.count, "error") %> prohibited this change_password from being saved:</h2>
+
+      <ul>
+      <% @change_password.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :current_password %>
+    <%= f.password_field :current_password %>
+  </div>
+
+  <div class="field">
+    <%= f.label :new_password %>
+    <%= f.password_field :new_password %>
+  </div>
+
+  <div class="field">
+    <%= f.label :new_password_confirmation %>
+    <%= f.password_field :new_password_confirmation %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %> <%= link_to 'Cancel', developer_path(current_developer), {:class=>"cancel"} %>
+  </div>
+<% end %>

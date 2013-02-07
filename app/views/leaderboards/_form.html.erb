@@ -1,0 +1,48 @@
+<%= form_for([@app, @leaderboard]) do |f| %>
+  <% if @leaderboard.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@leaderboard.errors.count, "error") %> prohibited this leaderboard from being saved:</h2>
+
+      <ul>
+      <% @leaderboard.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :sort_type, "Leaderboard Type" %>
+    <%= f.select :sort_type, options_for_select([['Higher values are better', Leaderboard::HIGH_VALUE_SORT_TYPE],
+                                                ['Lower Values are Better', Leaderboard::LOW_VALUE_SORT_TYPE]],
+                                                @leaderboard.sort_type) %>
+  </div>
+
+
+  <div class="field">
+    <%# f.label :icon %>
+    <label for="leaderboard_icon">Icon <span>(100 x 100)</span></label>
+    <%= f.file_field :icon %>
+  </div>
+
+  <% if params[:action] == "edit" %>
+    <%# image_tag @leaderboard.icon.url if @leaderboard.icon.file? %>
+  <% end %>
+
+  <% if params[:action] == "edit" %>
+    <div class="field checkbox">
+      <%= f.check_box :in_development %>
+      <%= f.label :in_development %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %> <%= link_to 'Cancel', [@app, @leaderboard], {:class=> 'cancel'} %>
+  </div>
+
+<% end %>
