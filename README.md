@@ -1,11 +1,9 @@
 openkit-server
 ===============
 
-OpenKit Server
-
 OpenKit is currently in private beta. <a href="http://openkit.io/beta/">Sign up for a beta invite here!</a>
 
-First release of the OpenKit server is coming on Feb 6, 2013.
+This readme is looking pretty sparse - why don't you head on over to our <a href="https://github.com/OpenKit/openkit-ios">iOS</a> or <a href="https://github.com/OpenKit/openkit-android">Android</a> page to start?
 
 
 License
