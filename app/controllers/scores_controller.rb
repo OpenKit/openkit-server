@@ -9,7 +9,7 @@ class ScoresController < ApplicationController
   # GET /scores
   # GET /scores.json
   def index
-    since = params[:since] && Time.parse(params[:since])
+    since = params[:since] && Time.parse(params[:since].to_s)
     user_id = params[:user_id].to_i
     @scores = @leaderboard.top_scores_with_users_best(user_id, since)
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
@@ -23,7 +23,7 @@ class ScoresController < ApplicationController
   # GET /scores/1
   # GET /scores/1.json
   def show
-    @score = @leaderboard.scores.find(params[:id])
+    @score = @leaderboard.scores.find(params[:id].to_i)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -39,7 +39,7 @@ class ScoresController < ApplicationController
     err_message = "Please pass a user_id with your score."  if user_id.blank?
 
     if !err_message
-      user = user_id && current_app.users.find_by_id(user_id)
+      user = user_id && current_app.users.find_by_id(user_id.to_i)
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
@@ -62,7 +62,7 @@ class ScoresController < ApplicationController
   # DELETE /scores/1
   # DELETE /scores/1.json
   def destroy
-    @score = Score.find(params[:id])
+    @score = Score.find(params[:id].to_i)
     if current_developer.authorized_to_delete_score?(@score)
       @score.destroy
       redirect_to scores_url, notice: "Score was deleted."
@@ -76,7 +76,7 @@ class ScoresController < ApplicationController
     l_id1 = params[:score] && params[:score].delete(:leaderboard_id)
     l_id2 = params.delete(:leaderboard_id)
     if(leaderboard_id = l_id1 || l_id2)
-      @leaderboard = current_app.leaderboards.find_by_id(leaderboard_id)
+      @leaderboard = current_app.leaderboards.find_by_id(leaderboard_id.to_i)
     end
 
     unless @leaderboard

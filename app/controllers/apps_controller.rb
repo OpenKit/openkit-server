@@ -15,7 +15,7 @@ class AppsController < ApplicationController
   # GET /apps/1
   # GET /apps/1.json
   def show
-    @app = current_developer.apps.find(params[:id])
+    @app = current_developer.apps.find(params[:id].to_i)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -36,7 +36,7 @@ class AppsController < ApplicationController
 
   # GET /apps/1/edit
   def edit
-    @app = current_developer.apps.find(params[:id])
+    @app = current_developer.apps.find(params[:id].to_i)
   end
 
   # POST /apps
@@ -59,7 +59,7 @@ class AppsController < ApplicationController
   # PUT /apps/1
   # PUT /apps/1.json
   def update
-    @app = current_developer.apps.find(params[:id])
+    @app = current_developer.apps.find(params[:id].to_i)
 
     respond_to do |format|
       if @app.update_attributes(params[:app])
@@ -75,7 +75,7 @@ class AppsController < ApplicationController
   # DELETE /apps/1
   # DELETE /apps/1.json
   def destroy
-    @app = current_developer.apps.find(params[:id])
+    @app = current_developer.apps.find(params[:id].to_i)
     @app.destroy
 
     respond_to do |format|

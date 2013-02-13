@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     if content_type_json? && accepts_json?
       @access[:api] = {}
       if params[:app_key]
-        @access[:api][:app] = App.find_by_app_key(params[:app_key])
+        @access[:api][:app] = App.find_by_app_key(params[:app_key].to_s)
       end
     else
       @access[:dashboard] = {}

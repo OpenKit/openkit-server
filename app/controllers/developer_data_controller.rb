@@ -24,7 +24,7 @@ class DeveloperDataController < ApplicationController
   def show
     key = params.delete(:id).to_s
     err_out = ""
-    dev_data = get_interface(params[:user_id], err_out)
+    dev_data = get_interface(params[:user_id].to_i, err_out)
     if err_out.blank?
       x = dev_data.get(key)
     end
@@ -62,7 +62,7 @@ class DeveloperDataController < ApplicationController
   # POST /developer_data.json
   def create
     err_out = ""
-    dev_data = get_interface(params[:user_id], err_out)
+    dev_data = get_interface(params[:user_id].to_i, err_out)
     if err_out.blank?
       dev_data.set(params[:field_key], params[:field_value])
     end

@@ -17,7 +17,7 @@ class LeaderboardsController < ApplicationController
   # GET /leaderboards/1
   # GET /leaderboards/1.json
   def show
-    @leaderboard = @app.leaderboards.find(params[:id])
+    @leaderboard = @app.leaderboards.find(params[:id].to_i)
     @top_scores = @leaderboard.top_scores
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
 
@@ -40,7 +40,7 @@ class LeaderboardsController < ApplicationController
 
   # GET /leaderboards/1/edit
   def edit
-    @leaderboard = @app.leaderboards.find(params[:id])
+    @leaderboard = @app.leaderboards.find(params[:id].to_i)
   end
 
   # POST /leaderboards
@@ -63,7 +63,7 @@ class LeaderboardsController < ApplicationController
   # PUT /leaderboards/1.json
   def update
     params[:leaderboard].delete(:app_id)
-    @leaderboard = @app.leaderboards.find(params[:id])
+    @leaderboard = @app.leaderboards.find(params[:id].to_i)
 
     respond_to do |format|
       if @leaderboard.update_attributes(params[:leaderboard])
@@ -79,7 +79,7 @@ class LeaderboardsController < ApplicationController
   # DELETE /leaderboards/1
   # DELETE /leaderboards/1.json
   def destroy
-    @leaderboard = @app.leaderboards.find_by_id(params[:id])
+    @leaderboard = @app.leaderboards.find_by_id(params[:id].to_i)
     if @leaderboard
       @leaderboard.destroy
       notice = "Destroyed leaderboard."
@@ -98,7 +98,7 @@ class LeaderboardsController < ApplicationController
     if api_request?
       @app = current_app
     else
-      @app = current_developer.apps.find(params[:app_id])
+      @app = current_developer.apps.find(params[:app_id].to_s)
     end
 
     if !@app

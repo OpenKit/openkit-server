@@ -5,7 +5,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    @developer = Developer.find_by_email(params[:email])
+    @developer = Developer.find_by_email(params[:email].to_s)
     if @developer
       @developer.deliver_password_reset_instructions!
       flash[:notice] = "Instructions have been sent.  Please check your spam folder if you do not see an email from us within a few minutes."
@@ -20,8 +20,8 @@ class PasswordResetsController < ApplicationController
   end
 
   def update
-    @developer.password = params[:password]
-    @developer.password_confirmation = params[:password_confirmation]
+    @developer.password = params[:password].to_s
+    @developer.password_confirmation = params[:password_confirmation].to_s
 
     # Use @developer.save_without_session_maintenance instead if you
     # don't want the developer to be signed in automatically.
@@ -37,7 +37,7 @@ class PasswordResetsController < ApplicationController
   private
 
   def load_developer_using_perishable_token
-    @developer = Developer.find_using_perishable_token(params[:id])
+    @developer = Developer.find_using_perishable_token(params[:id].to_s)
     unless @developer
       flash[:error] = "We're sorry, but we could not locate your account"
       redirect_to root_url

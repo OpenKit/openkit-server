@@ -23,8 +23,8 @@ class App < ActiveRecord::Base
   # does, create a subscription to current_app for this user.  If it does not,
   # create both the user and the subscription.
   def find_or_create_subscribed_user(user_params)
-    u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id])) ||
-        (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id]))
+    u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_i)) ||
+        (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_i))
 
     if !u
       u = developer.users.create(user_params)

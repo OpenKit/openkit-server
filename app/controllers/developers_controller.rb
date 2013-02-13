@@ -44,7 +44,7 @@ class DevelopersController < ApplicationController
 
   private
   def set_developer
-    @developer = Developer.find(params[:id])
+    @developer = Developer.find(params[:id].to_i)
     unless @developer && (current_developer == @developer)
       render :text => "Forbidden", :status => :forbidden
     end
