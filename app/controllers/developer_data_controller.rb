@@ -1,7 +1,6 @@
 class DeveloperDataController < ApplicationController
-  before_filter :require_api_access,              :only => [:create]
-  before_filter :require_dashboard_access,        :only => [:index, :destroy]
-  before_filter :require_dashboard_or_api_access, :only => [:show]
+  before_filter :require_api_access,              :only => [:create, :show]
+  before_filter :require_dashboard_access,        :only => [:index]
 
   # All data for this developer
   def index
@@ -42,22 +41,6 @@ class DeveloperDataController < ApplicationController
     #end
   end
 
-  # GET /developer_data/new
-  # GET /developer_data/new.json
-  def new
-    @developer_data = OKData.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @developer_data }
-    end
-  end
-
-  # GET /developer_data/1/edit
-  def edit
-    @developer_data = OKData.find(params[:id])
-  end
-
   # POST /developer_data
   # POST /developer_data.json
   def create
@@ -72,45 +55,8 @@ class DeveloperDataController < ApplicationController
     else
       render status: :bad_request, json: {message: err_out}
     end
-
-#    respond_to do |format|
-#      if @developer_data.save
-#        format.html { redirect_to @developer_data, notice: 'Ok data was successfully created.' }
-#        format.json { render json: @developer_data, status: :created, location: @developer_data }
-#      else
-#        format.html { render action: "new" }
-#        format.json { render json: @developer_data.errors, status: :unprocessable_entity }
-#      end
-#    end
   end
 
-  # PUT /developer_data/1
-  # PUT /developer_data/1.json
-  def update
-    @developer_data = OKData.find(params[:id])
-
-    respond_to do |format|
-      if @developer_data.update_attributes(params[:developer_data])
-        format.html { redirect_to @developer_data, notice: 'Ok data was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @developer_data.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /developer_data/1
-  # DELETE /developer_data/1.json
-  def destroy
-    @developer_data = OKData.find(params[:id])
-    @developer_data.destroy
-
-    respond_to do |format|
-      format.html { redirect_to developer_data_url }
-      format.json { head :no_content }
-    end
-  end
 
   private
   def get_interface(user_id, err_out)

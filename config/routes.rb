@@ -23,8 +23,8 @@ OKDashboard::Application.routes.draw do
 
   match "developer_data",      to: "developer_data#create",  via: :post,   :as => :developer_data   # API only
   match "developer_data",      to: "developer_data#index",   via: :get,    :as => :developer_data   # Dashboard only
-  match "developer_data/:id",  to: "developer_data#destroy", via: :delete, :as => :developer_data   # Dashboard only
-  match "developer_data/:id",  to: "developer_data#show",    via: :get,    :as => :developer_data   # Dashboard and API
+  # match "developer_data/:id",  to: "developer_data#destroy", via: :delete, :as => :developer_data   # Dashboard only
+  match "developer_data/:id",  to: "developer_data#show",    via: :get,    :as => :developer_data   # API only
 
   root :to => 'apps#index'
 end
