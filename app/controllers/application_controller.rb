@@ -34,7 +34,11 @@ class ApplicationController < ActionController::Base
   end
 
   def require_api_access
-    unless current_app
+    if current_app
+      if !accepts_json?
+        render status: :bad_request, json: {message: %(Client must accept JSON.  Set the 'Accepts' header on your HTTP request to "application/json")}
+      end
+    else
       respond_to do |format|
         format.html {
           render status: :forbidden, text: "Requires API Access"
@@ -64,11 +68,9 @@ class ApplicationController < ActionController::Base
 
   def set_access
     @access = {}
-    if content_type_json? && accepts_json?
+    if params[:app_key]
       @access[:api] = {}
-      if params[:app_key]
-        @access[:api][:app] = App.find_by_app_key(params[:app_key].to_s)
-      end
+      @access[:api][:app] = App.find_by_app_key(params[:app_key].to_s)
     else
       @access[:dashboard] = {}
       @access[:dashboard][:developer] = current_developer_session && current_developer_session.record
