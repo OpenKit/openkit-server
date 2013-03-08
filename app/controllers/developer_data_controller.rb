@@ -29,7 +29,7 @@ class DeveloperDataController < ApplicationController
     end
 
     if err_out.blank?
-      json = "{#{key.to_json}: #{x}}"
+      json = "{#{key.to_json}:#{x}}"
       render json: json
     else
       render status: :bad_request, json: {message: err_out}
@@ -51,7 +51,7 @@ class DeveloperDataController < ApplicationController
     end
 
     if err_out.blank?
-      render status: :created, json: {ok: "yay"}
+      render json: {ok: "yay"}
     else
       render status: :bad_request, json: {message: err_out}
     end

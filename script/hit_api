@@ -5,7 +5,7 @@ require 'json'
 require 'pp'
 require 'debugger'
 
-APP_KEY = "ZGa5rreNauqPLHsLY6Yz"
+APP_KEY = "QBQ7ebzX3SymLZPQxbBR"
 
 def yes?(x)
   print x + " (y/n) "
