@@ -8,8 +8,9 @@ class ChangePasswordController < ApplicationController
 
   # POST /change_password
   def create
-    @change_password = ChangePassword.new(params[:change_password])
-    if @change_password.update_for_developer(current_developer)
+    params.delete(:developer)
+    @change_password = ChangePassword.new(params[:change_password].merge(developer: current_developer))
+    if @change_password.save
       redirect_to developer_path(current_developer), notice: 'Change password was successfully created.'
     else
       render action: "new"

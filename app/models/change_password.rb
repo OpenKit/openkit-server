@@ -1,6 +1,7 @@
 class ChangePassword
   include ActiveModel::Validations
 
+  attr_accessor :developer
   attr_accessor :current_password
   attr_accessor :new_password, :new_password_confirmation
 
@@ -25,8 +26,7 @@ class ChangePassword
     "#<#{ self.to_s} #{ self.attributes.collect{ |e| ":#{ e }" }.join(', ') }>"
   end
 
-  def update_for_developer(developer)
-    @developer = developer
+  def save
     if self.valid?
       @developer.password = new_password
       @developer.password_confirmation = new_password_confirmation
@@ -42,7 +42,7 @@ class ChangePassword
   private
   def current_password_matches
     devSession = DeveloperSession.new({:email => @developer.email,
-                                      :password => current_password})
+                                      :password => @current_password})
     unless devSession.valid?
       errors.add(:current_password, "is incorrect.")
     end
