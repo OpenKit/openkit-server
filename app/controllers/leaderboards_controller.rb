@@ -4,8 +4,7 @@ class LeaderboardsController < ApplicationController
   before_filter :set_app
 
 
-  # GET /leaderboards
-  # GET /leaderboards.json
+  # API
   def index
     @leaderboards = @app.leaderboards
     respond_to do |format|
@@ -14,10 +13,10 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # GET /leaderboards/1
-  # GET /leaderboards/1.json
+  # Dash only
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
+    debugger
     @top_scores = @leaderboard.top_scores
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
 
@@ -27,8 +26,7 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # GET /leaderboards/new
-  # GET /leaderboards/new.json
+  # Dash only
   def new
     @leaderboard = @app.leaderboards.build
 
@@ -38,13 +36,12 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # GET /leaderboards/1/edit
+  # Dash only
   def edit
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
   end
 
-  # POST /leaderboards
-  # POST /leaderboards.json
+  # Dash only
   def create
     @leaderboard = @app.leaderboards.new(params[:leaderboard])
 
@@ -59,8 +56,7 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # PUT /leaderboards/1
-  # PUT /leaderboards/1.json
+  # Dash only
   def update
     params[:leaderboard].delete(:app_id)
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
@@ -76,8 +72,7 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # DELETE /leaderboards/1
-  # DELETE /leaderboards/1.json
+  # Dash only
   def destroy
     @leaderboard = @app.leaderboards.find_by_id(params[:id].to_i)
     if @leaderboard

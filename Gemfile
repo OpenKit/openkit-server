@@ -23,6 +23,11 @@ end
 
 group :test do
   gem 'sqlite3'
+  gem 'mocha', :require => false
+end
+
+group :development, :test do
+  gem 'debugger', '1.2.2'
 end
 
 # Gems used only for assets and not required

@@ -79,7 +79,10 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    metaclass (0.0.1)
     mime-types (1.21)
+    mocha (0.13.3)
+      metaclass (~> 0.0.1)
     multi_json (1.7.1)
     mysql2 (0.3.11)
     paperclip (3.3.1)
@@ -158,6 +161,7 @@ DEPENDENCIES
   friendly_id (= 4.0.9)
   jquery-rails
   json (= 1.7.7)
+  mocha
   mysql2 (= 0.3.11)
   paperclip (= 3.3.1)
   rails (= 3.2.13)

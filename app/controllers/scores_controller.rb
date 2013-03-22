@@ -43,19 +43,23 @@ class ScoresController < ApplicationController
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
-
     if !err_message
       @score = @leaderboard.scores.build(params[:score])
       @score.user = user
-      if !@score.save
-        err_message = "Score could not be created"
-      end
+      @score = Score.handle_new_score(@score)
     end
 
-    if !err_message
-      render status: :created, json: @score, location: @score
-    else
+    if err_message
       render status: :bad_request, json: {message: err_message}
+    else
+      if @score.errors.empty?
+        render json: @score, location: @score
+      else
+        # This is a little misleading, what we are most likely saying is that a
+        # new high score wasn't posted because there was already a better score in our db.
+        # Need to work out customer requirements for how to handle.
+        render json: {:errors => @score.errors.full_messages}
+      end
     end
   end
 

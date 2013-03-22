@@ -30,6 +30,15 @@ class Leaderboard < ActiveRecord::Base
 
 
   public
+
+  def is_high_value?
+    sort_type == HIGH_VALUE_SORT_TYPE
+  end
+
+  def is_low_value?
+    sort_type == LOW_VALUE_SORT_TYPE
+  end
+
   def player_count
     scores.count(:user_id, :distinct => true)
   end
@@ -40,27 +49,12 @@ class Leaderboard < ActiveRecord::Base
 
   # Damn, if we have a better way to set rank this would be chainable :/
   def top_n_scores(n, offset, since)
-    t1 = Arel::Table.new :scores
-    t2 = Arel::Table.new :scores
-
-    n_extreme = t2.project("leaderboard_id, user_id, #{extrema_func_name}(value) as extrema")
-    n_extreme.where(t2[:leaderboard_id].eq(id))
-    n_extreme.where(t2[:created_at].gteq(since)) if since
-    n_extreme.group("user_id")
-    n_extreme.order("extrema #{order_keyword}")
-    n_extreme.take(n)
-    n_extreme.skip(offset)
-    n_extreme = n_extreme.as("n_extreme")
-
-    join = Arel::Nodes::InnerJoin.new(n_extreme, Arel::Nodes::On.new(t1[:leaderboard_id].eq(n_extreme[:leaderboard_id]) \
-      .and(t1[:user_id].eq(n_extreme[:user_id])) \
-      .and(t1[:value].eq(n_extreme[:extrema]))))
-
-    x = Score.select("*").joins(join)
+    x = Score.where(leaderboard_id: id).order("value #{order_keyword}").offset(offset).take(n)
     x.each_with_index {|score, i| score.rank = i + 1}
   end
 
   def top_score_for_user(user_id, since = nil)
+    Score.where(:leaderboard_id => id, :user_id => user_id)
     score = scores.where({:user_id => user_id}).since(since).order("value #{order_keyword}").first(:include => :user)
     if score
       table = Arel::Table.new(:scores)
