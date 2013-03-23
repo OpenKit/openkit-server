@@ -16,7 +16,6 @@ class LeaderboardsController < ApplicationController
   # Dash only
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    debugger
     @top_scores = @leaderboard.top_scores
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
 
