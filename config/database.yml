@@ -13,10 +13,11 @@ development:
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
-  pool: 5
-  timeout: 5000
+  adapter: mysql2
+  encoding: utf8
+  database: leaderboard_test 
+  host: 127.0.0.1 
+  port: 3306
 
 production:
   adapter: mysql2

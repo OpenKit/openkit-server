@@ -1,5 +1,6 @@
 require 'random_gen'
 require 'ok_redis'
+require 'reaper'
 
 
 module ActiveModel
@@ -26,3 +27,7 @@ module ActiveModel
     end
   end
 end
+
+# BestScore.cached_count = BestScore.count
+# BestScore1.cached_count = BestScore1.count
+# BestScore7.cached_count = BestScore7.count

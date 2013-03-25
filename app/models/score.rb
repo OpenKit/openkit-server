@@ -4,6 +4,9 @@ class Score < ActiveRecord::Base
   attr_accessible :value
   attr_accessor :rank
 
+  @@max_best = 100
+  @@auto_insert_threshold = 80
+
   module Scopes
     def since(t = nil)
       t ? where("updated_at >= :updated_at", {:updated_at => t}) : scoped
@@ -13,18 +16,17 @@ class Score < ActiveRecord::Base
 
   class << self
     def handle_new_score(score)
-      old = Score.find_by_user_id_and_leaderboard_id(score.user_id, score.leaderboard_id)
-      if old
-        if score.is_better_than?(old)
-          old.update_attributes(value: score.value)
-          return old   # The old switcheroo
-        else
-          score.errors.add(:score, "is not better than previously submitted score")
-          return score
-        end
-      else
-        score.save
-        return score
+      # Save in scores table
+      score.save
+
+      # Handle best scores
+      if BestScore1.cached_count <= @@max_best
+
+      end
+
+      if score.value > BestScore1.minimum
+        BestScore1.create_from_score(score)
+        if BestScore1.count >
       end
     end
   end
