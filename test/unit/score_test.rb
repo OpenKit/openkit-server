@@ -56,62 +56,59 @@ class ScoreTest < ActiveSupport::TestCase
     s1 = score_helper(@hs_leaderboard, @user, 50)
     s2 = score_helper(@hs_leaderboard, @user, 100)
     s3 = score_helper(@hs_leaderboard, @user, 150)
+    s1.save
+    s2.save
+    s3.save
     
     # Let's put 50 in the 1 day, 100 in the 7 day, and 150 all time.
-    BestScore1.create_from_score(s1)
-    BestScore7.create_from_score(s2)
-    BestScoreAll.create_from_score(s3)
+    BestScore1.create!(score_id: 1, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 50)
+    BestScore7.create!(score_id: 2, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 100)
+    BestScore.create!(score_id: 3, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 150)
     
     # Now let's create a new score of 75 and handle it.
     s4 = score_helper(@hs_leaderboard, @user, 75)
     Score.handle_new_score(s4)
     
-    # Make sure 1 day is updated
-    assert BestScore1.find_by_score_id(s4.id)
-    assert !BestScore1.find_by_score_id(s1.id)
     
-    # Make sure 7 day and all time are not updated
-    assert !BestScore7.find_by_score_id(s1.id)
-    assert !BestScoreAll.find_by_score_id(s1.id)
+    assert_equal 75, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 100, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 150, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    
     
     # Now let's create a new score of 125 and handle it.
     s5 = score_helper(@hs_leaderboard, @user, 125)
     Score.handle_new_score(s5)
-    assert BestScore1.find_by_score_id(s5.id)
-    assert !BestScore1.find_by_score_id(s4.id)
-    assert BestScore7.find_by_score_id(s5.id)
-    assert !BestScore7.find_by_score_id(s2.id)
-    assert !BestScoreAll.find_by_score_id(s5.id)
+    assert_equal 125, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 125, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 150, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     
     # Now 200
     s6 = score_helper(@hs_leaderboard, @user, 200)
     Score.handle_new_score(s6)
-    assert BestScore1.find_by_score_id(s6.id)
-    assert !BestScore1.find_by_score_id(s5.id)
-    assert BestScore7.find_by_score_id(s6.id)
-    assert !BestScore7.find_by_score_id(s5.id)
-    assert BestScoreAll.find_by_score_id(s6.id)
-    assert !BestScoreAll.find_by_score_id(s3.id)
+    assert_equal 200, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 200, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    assert_equal 200, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
   end
   
   test "With full best tables, a new best should pop lowest score out and insert new score" do
-    max_entries = 100
+    max_entries = BestScoreBase::MAX_SCORE_COUNT
     bulk_value = 50
     
     # Do bulk insert into best. 
     arr = Array.new(max_entries - 1, "(#{@hs_leaderboard.id}, #{@user.id}, #{bulk_value}, '2013-01-01 04:00:00')")
-    sql = "INSERT INTO scores (leaderboard_id, user_id, value, created_at) VALUES #{arr.join(", ")}"
+    sql = "INSERT INTO best_scores_1 (leaderboard_id, user_id, value, created_at) VALUES #{arr.join(", ")}"
     BestScore1.connection.execute sql
     
     # create a score that is lower than bulk_value
-    low = BestScore1.create!(leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: bulk_value - 10, score_id: 1)
+    low = score_helper(@hs_leaderboard, @user, bulk_value - 10)
+    Score.handle_new_score(low)
     
     # now handle a score post that is higher than the current low score
-    s1 = score_helper(@hs_leaderboard, @user, 125)
-    Score.handle_new_score(s1)
+    high = score_helper(@hs_leaderboard, @user, bulk_value + 10)
+    Score.handle_new_score(high)
     
-    assert BestScore1.find(s1.id)
-    assert !BestScore1.find(low.id)
+    assert BestScore1.find_by_score_id(high.id)
+    assert !BestScore1.find_by_score_id(low.id)
   end
   
   test "daily scores do fear the reaper" do 
@@ -123,21 +120,17 @@ class ScoreTest < ActiveSupport::TestCase
     }
     
     lives = create_daily.()
-    lives.update_attributes(:created_at => lives_time)
+    lives.created_at = lives_time
+    lives.save
     
     dies = create_daily.()
-    dies.update_attributes(:created_at => dies_time)
+    dies.created_at = dies_time
+    dies.save
     
     Reaper.reap
     
-    assert BestScore1.find(lives.id)
-    assert !BestScore1.find(dies.id)
-  end
-  
-  test "best scores should be saved in utc" do
-    score = BestScore.create!(leaderboard_id: 1, user_id: 1, value: 1, score_id: 1)
-    score.update_attributes(created_at: Time.parse("2013-03-23 15:00:00 -0700"))
-    assert_equal "2013-03-23 22:00:00", BestScore.find(score.id).attributes_before_type_cast["created_at"]
+    assert BestScore1.find_by_id(lives.id)
+    assert !BestScore1.find_by_id(dies.id)
   end
   
   test "weekly scores do fear the reaper" do
@@ -149,15 +142,25 @@ class ScoreTest < ActiveSupport::TestCase
     }
     
     lives = create_weekly.()
-    lives.update_attributes(:created_at => lives_time)
+    lives.created_at = lives_time
+    lives.save
     
     dies = create_weekly.()
-    dies.update_attributes(:created_at => dies_time)
+    dies.created_at = dies_time
+    dies.save
 
     Reaper.reap
     
-    assert BestScore7.find(lives.id)
-    assert !BestScore7.find(dies.id)
+    assert BestScore7.find_by_id(lives.id)
+    assert !BestScore7.find_by_id(dies.id)
+  end
+  
+  test "best scores should be saved in utc" do
+    best = BestScore.create!(leaderboard_id: 1, user_id: 1, value: 1, score_id: 1)
+    best.created_at = Time.parse("2013-03-23 15:00:00 -0700")
+    best.save
+    created_at_str = BestScore.find_by_id(best.id).attributes_before_type_cast["created_at"].to_s
+    assert "2013-03-23 22:00:00 UTC", created_at_str
   end
   
   test "row count in best tables should be approximate and cached" do

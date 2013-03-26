@@ -1,6 +1,6 @@
 module BestScoreBase
   MAX_SCORE_COUNT = 3
-  
+
   # Indices for cache.
   SCORE_COUNT     = 0
   MIN_VALUE       = 1
