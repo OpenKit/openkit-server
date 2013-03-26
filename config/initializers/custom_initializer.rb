@@ -28,6 +28,9 @@ module ActiveModel
   end
 end
 
-# BestScore.cached_count = BestScore.count
-# BestScore1.cached_count = BestScore1.count
-# BestScore7.cached_count = BestScore7.count
+begin
+  BestScore.refresh_cache_all
+  BestScore1.refresh_cache_all
+  BestScore7.refresh_cache_all
+rescue
+end

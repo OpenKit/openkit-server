@@ -3,9 +3,9 @@ class Score < ActiveRecord::Base
   belongs_to :leaderboard
   attr_accessible :value
   attr_accessor :rank
-
-  @@max_best = 100
-  @@auto_insert_threshold = 80
+  
+  # TODO: REMOVE ME: 
+  attr_accessible :leaderboard_id, :user_id
 
   module Scopes
     def since(t = nil)
@@ -15,18 +15,35 @@ class Score < ActiveRecord::Base
   extend Scopes
 
   class << self
+    def create_dummy1
+      s = new(:leaderboard_id => 1, :user_id => 1, :value => 100.0)
+      handle_new_score(s)
+      s
+    end
+    
+    def create_dummy2
+      s = new(:leaderboard_id => 1, :user_id => 1, :value => 110.0)
+      handle_new_score(s)
+      s
+    end
+    
+    def create_dummy3
+      s = new(:leaderboard_id => 1, :user_id => 1, :value => 90.0)
+      handle_new_score(s)
+      s
+    end
+    
+    def create_dummy4
+      s = new(:leaderboard_id => 1, :user_id => 1, :value => 130.0)
+      handle_new_score(s)
+      s
+    end
+    
     def handle_new_score(score)
-      # Save in scores table
-      score.save
-
-      # Handle best scores
-      if BestScore1.cached_count <= @@max_best
-
-      end
-
-      if score.value > BestScore1.minimum
-        BestScore1.create_from_score(score)
-        if BestScore1.count >
+      if score.save
+        BestScore1.handle(score)
+        BestScore7.handle(score)
+        BestScore.handle(score)
       end
     end
   end

@@ -45,6 +45,9 @@ class ScoresController < ApplicationController
     err_message = "User with that ID is not subscribed to this app."  if !user
     if !err_message
       @score = @leaderboard.scores.build(params[:score])
+      if @leaderboard.is_low_value?
+        @score.value *= -1
+      end
       @score.user = user
       @score = Score.handle_new_score(@score)
     end
