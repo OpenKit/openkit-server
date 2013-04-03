@@ -8,7 +8,7 @@ class App < ActiveRecord::Base
   attr_accessible :name, :icon
 
   belongs_to :developer
-  has_many :leaderboards
+  has_many :leaderboards, :dependent => :destroy
   has_many :subscriptions
   has_many :users, :through => :subscriptions
 
