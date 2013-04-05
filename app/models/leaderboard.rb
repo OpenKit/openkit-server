@@ -23,7 +23,7 @@ class Leaderboard < ActiveRecord::Base
 
   # Don't store HighValueLeaderboard and LowValueLeaderboard images in different places.
   ATTACHMENT_URL = "/system/leaderboards/:attachment/:id_partition/:style/:filename"
-  has_attached_file :icon, url: ATTACHMENT_URL
+  has_attached_file :icon, url: ATTACHMENT_URL, :default_url => '/assets/leaderboard_icon.png'
 
   HIGH_VALUE_SORT_TYPE = "HighValue"
   LOW_VALUE_SORT_TYPE = "LowValue"

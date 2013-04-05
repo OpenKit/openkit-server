@@ -20,7 +20,7 @@
 
     <% @apps.each do |app| %>
       <tr>
-        <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'} if app.icon.file? %></td>
+        <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
         <td class="name"><%= link_to app.name, app %></td>
         <td class="manage">
           <%= link_to edit_app_path(app) do %>
