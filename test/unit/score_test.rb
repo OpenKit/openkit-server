@@ -163,14 +163,14 @@ class ScoreTest < ActiveSupport::TestCase
     assert "2013-03-23 22:00:00 UTC", created_at_str
   end
   
-  test "row count in best tables should be approximate and cached" do
+  test "user should only have one score in best leaderboards" do
+    best = BestScore.create!(leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 10, score_id: 1)
+    s1 = score_helper(@hs_leaderboard, @user, 20)
+    Score.handle_new_score(s1)
     
+    assert_equal 1, BestScore.where(leaderboard_id: @hs_leaderboard.id, user_id: @user.id).count
+    assert_equal 20, BestScore.where(leaderboard_id: @hs_leaderboard.id, user_id: @user.id).first.value
   end
-  
-  test "row count should resync with db every 5 runs of the reaper" do
-    
-  end
-  
   
 
   # test "high score all time overwriting" do
