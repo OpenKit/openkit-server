@@ -19,7 +19,7 @@ class ScoresController < ApplicationController
       format.json { render json: @scores.to_json(:include => :user, :methods => :rank) }
     end
   end
-
+  
   # GET /scores/1
   # GET /scores/1.json
   def show
@@ -49,7 +49,13 @@ class ScoresController < ApplicationController
         @score.value *= -1
       end
       @score.user = user
-      @score = Score.handle_new_score(@score)
+      Score.handle_new_score(@score)
+    end
+    
+    logger.info("The Score is #{@score}")
+    
+    if(@score == nil)
+      logger.info("The score is null!")
     end
 
     if err_message

@@ -9,6 +9,7 @@ module BestScoreBase
   def self.included(base)
     base.attr_accessible :leaderboard_id, :user_id, :value, :score_id
     base.after_destroy :update_cache_after_destroy
+    base.belongs_to :user
     base.send :extend,  ClassMethods
     base.send :include, InstanceMethods
   end
