@@ -88,14 +88,17 @@ class ScoreTest < ActiveSupport::TestCase
     assert_equal 200, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 200, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 200, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
+    
   end
+  
   
   test "With full best tables, a new best should pop lowest score out and insert new score" do
     max_entries = BestScoreBase::MAX_SCORE_COUNT
     bulk_value = 50
     
+    
     # Do bulk insert into best. 
-    arr = Array.new(max_entries - 1, "(#{@hs_leaderboard.id}, #{@user.id}, #{bulk_value}, '2013-01-01 04:00:00')")
+    arr = Array.new(max_entries - 1, "(#{@hs_leaderboard.id}, #{@user.id}, #{bulk_value}, '2013-01-01 04:00:00')")  
     sql = "INSERT INTO best_scores_1 (leaderboard_id, user_id, value, created_at) VALUES #{arr.join(", ")}"
     BestScore1.connection.execute sql
     

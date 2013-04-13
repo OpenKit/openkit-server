@@ -1,7 +1,7 @@
 class Score < ActiveRecord::Base
   belongs_to :user
   belongs_to :leaderboard
-  attr_accessible :value
+  attr_accessible :value, :metadata
   attr_accessor :rank
   
   # TODO: REMOVE ME: 
@@ -14,31 +14,7 @@ class Score < ActiveRecord::Base
   end
   extend Scopes
 
-  class << self
-    def create_dummy1
-      s = new(:leaderboard_id => 1, :user_id => 1, :value => 100.0)
-      handle_new_score(s)
-      s
-    end
-    
-    def create_dummy2
-      s = new(:leaderboard_id => 1, :user_id => 1, :value => 110.0)
-      handle_new_score(s)
-      s
-    end
-    
-    def create_dummy3
-      s = new(:leaderboard_id => 1, :user_id => 1, :value => 90.0)
-      handle_new_score(s)
-      s
-    end
-    
-    def create_dummy4
-      s = new(:leaderboard_id => 1, :user_id => 1, :value => 130.0)
-      handle_new_score(s)
-      s
-    end
-    
+  class << self    
     def handle_new_score(score)
       if score.save
         BestScore1.handle(score)

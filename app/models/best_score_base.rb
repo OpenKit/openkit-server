@@ -7,7 +7,7 @@ module BestScoreBase
   MIN_VALUE_DIRTY = 2
   
   def self.included(base)
-    base.attr_accessible :leaderboard_id, :user_id, :value, :score_id
+    base.attr_accessible :leaderboard_id, :user_id, :value, :score_id, :metadata
     base.after_destroy :update_cache_after_destroy
     base.belongs_to :user
     base.send :extend,  ClassMethods
@@ -42,8 +42,15 @@ module BestScoreBase
     
     def create_from_score(score)
       l_id = score.leaderboard_id
+      # if this is the first score for l_id, create the cache for this leaderboard
       c = cache[l_id] || refresh_cache(l_id)
-      if create(leaderboard_id: l_id, user_id: score.user_id, score_id: score.id, value: score.value)
+      
+      score = where(leaderboard_id: l_id, user_id: score.user_id)
+      if(score)
+        score.destroy
+      end
+      
+      if create(leaderboard_id: l_id, user_id: score.user_id, score_id: score.id, value: score.value, metadata: score.metadata)
         # If minimum isn't dirty, we know exactly what the minimum is.  The new score may be lower than
         # the current minimum, how?  Because the reaper kills scores that are no longer valid (out of 
         # time range), and when that happens we stuff the next scores automatically into the best table

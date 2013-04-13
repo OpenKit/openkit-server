@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130322231927) do
+ActiveRecord::Schema.define(:version => 20130412231348) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130322231927) do
     t.integer  "score_id",       :null => false
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
+    t.integer  "metadata"
   end
 
   add_index "best_scores", ["created_at"], :name => "index_best_scores_on_created_at"
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(:version => 20130322231927) do
     t.integer  "score_id",       :null => false
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
+    t.integer  "metadata"
   end
 
   add_index "best_scores_1", ["created_at"], :name => "index_best_scores_1_on_created_at"
@@ -58,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20130322231927) do
     t.integer  "score_id",       :null => false
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
+    t.integer  "metadata"
   end
 
   add_index "best_scores_7", ["created_at"], :name => "index_best_scores_7_on_created_at"
@@ -113,6 +116,7 @@ ActiveRecord::Schema.define(:version => 20130322231927) do
     t.integer  "leaderboard_id"
     t.datetime "created_at",     :null => false
     t.string   "display_value"
+    t.integer  "metadata"
   end
 
   add_index "scores", ["leaderboard_id", "user_id"], :name => "index_scores_on_leaderboard_id_and_user_id"
