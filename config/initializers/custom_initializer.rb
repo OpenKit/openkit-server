@@ -1,5 +1,6 @@
 require 'random_gen'
 require 'ok_redis'
+require 'reaper'
 
 
 module ActiveModel
@@ -25,4 +26,11 @@ module ActiveModel
       end
     end
   end
+end
+
+begin
+  BestScore.refresh_cache_all
+  BestScore1.refresh_cache_all
+  BestScore7.refresh_cache_all
+rescue
 end

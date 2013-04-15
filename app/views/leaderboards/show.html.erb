@@ -24,6 +24,7 @@
   <tr>
     <th>Nick</th>
     <th>Value</th>
+	<th>Metadata</th>
     <th>Scored at</th>
   </tr>
 
@@ -37,8 +38,9 @@
       <tr>
         <td><%= score.user.nick %></td>
         <td><%= score.value %></td>
+		<td><%= score.metadata %></td>
         <td><%= score.created_at %></td>
-      </tr>
+    </tr>
     <% end %>
 
   <% end %>

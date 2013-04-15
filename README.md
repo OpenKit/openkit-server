@@ -5,6 +5,10 @@ OpenKit is currently in private beta. <a href="http://openkit.io/beta/">Sign up 
 
 This readme is looking pretty sparse - why don't you head on over to our <a href="https://github.com/OpenKit/openkit-ios">iOS</a> or <a href="https://github.com/OpenKit/openkit-android">Android</a> page to start?
 
+Start delayed _ job locally with:
+```
+	rake jobs:work
+```
 
 License
 -------

@@ -10,7 +10,11 @@ OKDashboard::Application.routes.draw do
 
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
+  
+  #Scores custom actions, all API only
+  resources :best_scores, :only => [:index]
 
+   
   # If you are running in development, modify the line below to include :new and :create actions,
   # then uncomment the link to new_developer_path in app/views/developer_sessions/new.html.erb
   resources :developers,          :only => [:edit, :update, :show]

@@ -8,7 +8,7 @@ class App < ActiveRecord::Base
   attr_accessible :name, :icon
 
   belongs_to :developer
-  has_many :leaderboards
+  has_many :leaderboards, :dependent => :destroy
   has_many :subscriptions
   has_many :users, :through => :subscriptions
 
@@ -16,7 +16,7 @@ class App < ActiveRecord::Base
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => :developer_id
-  has_attached_file :icon
+  has_attached_file :icon, :default_url => '/assets/app_icon.png'
 
 
   # First, see if the user already exists for the developer of this app. If it
