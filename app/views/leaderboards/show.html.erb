@@ -23,6 +23,7 @@
 <table class="box left">
   <tr>
     <th>Nick</th>
+	<th>Display String</th>
     <th>Value</th>
 	<th>Metadata</th>
     <th>Scored at</th>
@@ -37,6 +38,7 @@
     <% @top_scores.each do |score| %>
       <tr>
         <td><%= score.user.nick %></td>
+		<td><%= score.display_string %></td>
         <td><%= score.value %></td>
 		<td><%= score.metadata %></td>
         <td><%= score.created_at %></td>

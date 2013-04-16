@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130412231348) do
+ActiveRecord::Schema.define(:version => 20130416004410) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20130412231348) do
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
     t.integer  "metadata"
+    t.string   "display_string"
   end
 
   add_index "best_scores", ["created_at"], :name => "index_best_scores_on_created_at"
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20130412231348) do
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
     t.integer  "metadata"
+    t.string   "display_string"
   end
 
   add_index "best_scores_1", ["created_at"], :name => "index_best_scores_1_on_created_at"
@@ -61,6 +63,7 @@ ActiveRecord::Schema.define(:version => 20130412231348) do
     t.integer  "value",          :null => false
     t.datetime "created_at",     :null => false
     t.integer  "metadata"
+    t.string   "display_string"
   end
 
   add_index "best_scores_7", ["created_at"], :name => "index_best_scores_7_on_created_at"
@@ -115,7 +118,7 @@ ActiveRecord::Schema.define(:version => 20130412231348) do
     t.integer  "user_id"
     t.integer  "leaderboard_id"
     t.datetime "created_at",     :null => false
-    t.string   "display_value"
+    t.string   "display_string"
     t.integer  "metadata"
   end
 

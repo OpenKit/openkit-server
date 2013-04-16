@@ -1,7 +1,7 @@
 class Score < ActiveRecord::Base
   belongs_to :user
   belongs_to :leaderboard
-  attr_accessible :value, :metadata
+  attr_accessible :value, :metadata, :display_string
   attr_accessor :rank
   
   # TODO: REMOVE ME: 

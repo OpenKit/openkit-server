@@ -7,7 +7,7 @@ module BestScoreBase
   MIN_VALUE_DIRTY = 2
   
   def self.included(base)
-    base.attr_accessible :leaderboard_id, :user_id, :value, :score_id, :metadata
+    base.attr_accessible :leaderboard_id, :user_id, :value, :score_id, :metadata, :display_string
     base.after_destroy :update_cache_after_destroy
     base.belongs_to :user
     base.send :extend,  ClassMethods
