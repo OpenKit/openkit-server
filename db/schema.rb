@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130416004410) do
+ActiveRecord::Schema.define(:version => 20130416225733) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -31,11 +31,11 @@ ActiveRecord::Schema.define(:version => 20130416004410) do
   add_index "apps", ["developer_id"], :name => "index_apps_on_developer_id"
 
   create_table "best_scores", :force => true do |t|
-    t.integer  "leaderboard_id", :null => false
-    t.integer  "user_id",        :null => false
-    t.integer  "score_id",       :null => false
-    t.integer  "value",          :null => false
-    t.datetime "created_at",     :null => false
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
     t.integer  "metadata"
     t.string   "display_string"
   end
@@ -44,11 +44,11 @@ ActiveRecord::Schema.define(:version => 20130416004410) do
   add_index "best_scores", ["leaderboard_id"], :name => "index_best_scores_on_leaderboard_id"
 
   create_table "best_scores_1", :force => true do |t|
-    t.integer  "leaderboard_id", :null => false
-    t.integer  "user_id",        :null => false
-    t.integer  "score_id",       :null => false
-    t.integer  "value",          :null => false
-    t.datetime "created_at",     :null => false
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
     t.integer  "metadata"
     t.string   "display_string"
   end
@@ -57,11 +57,11 @@ ActiveRecord::Schema.define(:version => 20130416004410) do
   add_index "best_scores_1", ["leaderboard_id"], :name => "index_best_scores_1_on_leaderboard_id"
 
   create_table "best_scores_7", :force => true do |t|
-    t.integer  "leaderboard_id", :null => false
-    t.integer  "user_id",        :null => false
-    t.integer  "score_id",       :null => false
-    t.integer  "value",          :null => false
-    t.datetime "created_at",     :null => false
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
     t.integer  "metadata"
     t.string   "display_string"
   end
@@ -114,10 +114,10 @@ ActiveRecord::Schema.define(:version => 20130416004410) do
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
 
   create_table "scores", :force => true do |t|
-    t.integer  "value",          :null => false
+    t.integer  "value",          :limit => 8, :null => false
     t.integer  "user_id"
     t.integer  "leaderboard_id"
-    t.datetime "created_at",     :null => false
+    t.datetime "created_at",                  :null => false
     t.string   "display_string"
     t.integer  "metadata"
   end
