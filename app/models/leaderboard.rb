@@ -43,16 +43,19 @@ class Leaderboard < ActiveRecord::Base
     scores.count(:user_id, :distinct => true)
   end
 
+  # Deprecated!
   def top_scores(since = nil)
     top_n_scores(5, 0, since)
   end
 
+  # Deprecated!
   # Damn, if we have a better way to set rank this would be chainable :/
   def top_n_scores(n, offset, since)
     x = Score.where(leaderboard_id: id).order("value #{order_keyword}").offset(offset).take(n)
     x.each_with_index {|score, i| score.rank = i + 1}
   end
 
+  # Deprecated!
   def top_score_for_user(user_id, since = nil)
     Score.where(:leaderboard_id => id, :user_id => user_id)
     score = scores.where({:user_id => user_id}).since(since).order("value #{order_keyword}").first(:include => :user)
@@ -76,6 +79,7 @@ class Leaderboard < ActiveRecord::Base
     score
   end
 
+  # Deprecated!
   def top_scores_with_users_best(user_id, since = nil)
     top = top_scores(since)
     unless top.map(&:user_id).include?(user_id)

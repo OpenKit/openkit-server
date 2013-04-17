@@ -16,7 +16,7 @@ class LeaderboardsController < ApplicationController
   # Dash only
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    @top_scores = @leaderboard.top_scores
+    @top_scores = Score.bests_for('all_time', @leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
 
     respond_to do |format|
