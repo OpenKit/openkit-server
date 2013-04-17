@@ -5,11 +5,13 @@ class BestScoresController < ApplicationController
   def index
     @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
-    render json: @scores.to_json(:include => :user)
+    render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
   end
   
   def user
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
+    ActiveRecord::Associations::Preloader.new(@score, [:user]).run
+    render json: @score.to_json(:include => :user, :methods => [:value, :rank])
   end
 
   private

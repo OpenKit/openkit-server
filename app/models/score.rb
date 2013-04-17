@@ -71,11 +71,15 @@ class Score < ActiveRecord::Base
         where x.#{leaderboard_cond} #{created_cond ? "AND x." + created_cond : ''}
         group by x.user_id
       ) t2
-      left join scores on t2.leaderboard_id=scores.leaderboard_id AND t2.user_id=scores.user_id AND t2.max_val=scores.sort_value AND t2.first_time=scores.created_at;      
+      left join scores on t2.leaderboard_id=scores.leaderboard_id AND t2.user_id=scores.user_id AND t2.max_val=scores.sort_value AND t2.first_time=scores.created_at
+      ORDER BY scores.sort_value DESC
       END
       
       query.gsub!(/\s+/, " ")
-      Score.find_by_sql(query)
+      scores = Score.find_by_sql(query)
+      scores.inject(1) {|x,y| y.rank = x; x+=1; x}
+      scores
+        
     end
   end
 
