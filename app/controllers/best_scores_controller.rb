@@ -3,10 +3,13 @@ class BestScoresController < ApplicationController
   before_filter :set_leaderboard
 
   def index
-    klass = class_for_range(params[:leaderboard_range])
-    @scores = klass.where(leaderboard_id: @leaderboard.id)
+    @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     render json: @scores.to_json(:include => :user)
+  end
+  
+  def user
+    @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
   end
 
   private
@@ -14,19 +17,6 @@ class BestScoresController < ApplicationController
     @leaderboard = current_app.leaderboards.find_by_id(params.delete(:leaderboard_id))
     unless @leaderboard
       render status: :forbidden, json: {message: "Pass a leaderboard_id that belongs to the app associated with app_key"}
-    end
-  end
-
-  def class_for_range(leaderboard_range)
-    case leaderboard_range
-    when "today"
-      BestScore1
-    when "this_week"
-      BestScore7
-    when "all_time"
-      BestScore
-    else
-      BestScore
     end
   end
 end

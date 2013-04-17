@@ -10,7 +10,10 @@ OKDashboard::Application.routes.draw do
 
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
-  resources :best_scores, :only => [:index]
+  
+  # API only
+  match "best_scores",          to: "best_scores#index",  via: :get 
+  match "best_scores/user",     to: "best_scores#user",   via: :get
 
   # If you are running in development, modify the line below to include :new and :create actions,
   # then uncomment the link to new_developer_path in app/views/developer_sessions/new.html.erb

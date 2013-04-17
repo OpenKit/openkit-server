@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130416225733) do
+ActiveRecord::Schema.define(:version => 20130417023019) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(:version => 20130416225733) do
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
 
   create_table "scores", :force => true do |t|
-    t.integer  "value",          :limit => 8, :null => false
+    t.integer  "sort_value",     :limit => 8, :null => false
     t.integer  "user_id"
     t.integer  "leaderboard_id"
     t.datetime "created_at",                  :null => false
