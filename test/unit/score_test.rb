@@ -1,25 +1,5 @@
 require 'test_helper'
 
-# There are 5 tables for scores: 
-#   * scores table with all scores
-#   * best scores table with top 100
-#   * best scores table with top 100, reaped on rolling 24hr basis
-#   * best scores table with top 100, reaped on rolling 7day basis
-#   * a lookup table to get approximate rank if outside top 100 
-
-# The best scores tables are denormalized.  They contain all data needed for a client.  They *do*
-# have a foreign key referencing the all scores table, but it should not be used in production queries.
-
-# The best tables will be slightly bigger than the number of scores you should get
-# from them (except for all time).  The reaper will kill stuff out of 1 and 7 day, 
-# and then the next scores submitted will fill those spots.  So at the low end of these 
-# tables, there will be sorting happening due to reaper, and the ranks will not be accurate.
-
-# Best tables are indexed on leaderboard_id and on value.
-# Scores table is indexed on (leaderboard_id, user_id), query in that order.
-
-# The lookup table for approx rank is not yet implemented.
-
 class ScoreTest < ActiveSupport::TestCase
   def score_helper(leaderboard, user, value, created_at = nil)
     s = leaderboard.scores.build()
@@ -29,6 +9,15 @@ class ScoreTest < ActiveSupport::TestCase
     s.created_at = created_at if created_at
     s
   end
+  
+  def score_helper!(*args)
+    s = score_helper(*args)
+    if !s.save
+      raise StandardError.new("Score helper fail.")
+    end
+    s
+  end
+  
 
   def scores(leaderboard, user)
     Score.where(leaderboard_id: leaderboard.id, user_id: user.id)
@@ -37,7 +26,8 @@ class ScoreTest < ActiveSupport::TestCase
   def setup
     @hs_leaderboard = Leaderboard.create!(name: "high", sort_type: Leaderboard::HIGH_VALUE_SORT_TYPE)
     @ls_leaderboard = Leaderboard.create!(name: "low", sort_type: Leaderboard::LOW_VALUE_SORT_TYPE)
-    @user = User.create!(nick: "foo")
+    @user   = User.create!(nick: "foo")
+    @user2  = User.create!(nick: "bar")
   end
 
   test "scores of the same leaderboard type should compare properly" do
@@ -110,11 +100,45 @@ class ScoreTest < ActiveSupport::TestCase
   end
   
   test "a user should only have one best score for any time range" do
-    user1 = User.create!(nick: "foo")
-    user2 = User.create!(nick: "bar")
-    score_helper(@hs_leaderboard, user1, 100).save
-    score_helper(@hs_leaderboard, user1, 300).save
+    score_helper(@hs_leaderboard, @user, 100).save
+    score_helper(@hs_leaderboard, @user, 300).save
     assert_equal 1, Score.bests_for('today', @hs_leaderboard.id).count
+    
+    score_helper(@hs_leaderboard, @user2, 100).save
+    assert_equal 2, Score.bests_for('today', @hs_leaderboard.id).count
   end
-
+  
+  test "a best score moving out of range" do
+    s1 = score_helper!(@hs_leaderboard, @user, 100, Time.now)
+    s2 = score_helper!(@hs_leaderboard, @user, 50, Time.now)
+    assert_equal 1,   Score.bests_for('this_week', @hs_leaderboard.id).count
+    assert_equal 100, Score.bests_for('this_week', @hs_leaderboard.id)[0].value
+    
+    s1.update_attributes({:created_at => Time.now - 7.days - 1.second}, :without_protection => true)
+    assert_equal 1, Score.bests_for('this_week', @hs_leaderboard.id).count
+    assert_equal 50, Score.bests_for('this_week', @hs_leaderboard.id)[0].value
+  end
+  
+  test "high score rank" do 
+    s1 = score_helper!(@hs_leaderboard, @user, 100, Time.now)
+    s2 = score_helper!(@hs_leaderboard, @user2, 50, Time.now)
+    assert_equal 1, Score.best_for('this_week', @hs_leaderboard.id, @user.id).rank
+    assert_equal 2, Score.best_for('this_week', @hs_leaderboard.id, @user2.id).rank
+    
+    s1.update_attributes({:created_at => Time.now - 8.days}, :without_protection => true)
+    assert_nil        Score.best_for('this_week', @hs_leaderboard.id, @user.id)
+    assert_equal 1,   Score.best_for('this_week', @hs_leaderboard.id, @user2.id).rank
+  end
+  
+  test "low score rank" do
+    s1 = score_helper!(@ls_leaderboard, @user, 4, Time.now)
+    s2 = score_helper!(@ls_leaderboard, @user2, 5, Time.now)
+    assert_equal 1, Score.best_for('this_week', @ls_leaderboard.id, @user.id).rank
+    assert_equal 2, Score.best_for('this_week', @ls_leaderboard.id, @user2.id).rank
+    
+    s1.update_attributes({:created_at => Time.now - 8.days}, :without_protection => true)
+    assert_nil        Score.best_for('this_week', @ls_leaderboard.id, @user.id)
+    assert_equal 1,   Score.best_for('this_week', @ls_leaderboard.id, @user2.id).rank
+  end
+  
 end

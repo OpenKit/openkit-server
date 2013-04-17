@@ -4,6 +4,8 @@ class Score < ActiveRecord::Base
   attr_accessible :metadata, :display_string, :user_id
   attr_accessor :rank
   
+  @@enable_user_rank = true
+  
   
   def value=(v)
     self.sort_value = v
@@ -24,23 +26,45 @@ class Score < ActiveRecord::Base
   # end
   # extend Scopes
 
-  class << self    
-
-    # Put composite index on leaderboard_id, user_id, created_at, sort_value DESC for this one.
-    def best_for(frame, leaderboard_id, user_id)
-      since = case frame
+  class << self
+    
+    # Apply something here that makes the time switch only every 10 minutes or so to help
+    # caching.
+    def time_boundary_for_frame(frame)
+      boundary = case frame
         when 'today' then Time.now - 1.day
         when 'this_week' then Time.now - 1.week
         when 'all_time' then nil
       end
-      cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
+      boundary
+    end
+
+    # Put composite index on leaderboard_id, user_id, created_at, sort_value DESC for this one.
+    def best_for(frame, leaderboard_id, user_id)
+      best_cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
+      
+      since = time_boundary_for_frame(frame)
       if since
-        cond[0] << " AND created_at > ?"
-        cond << since
+        best_cond[0] << " AND created_at > ?"
+        best_cond << since
       end
-      score = where(cond).order("sort_value DESC").limit(1)[0]
-      score.value
-      score
+      best_score = where(best_cond).order("sort_value DESC").limit(1)[0]
+      
+      if best_score
+        if @@enable_user_rank
+          rank_cond = ["leaderboard_id = ?", leaderboard_id]
+          if since
+            rank_cond[0] << " AND created_at > ?"
+            rank_cond << since
+          end 
+          rank_cond[0] << " AND sort_value > ?"
+          rank_cond << best_score.sort_value
+          sanitized_rank_cond = ActiveRecord::Base.send(:sanitize_sql_array, rank_cond)
+          best_score.rank = connection.execute("select count(*) from (select * from scores where #{sanitized_rank_cond} group by user_id) t").first[0] + 1
+        end
+      end
+      
+      best_score
     end
     
     # Who knows what the index strategy should look like for this one. 
