@@ -40,10 +40,17 @@ module BestScoreBase
       raise StandardError.new("You're breaking the cached record count!")
     end
     
+    # We try to find a cache for the leaderboard associated with the score submitted.
+    # If we do not find a cache, we create it.
+    #
+    # Users can only have a single score per best leaderboard, so before submitting
+    # a score we destroy any previous score for this leaderboard/user combo.  Make sure
+    # to use destroy instead of delete: we rely on after_destroy callbacks to update 
+    # the cache.
     def create_from_score(score)
       l_id = score.leaderboard_id
-      # if this is the first score for l_id, create the cache for this leaderboard
-      c = cache[l_id] || refresh_cache(l_id)
+      leaderboard_cache = cache[l_id] || refresh_cache(l_id)
+      self.destroy_all(leaderboard_id: l_id, user_id: score.user_id)
       
       
       if create(leaderboard_id: l_id, user_id: score.user_id, score_id: score.id, value: score.value, metadata: score.metadata, display_string: score.display_string)
@@ -51,31 +58,31 @@ module BestScoreBase
         # the current minimum, how?  Because the reaper kills scores that are no longer valid (out of 
         # time range), and when that happens we stuff the next scores automatically into the best table
         # until we hit a count of MAX_SCORE_COUNT.
-        if !c[MIN_VALUE_DIRTY]
-          if c[MIN_VALUE].nil? || (score.value < c[MIN_VALUE])
-            c[MIN_VALUE] = score.value
+        if !leaderboard_cache[MIN_VALUE_DIRTY]
+          if leaderboard_cache[MIN_VALUE].nil? || (score.value < leaderboard_cache[MIN_VALUE])
+            leaderboard_cache[MIN_VALUE] = score.value
           end
         end
         
         # If score count is over the max, kill everything with the MIN_VALUE
-        if ((c[SCORE_COUNT] += 1) > MAX_SCORE_COUNT)
-          destroy_all(["leaderboard_id = ? AND value = ?", l_id, c[MIN_VALUE]])
+        if ((leaderboard_cache[SCORE_COUNT] += 1) > MAX_SCORE_COUNT)
+          destroy_all(["leaderboard_id = ? AND value = ?", l_id, leaderboard_cache[MIN_VALUE]])
         end
       end
     end
     
     def handle(score)
       l_id = score.leaderboard_id
-      c = cache[l_id] || refresh_cache(l_id)
+      leaderboard_cache = cache[l_id] || refresh_cache(l_id)
 
-      if c[SCORE_COUNT] < MAX_SCORE_COUNT
+      if leaderboard_cache[SCORE_COUNT] < MAX_SCORE_COUNT
         create_from_score(score)
       else
-        if c[MIN_VALUE_DIRTY]
-          c = refresh_cache(l_id)
+        if leaderboard_cache[MIN_VALUE_DIRTY]
+          leaderboard_cache = refresh_cache(l_id)
         end
         
-        if c[MIN_VALUE].nil? || score.value > c[MIN_VALUE]
+        if leaderboard_cache[MIN_VALUE].nil? || score.value > leaderboard_cache[MIN_VALUE]
           create_from_score(score)
         end
       end

@@ -23,7 +23,8 @@ require 'test_helper'
 class ScoreTest < ActiveSupport::TestCase
   def score_helper(leaderboard, user, value)
     s = leaderboard.scores.build(value: value)
-    s.user = user
+    s.user_id = user.id if user.is_a?(User)
+    s.user_id = user if user.is_a?(Fixnum)
     s
   end
 
@@ -50,41 +51,34 @@ class ScoreTest < ActiveSupport::TestCase
     assert !s4.is_better_than?(s5)
   end
   
+  # Create a situation where user already has scores in the three Best tables,
+  # and make sure the overwrite only happens in one.
   test "scores only post to the appropriate Best tables" do
-    # Create a situation where user already has scores in the
-    # three Best tables, and make sure the overwrite only happens in one.
-    s1 = score_helper(@hs_leaderboard, @user, 50)
-    s2 = score_helper(@hs_leaderboard, @user, 100)
-    s3 = score_helper(@hs_leaderboard, @user, 150)
-    s1.save
-    s2.save
-    s3.save
-    
-    # Let's put 50 in the 1 day, 100 in the 7 day, and 150 all time.
     BestScore1.create!(score_id: 1, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 50)
     BestScore7.create!(score_id: 2, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 100)
     BestScore.create!(score_id: 3, leaderboard_id: @hs_leaderboard.id, user_id: @user.id, value: 150)
     
     # Now let's create a new score of 75 and handle it.
-    s4 = score_helper(@hs_leaderboard, @user, 75)
-    Score.handle_new_score(s4)
-    
+    s1 = score_helper(@hs_leaderboard, @user, 75)
+    debugger
+    Score.handle_new_score(s1)
     
     assert_equal 75, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 100, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 150, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     
-    
     # Now let's create a new score of 125 and handle it.
-    s5 = score_helper(@hs_leaderboard, @user, 125)
-    Score.handle_new_score(s5)
+    s2 = score_helper(@hs_leaderboard, @user, 125)
+    Score.handle_new_score(s2)
+    
     assert_equal 125, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 125, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 150, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     
     # Now 200
-    s6 = score_helper(@hs_leaderboard, @user, 200)
-    Score.handle_new_score(s6)
+    s3 = score_helper(@hs_leaderboard, @user, 200)
+    Score.handle_new_score(s3)
+    
     assert_equal 200, BestScore1.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 200, BestScore7.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
     assert_equal 200, BestScore.where(leaderboard_id: @hs_leaderboard.id).maximum("value")
@@ -96,11 +90,11 @@ class ScoreTest < ActiveSupport::TestCase
     max_entries = BestScoreBase::MAX_SCORE_COUNT
     bulk_value = 50
     
-    
     # Do bulk insert into best. 
-    arr = Array.new(max_entries - 1, "(#{@hs_leaderboard.id}, #{@user.id}, #{bulk_value}, '2013-01-01 04:00:00')")  
-    sql = "INSERT INTO best_scores_1 (leaderboard_id, user_id, value, created_at) VALUES #{arr.join(", ")}"
-    BestScore1.connection.execute sql
+    (1...max_entries).each do |n|
+      s = score_helper(@hs_leaderboard, @user.id + n, bulk_value)
+      Score.handle_new_score(s)
+    end
     
     # create a score that is lower than bulk_value
     low = score_helper(@hs_leaderboard, @user, bulk_value - 10)
