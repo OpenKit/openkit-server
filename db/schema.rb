@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417023019) do
+ActiveRecord::Schema.define(:version => 20130418150745) do
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(:version => 20130417023019) do
     t.integer  "developer_id"
     t.integer  "twitter_id",   :limit => 8
     t.integer  "fb_id",        :limit => 8
+    t.integer  "custom_id",    :limit => 8
   end
 
   add_index "users", ["developer_id"], :name => "index_users_on_developer_id"

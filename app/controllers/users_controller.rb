@@ -44,8 +44,8 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     err_message = nil
-    if params[:user][:fb_id].blank? && params[:user][:twitter_id].blank?
-      err_message = "Please pass either a fb_id or twitter_id."
+    if params[:user][:fb_id].blank? && params[:user][:twitter_id].blank? && params[:user][:custom_id].blank?
+      err_message = "Please pass either a fb_id, twitter_id, or custom_id"
     end
 
     if !err_message
