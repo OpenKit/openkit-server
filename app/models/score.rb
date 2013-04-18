@@ -73,7 +73,13 @@ class Score < ActiveRecord::Base
     #
     # Note: the timestamp in the query will always break query cache!  Bad!  Use some modulo
     # on time.
-    def bests_for(frame, leaderboard_id)
+    #
+    # Cap number per page at 25 for now.
+    def bests_for(frame, leaderboard_id, opts = {})
+      page_num     = (opts[:page_num] && opts[:page_num].to_i) || 1
+      num_per_page = (opts[:num_per_page] && opts[:num_per_page].to_i) || 25
+      num_per_page > 25 && num_per_page = 25
+
       since = case frame
         when 'today' then Time.now - 1.day
         when 'this_week' then Time.now - 1.week
@@ -89,8 +95,9 @@ class Score < ActiveRecord::Base
           select leaderboard_id, user_id, max(sort_value) as max_val from scores
           where #{leaderboard_cond} #{created_cond ? "AND " + created_cond : ''}
           group by user_id
-          limit 25
-        ) t1 
+          limit #{num_per_page.to_i}
+          offset #{(page_num.to_i - 1) * num_per_page.to_i}
+        ) t1
         left join scores x on t1.leaderboard_id=x.leaderboard_id and t1.user_id=x.user_id and t1.max_val=x.sort_value
         where x.#{leaderboard_cond} #{created_cond ? "AND x." + created_cond : ''}
         group by x.user_id
