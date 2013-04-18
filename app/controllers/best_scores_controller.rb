@@ -3,7 +3,9 @@ class BestScoresController < ApplicationController
   before_filter :set_leaderboard
 
   def index
-    @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id)
+    x = params.delete(:page_num)
+    y = params.delete(:num_per_page)
+    @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id, {page_num: x, num_per_page: y})
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
   end
