@@ -108,9 +108,9 @@ class Score < ActiveRecord::Base
       
       query.gsub!(/\s+/, " ")
       scores = Score.find_by_sql(query)
-      scores.inject(1) {|x,y| y.rank = x; x+=1; x}
+      start_rank = ((page_num - 1) * num_per_page) + 1
+      scores.inject(start_rank) {|x,y| y.rank = x; x+=1; x}
       scores
-        
     end
   end
 
