@@ -144,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20130418150745) do
     t.integer  "custom_id",    :limit => 8
   end
 
+  add_index "users", ["custom_id"], :name => "index_users_on_custom_id"
   add_index "users", ["developer_id"], :name => "index_users_on_developer_id"
   add_index "users", ["fb_id"], :name => "index_users_on_fb_id"
   add_index "users", ["twitter_id"], :name => "index_users_on_twitter_id"
