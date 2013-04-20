@@ -140,5 +140,70 @@ class ScoreTest < ActiveSupport::TestCase
     assert_nil        Score.best_for('this_week', @ls_leaderboard.id, @user.id)
     assert_equal 1,   Score.best_for('this_week', @ls_leaderboard.id, @user2.id).rank
   end
-  
+
+  test "best scores query returns no duplicates" do
+    s1 = score_helper!(@hs_leaderboard, @user, 100)
+    s2 = score_helper!(@hs_leaderboard, @user, 100)
+    scores = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1, num_per_page: 1000})
+    assert_equal 1, scores.count
+  end
+
+  test "rank with pagination" do
+    num_users = 2
+    scores_per_user = 2
+    max_score = 1000
+    prob_of_best_dup = 1.00000
+
+    # Generate random users and random score values; manually sort them.
+    user_val_arr = []
+    (1..num_users).each do |x|
+
+      vals = Array.new(scores_per_user - 1) {|i| rand(max_score)}
+
+      best = vals.sort.reverse[0]
+      if rand < prob_of_best_dup
+        vals << best
+      else
+        vals << rand(best)
+      end
+
+      user_val_arr << {:nick => "user#{x}",
+                       :values => vals,
+                       :best => best}
+    end
+
+    manually_sorted = user_val_arr.sort {|x, y| y[:best] <=> x[:best]}
+
+
+    # Create Score objects
+    user_val_arr.each do |h|
+      user = User.create!(:nick => h[:nick])
+      h[:values].each do |val|
+        score_helper!(@hs_leaderboard, user, val)
+      end
+    end
+
+    # Now compare the manually sorted array against what we get out of the db.
+    # First, with a large num_per_page (effectively not grouping).
+    scores = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1, num_per_page: 1000})
+
+    scores.each_with_index do |score, i|
+      assert_equal score.value, manually_sorted[i][:best]
+    end
+
+    # Next, by taking pages out of the db:
+    [1].each do |num_per_page|
+      assert_equal 0, num_users % num_per_page   # sanity
+
+      (num_users / num_per_page).times do |i|
+        scores = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1 + i, num_per_page: num_per_page})
+        assert_equal num_per_page, scores.size   # sanity
+
+        scores.each_with_index do |score, j|
+          assert_equal score.value, manually_sorted[(i * num_per_page) + j][:best]
+        end
+      end
+    end
+  end
+
 end

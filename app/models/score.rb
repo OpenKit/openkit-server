@@ -75,6 +75,11 @@ class Score < ActiveRecord::Base
     # on time.
     #
     # Cap number per page at 25 for now.
+    #
+    # Notes on this crazy query: The last group by user_id is necessary
+    # because, technically, two scores can be submitted at the same time, for
+    # the same user, with the same value, and these are the columns that we use to
+    # join scores on itself.
     def bests_for(frame, leaderboard_id, opts = {})
       page_num     = (opts[:page_num] && opts[:page_num].to_i) || 1
       num_per_page = (opts[:num_per_page] && opts[:num_per_page].to_i) || 25
@@ -103,6 +108,7 @@ class Score < ActiveRecord::Base
         group by x.user_id
       ) t2
       left join scores on t2.leaderboard_id=scores.leaderboard_id AND t2.user_id=scores.user_id AND t2.max_val=scores.sort_value AND t2.first_time=scores.created_at
+      GROUP BY user_id
       ORDER BY scores.sort_value DESC
       END
 
