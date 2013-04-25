@@ -148,6 +148,15 @@ class ScoreTest < ActiveSupport::TestCase
     assert_equal 1, scores.count
   end
 
+  test "pagination with multiple users, with early users higher" do
+    s1 = score_helper!(@hs_leaderboard, @user, 900)
+    s2 = score_helper!(@hs_leaderboard, @user2, 100)
+    first  = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1, num_per_page: 1})[0]
+    second = Score.bests_for('today', @hs_leaderboard.id, {page_num: 2, num_per_page: 1})[0]
+    assert_equal s1.id, first.id
+    assert_equal s2.id, first.id
+  end
+
   test "rank with pagination" do
     num_users = 2
     scores_per_user = 2
@@ -173,6 +182,9 @@ class ScoreTest < ActiveSupport::TestCase
     end
 
     manually_sorted = user_val_arr.sort {|x, y| y[:best] <=> x[:best]}
+
+    puts "manually sorted:"
+    pp manually_sorted
 
 
     # Create Score objects
