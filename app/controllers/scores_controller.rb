@@ -16,10 +16,10 @@ class ScoresController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @scores.to_json(:include => :user, :methods => :rank) }
+      format.json { render json: @scores.to_json(:include => :user, :methods => [:rank, :value]) }
     end
   end
-  
+
   # GET /scores/1
   # GET /scores/1.json
   def show
@@ -52,7 +52,7 @@ class ScoresController < ApplicationController
         err_message = "#{@score.errors.full_messages.join(", ")}"
       end
     end
-    
+
     if err_message
       render status: :bad_request, json: {message: err_message}
     else

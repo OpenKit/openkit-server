@@ -19,12 +19,12 @@ class Score < ActiveRecord::Base
     v
   end
 
-  # module Scopes
-  #   def since(t = nil)
-  #     t ? where("created_at >= :created_at", {:created_at => t}) : scoped
-  #   end
-  # end
-  # extend Scopes
+  module Scopes
+    def since(t = nil)
+      t ? where("created_at >= :created_at", {:created_at => t}) : scoped
+    end
+  end
+  extend Scopes
 
   class << self
 

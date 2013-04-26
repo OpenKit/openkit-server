@@ -51,26 +51,27 @@ class Leaderboard < ActiveRecord::Base
   # Deprecated!
   # Damn, if we have a better way to set rank this would be chainable :/
   def top_n_scores(n, offset, since)
-    x = Score.where(leaderboard_id: id).order("value #{order_keyword}").offset(offset).take(n)
+    since = Time.now - 10.years if since.nil?
+    x = Score.where(["leaderboard_id = ? AND created_at > ?", id, since]).order("sort_value #{order_keyword}").offset(offset).take(n)
     x.each_with_index {|score, i| score.rank = i + 1}
   end
 
   # Deprecated!
   def top_score_for_user(user_id, since = nil)
     Score.where(:leaderboard_id => id, :user_id => user_id)
-    score = scores.where({:user_id => user_id}).since(since).order("value #{order_keyword}").first(:include => :user)
+    score = scores.where({:user_id => user_id}).since(since).order("sort_value #{order_keyword}").first(:include => :user)
     if score
       table = Arel::Table.new(:scores)
-      order = (sort_type == HIGH_VALUE_SORT_TYPE) ? table[:value].desc : table[:value]
+      order = (sort_type == HIGH_VALUE_SORT_TYPE) ? table[:sort_value].desc : table[:sort_value]
       sub = table.project("*")
       sub.where(table["leaderboard_id"].eq(id))
       sub.where(table["created_at"].gteq(since))  if since
       if sort_type == HIGH_VALUE_SORT_TYPE
-        sub.where(table["value"].gt(score.value))
-        sub.order(table["value"].desc)
+        sub.where(table["sort_value"].gt(score.value))
+        sub.order(table["sort_value"].desc)
       else
-        sub.where(table["value"].lt(score.value))
-        sub.order(table["value"])
+        sub.where(table["sort_value"].lt(score.value))
+        sub.order(table["sort_value"])
       end
       sub = sub.as("sub")
       sub2 = Score.select("*").from(sub).group(:user_id).as("sub2")
