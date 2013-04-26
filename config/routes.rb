@@ -10,17 +10,12 @@ OKDashboard::Application.routes.draw do
 
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
-  
+
   # API only
-  match "best_scores",          to: "best_scores#index",  via: :get 
+  match "best_scores",          to: "best_scores#index",  via: :get
   match "best_scores/user",     to: "best_scores#user",   via: :get
 
-  # If you are running in development, modify the line below to include :new and :create actions,
-  # then uncomment the link to new_developer_path in app/views/developer_sessions/new.html.erb
-  resources :developers,          :only => [:edit, :update, :show]
-  match "__:signup_rand:__",      to: "developers#create",  via: :post, :as => :developers
-  match "__:signup_rand:__/new",  to: "developers#new",     via: :get,  :as => :new_developer
-
+  resources :developers,          :only => [:edit, :update, :show, :new, :create]
   resources :developer_sessions,  :only => [:create]
   match "developer_sessions",     :to => "developer_sessions#destroy", :as => :logout, :via => :delete
   match "developer_sessions/new", :to => "developer_sessions#new",    :as => :login, :via => :get
