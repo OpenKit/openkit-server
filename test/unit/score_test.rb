@@ -154,21 +154,29 @@ class ScoreTest < ActiveSupport::TestCase
     first  = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1, num_per_page: 1})[0]
     second = Score.bests_for('today', @hs_leaderboard.id, {page_num: 2, num_per_page: 1})[0]
     assert_equal s1.id, first.id
+    assert_equal s2.id, second.id
+  end
+
+  test "pagination with multiple users, with later users higher" do
+    s1 = score_helper!(@hs_leaderboard, @user, 100)
+    s2 = score_helper!(@hs_leaderboard, @user2, 900)
+    first  = Score.bests_for('today', @hs_leaderboard.id, {page_num: 1, num_per_page: 1})[0]
+    second = Score.bests_for('today', @hs_leaderboard.id, {page_num: 2, num_per_page: 1})[0]
     assert_equal s2.id, first.id
+    assert_equal s1.id, second.id
   end
 
   test "rank with pagination" do
-    num_users = 2
-    scores_per_user = 2
+    num_users = 18
+    scores_per_user = 3
     max_score = 1000
-    prob_of_best_dup = 1.00000
+    prob_of_best_dup = 0.8
 
     # Generate random users and random score values; manually sort them.
     user_val_arr = []
     (1..num_users).each do |x|
 
       vals = Array.new(scores_per_user - 1) {|i| rand(max_score)}
-
       best = vals.sort.reverse[0]
       if rand < prob_of_best_dup
         vals << best
@@ -182,10 +190,6 @@ class ScoreTest < ActiveSupport::TestCase
     end
 
     manually_sorted = user_val_arr.sort {|x, y| y[:best] <=> x[:best]}
-
-    puts "manually sorted:"
-    pp manually_sorted
-
 
     # Create Score objects
     user_val_arr.each do |h|
@@ -204,7 +208,7 @@ class ScoreTest < ActiveSupport::TestCase
     end
 
     # Next, by taking pages out of the db:
-    [1].each do |num_per_page|
+    [1, 2, 3].each do |num_per_page|
       assert_equal 0, num_users % num_per_page   # sanity
 
       (num_users / num_per_page).times do |i|

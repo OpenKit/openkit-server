@@ -100,6 +100,7 @@ class Score < ActiveRecord::Base
           select leaderboard_id, user_id, max(sort_value) as max_val from scores
           where #{leaderboard_cond} #{created_cond ? "AND " + created_cond : ''}
           group by user_id
+          order by max_val DESC
           limit #{num_per_page.to_i}
           offset #{(page_num.to_i - 1) * num_per_page.to_i}
         ) t1
