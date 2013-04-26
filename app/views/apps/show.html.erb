@@ -13,12 +13,14 @@
     <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} if @app.icon.file? %></li>
     <li><b>Name:</b> <span><%= @app.name %></span></li>
     <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
+    <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
   </ul>
 </div>
 
 <div class="box left no_table">
   <ul>
     <li><%= image_tag ("leaderboard_icon.png") %><%= link_to 'Leaderboards', app_leaderboards_path(@app) %></li>
+    <li><%= image_tag ("leaderboard_icon.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
     <li><%= image_tag ("cloud_icon.png") %>Cloud Data Browser (coming soon)</li>
   </ul>
 </div>

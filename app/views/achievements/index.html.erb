@@ -1,0 +1,54 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %>  <span>/</span>  Achievements</h1>
+  <%= link_to new_app_achievement_path(@app), {:class => 'header_button'} do %>
+    <i class="icon-plus"></i> Add a New Achievement
+  <% end %>
+</div>
+
+<div class="one_col">
+  <table class="box">
+    <tr>
+      <th colspan="2">Icons</th>
+      <th>Name</th>
+      <th>ID</th>
+      <th>Goal</th>
+      <th>Points</th>
+      <th>In Development?</th>
+      <th></th>
+    </tr>
+<%# count = 0; %>
+  <% if @achievements.empty? %>
+    <tr>
+        <td colspan="5">There are no achievements for this app. <%= link_to 'Add a New Achievement', new_app_achievement_path(@app) %></td>
+    </tr>
+  <% else %>
+    <% @achievements.each do |achievement| %>
+      <tr>
+        <td class="icon"><%= image_tag achievement.icon.url, {:class=> 'leaderboard_icon'} %>
+	<br /><div style="text-align:center;width:100%">Unlocked</div>
+	</td>
+        <td class="icon"><%= image_tag achievement.icon_locked.url, {:class=> 'leaderboard_icon'} %>
+	<br /><div style="text-align:center;width:100%">Locked</div>
+	</td>
+        <td class="name"><%= link_to achievement.name, [@app, achievement] %></td>
+        <td class="id"><%= achievement.id %></td>
+        <td class="goal"><%= achievement.goal %></td>
+        <td class="points"><%= achievement.points %></td>
+        <td><%= achievement.in_development %></td>
+        <td class="manage">
+          <%= link_to edit_app_achievement_path(@app, achievement) do %>
+            <i class="icon-edit"></i> Edit
+          <% end %>
+          <%= link_to [@app, achievement], method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <i class="icon-remove"></i> Destroy
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+
+  <% end %>
+
+  </table>
+</div>
+
+<%# link_to 'Back', app_path(@app) %>

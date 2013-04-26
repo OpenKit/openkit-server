@@ -1,15 +1,20 @@
 OKDashboard::Application.routes.draw do
   resources :apps do
     resources :leaderboards
+    resources :achievements
   end
 
   resources :leaderboards, :only => [:index]
+  resources :achievements, :only => [:index, :facebook]
 
   resources :change_password, :only => [:new, :create]
   resources :password_resets, :only => [:new, :create, :edit, :update]
 
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
+  resources :achievement_scores, :only => [:create, :index, :show, :destroy]
+  
+  match "achievements/facebook",          to: "achievements#facebook",  via: :get 
 
   # API only
   match "best_scores",          to: "best_scores#index",  via: :get

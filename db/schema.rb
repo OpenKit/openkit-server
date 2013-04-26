@@ -11,7 +11,38 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130418150745) do
+ActiveRecord::Schema.define(:version => 20130426174146) do
+
+  create_table "achievement_scores", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "achievement_id"
+    t.integer  "progress"
+    t.datetime "created_at",     :null => false
+  end
+
+  add_index "achievement_scores", ["user_id", "achievement_id"], :name => "index_achievement_progress_on_app_user_and_achievement_id"
+  add_index "achievement_scores", ["user_id"], :name => "index_achievement_progress_on_app_and_user_id"
+
+  create_table "achievements", :force => true do |t|
+    t.string   "name"
+    t.integer  "app_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "icon_locked_file_name"
+    t.string   "icon_locked_content_type"
+    t.integer  "icon_locked_file_size"
+    t.datetime "icon_locked_updated_at"
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
+    t.boolean  "in_development",           :default => true
+    t.text     "desc"
+    t.integer  "points"
+    t.integer  "goal"
+  end
+
+  add_index "achievements", ["app_id"], :name => "index_achievements_on_game_id"
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -24,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20130418150745) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
+    t.string   "fbid"
   end
 
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
