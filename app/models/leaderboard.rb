@@ -5,7 +5,7 @@ class Leaderboard < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :app_id
 
   belongs_to :app
-  has_many :scores
+  has_many :scores, :dependent => :delete_all
 
   def api_fields(base_uri = "http://localhost:3000/")
     {
@@ -21,7 +21,7 @@ class Leaderboard < ActiveRecord::Base
     }
   end
 
-  # Don't store HighValueLeaderboard and LowValueLeaderboard images in different places.
+  # Move out to S3...
   ATTACHMENT_URL = "/system/leaderboards/:attachment/:id_partition/:style/:filename"
   has_attached_file :icon, url: ATTACHMENT_URL, :default_url => '/assets/leaderboard_icon.png'
 

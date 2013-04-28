@@ -6,11 +6,10 @@ class Achievement < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :app_id
 
   belongs_to :app
-  has_many :achievement_scores
-  has_many :progress
+  has_many :achievement_scores, :dependent => :delete_all
 
-  def api_fields(base_uri = "http://localhost:3000/", user_id)
-    {
+  def api_fields(base_uri, user_id)
+    fields = {
       :id => id,
       :app_id => app_id,
       :name => name,
@@ -22,25 +21,26 @@ class Achievement < ActiveRecord::Base
       :in_development => in_development,
       :icon_url => base_uri + icon.url,
       :icon_locked_url => base_uri + icon_locked.url,
-	:progress => progress(user_id)
     }
+    fields[:progress] = progress(user_id) if user_id
+    fields
   end
 
-  # Don't store HighValueLeaderboard and LowValueLeaderboard images in different places.
+  # Move to s3
   ATTACHMENT_URL = "/system/achievements/:attachment/:id_partition/:style/:filename"
-  has_attached_file :icon, url: ATTACHMENT_URL, :default_url => '/assets/achievement_icon.png'
+  has_attached_file :icon,        url: ATTACHMENT_URL, :default_url => '/assets/achievement_icon.png'
   has_attached_file :icon_locked, url: ATTACHMENT_URL, :default_url => '/assets/achievement_locked_icon.png'
 
 
   def progress(user_id)
-	achievement_scores = AchievementScore.where(:achievement_id => id, :user_id => user_id)
+    achievement_scores = AchievementScore.where(:achievement_id => id, :user_id => user_id)
     res = achievement_scores.select("progress").where({:user_id => user_id}).first(:include => :user)["progress"].nil? rescue true
 
-	unless res
-	    progress = achievement_scores.select("progress").where({:user_id => user_id}).first(:include => :user)["progress"]
-	else
-		progress = 0
-	end
+    unless res
+      progress = achievement_scores.select("progress").where({:user_id => user_id}).first(:include => :user)["progress"]
+    else
+      progress = 0
+    end
     progress
   end
 

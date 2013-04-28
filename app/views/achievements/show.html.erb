@@ -10,8 +10,8 @@
 <div class="box right details">
   <div class="details_header">Achievement Details</div>
   <ul>
-    <li class="icon"><b>Icon Locked:</b> <%= image_tag @achievement.icon_locked.url, {:class=> 'leaderboard_icon'} if @achievement.icon_locked.file? %></li>
-    <li class="icon"><b>Icon:</b> <%= image_tag @achievement.icon.url, {:class=> 'leaderboard_icon'} if @achievement.icon.file? %></li>
+    <li class="icon"><b>Icon Locked:</b> <%= image_tag @achievement.icon_locked.url, {:class=> 'leaderboard_icon'} %></li>
+    <li class="icon"><b>Icon:</b> <%= image_tag @achievement.icon.url, {:class=> 'leaderboard_icon'} %></li>
     <li><b>Name:</b> <span><%= @achievement.name %></span></li>
     <li><b>ID:</b> <span><%= @achievement.id %></span></li>
     <li><b>In Development:</b> <span><%= @achievement.in_development %></span></li>

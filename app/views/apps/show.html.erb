@@ -10,7 +10,7 @@
 <div class="box right details">
   <div class="details_header">App Details</div>
   <ul>
-    <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} if @app.icon.file? %></li>
+    <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
     <li><b>Name:</b> <span><%= @app.name %></span></li>
     <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
     <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>

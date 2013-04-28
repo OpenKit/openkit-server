@@ -13,8 +13,8 @@ OKDashboard::Application.routes.draw do
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
   resources :achievement_scores, :only => [:create, :index, :show, :destroy]
-  
-  match "achievements/facebook",          to: "achievements#facebook",  via: :get 
+
+  match "achievements/facebook",          to: "achievements#facebook",  via: :get
 
   # API only
   match "best_scores",          to: "best_scores#index",  via: :get
