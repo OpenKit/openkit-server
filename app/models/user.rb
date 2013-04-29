@@ -11,4 +11,10 @@ class User < ActiveRecord::Base
   has_many :apps, :through => :subscriptions
   belongs_to :developer
 
+  class << self
+    def unreferenced
+      joins("left join subscriptions on subscriptions.user_id=users.id").where("subscriptions.user_id IS NULL").select("distinct users.*")
+    end
+  end
+
 end

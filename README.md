@@ -1,13 +1,28 @@
 openkit-server
 ===============
 
-OpenKit is currently in private beta. <a href="http://openkit.io/beta/">Sign up for a beta invite here!</a>
+OpenKit is currently in private beta. <a href="http://openkit.io/beta">Sign up for a beta invite here!</a>
 
-This readme is looking pretty sparse - why don't you head on over to our <a href="https://github.com/OpenKit/openkit-ios">iOS</a> or <a href="https://github.com/OpenKit/openkit-android">Android</a> page to start?
+
+After downloading build required gems with:
+```
+	$ bundle install
+```
+
 
 Start delayed _ job locally with:
 ```
-	rake jobs:work
+	$ rake jobs:work
+```
+
+See a list of all rake-able jobs:
+```
+	$ bundle exec rake -T
+```
+
+Start server with:
+```
+	$ rails server
 ```
 
 License

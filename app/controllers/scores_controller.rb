@@ -1,13 +1,8 @@
 class ScoresController < ApplicationController
-  # From the API, we need an app_key and leaderboard_id for all actions
-  # in this controller.  The only action that will be available from the
-  # developer dashboard is destroy.
   before_filter :require_dashboard_access, :only   => [:destroy]
   before_filter :require_api_access,       :except => [:destroy]
   before_filter :set_leaderboard,          :except => [:destroy]
 
-  # GET /scores
-  # GET /scores.json
   def index
     since = params[:since] && Time.parse(params[:since].to_s)
     user_id = params[:user_id].to_i
@@ -20,8 +15,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # GET /scores/1
-  # GET /scores/1.json
   def show
     @score = @leaderboard.scores.find(params[:id].to_i)
 
@@ -31,8 +24,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # POST /scores
-  # POST /scores.json
   def create
     err_message = nil
     user_id = params[:score].delete(:user_id)
@@ -60,8 +51,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # DELETE /scores/1
-  # DELETE /scores/1.json
   def destroy
     @score = Score.find(params[:id].to_i)
     if current_developer.authorized_to_delete_score?(@score)

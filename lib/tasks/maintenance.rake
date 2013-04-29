@@ -44,4 +44,13 @@ namespace :maintenance do
     end
     puts "Done."
   end
+
+  desc "Prune users"
+  task :prune_users => :environment do
+    STDOUT.print "This modifies the DB, are you sure? (y/n) "
+    if STDIN.gets.chomp == "y"
+      ActiveRecord::Base.logger = Logger.new(STDOUT)
+      User.unreferenced.destroy_all
+    end
+  end
 end

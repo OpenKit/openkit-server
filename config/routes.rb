@@ -1,15 +1,25 @@
 OKDashboard::Application.routes.draw do
+
+  # In the dashboard, the @app is set off of its id, which is part of the
+  # request path.  When using the API, the app_key is used instead, and is
+  # passed as a json param.
   resources :apps do
-    resources :leaderboards
+    resources :leaderboards  # Dash
+    resources :achievements  # Dash
   end
 
-  resources :leaderboards, :only => [:index]
+  # API
+  resources :leaderboards, :only => [:index, :create]
+  resources :achievements, :only => [:index, :create]
+  match "achievements/facebook",          to: "achievements#facebook",  via: :get
 
   resources :change_password, :only => [:new, :create]
   resources :password_resets, :only => [:new, :create, :edit, :update]
 
   resources :users
   resources :scores, :only => [:create, :index, :show, :destroy]
+  resources :achievement_scores, :only => [:create, :destroy]
+
 
   # API only
   match "best_scores",          to: "best_scores#index",  via: :get
@@ -24,6 +34,10 @@ OKDashboard::Application.routes.draw do
   match "developer_data",      to: "developer_data#index",   via: :get,    :as => :developer_data   # Dashboard only
   # match "developer_data/:id",  to: "developer_data#destroy", via: :delete, :as => :developer_data   # Dashboard only
   match "developer_data/:id",  to: "developer_data#show",    via: :get,    :as => :developer_data   # API only
+
+
+  # Special request to purge end to end test data
+  match "/purge_test_data", to: "apps#purge_test_data", via: :delete
 
   root :to => 'apps#index'
 end
