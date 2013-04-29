@@ -33,15 +33,8 @@ class Achievement < ActiveRecord::Base
 
 
   def progress(user_id)
-    achievement_scores = AchievementScore.where(:achievement_id => id, :user_id => user_id)
-    res = achievement_scores.select("progress").where({:user_id => user_id}).first(:include => :user)["progress"].nil? rescue true
-
-    unless res
-      progress = achievement_scores.select("progress").where({:user_id => user_id}).first(:include => :user)["progress"]
-    else
-      progress = 0
-    end
-    progress
+    res = achievement_scores.where(:user_id => user_id).order("progress DESC").limit(1)[0]
+    res ? res.progress : 0
   end
 
   def achievement_list(user_id)
