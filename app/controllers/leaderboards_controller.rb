@@ -1,6 +1,6 @@
 class LeaderboardsController < ApplicationController
-  before_filter :require_dashboard_or_api_access, :only   => [:index]
-  before_filter :require_dashboard_access,        :except => [:index]
+  before_filter :require_dashboard_or_api_access, :only   => [:index, :create]
+  before_filter :require_dashboard_access,        :except => [:index, :create]
   before_filter :set_app
 
 

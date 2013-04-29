@@ -1,6 +1,6 @@
 class AchievementsController < ApplicationController
-  before_filter :require_dashboard_or_api_access, :only   => [:index, :facebook]
-  before_filter :require_dashboard_access,        :except => [:index, :facebook]
+  before_filter :require_dashboard_or_api_access, :only   => [:index, :create, :facebook]
+  before_filter :require_dashboard_access,        :except => [:index, :create, :facebook]
   before_filter :set_app
   layout "facebook",    :only   => [:facebook]
   layout "application", :except => [:facebook]
@@ -21,8 +21,8 @@ class AchievementsController < ApplicationController
   # Dash only
   def show
     @achievement = @app.achievements.find(params[:id].to_i)
-    @top_scores = Score.bests_for('all_time', @achievement.id)
-    ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
+    @achievement_scores = @achievement.best_scores
+    ActiveRecord::Associations::Preloader.new(@best__scores, [:user]).run
 
     respond_to do |format|
       format.html # show.html.erb
@@ -59,7 +59,6 @@ class AchievementsController < ApplicationController
     @achievement = @app.achievements.find(params[:id].to_i)
   end
 
-  # Dash only
   def create
     @achievement = @app.achievements.new(params[:achievement])
 

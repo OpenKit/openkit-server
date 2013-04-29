@@ -13,7 +13,10 @@
     <li class="icon"><b>Icon Locked:</b> <%= image_tag @achievement.icon_locked.url, {:class=> 'leaderboard_icon'} %></li>
     <li class="icon"><b>Icon:</b> <%= image_tag @achievement.icon.url, {:class=> 'leaderboard_icon'} %></li>
     <li><b>Name:</b> <span><%= @achievement.name %></span></li>
+    <li><b>Desc:</b> <span><%= @achievement.desc %></span></li>
     <li><b>ID:</b> <span><%= @achievement.id %></span></li>
+    <li><b>Goal:</b> <span><%= @achievement.goal %></span></li>
+    <li><b>Points:</b> <span><%= @achievement.points %></span></li>
     <li><b>In Development:</b> <span><%= @achievement.in_development %></span></li>
   </ul>
 </div>
@@ -23,24 +26,20 @@
 <table class="box left">
   <tr>
     <th>Nick</th>
-	<th>Display String</th>
-    <th>Value</th>
-	<th>Metadata</th>
+	  <th>Current progress</th>
     <th>Scored at</th>
   </tr>
 
-  <% if @top_scores.empty? %>
+  <% if @achievement_scores.empty? %>
     <tr>
       <td colspan="3">There are no players in this achievement.</td>
     </tr>
   <% else %>
 
-    <% @top_scores.each do |score| %>
+    <% @achievement_scores.each do |score| %>
       <tr>
         <td><%= score.user.nick %></td>
-		<td><%= score.display_string %></td>
-        <td><%= score.value %></td>
-		<td><%= score.metadata %></td>
+		    <td><%= score.progress %></td>
         <td><%= score.created_at %></td>
     </tr>
     <% end %>

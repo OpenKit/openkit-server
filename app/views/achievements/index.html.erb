@@ -16,7 +16,6 @@
       <th>In Development?</th>
       <th></th>
     </tr>
-<%# count = 0; %>
   <% if @achievements.empty? %>
     <tr>
         <td colspan="5">There are no achievements for this app. <%= link_to 'Add a New Achievement', new_app_achievement_path(@app) %></td>
@@ -24,12 +23,13 @@
   <% else %>
     <% @achievements.each do |achievement| %>
       <tr>
-        <td class="icon"><%= image_tag achievement.icon.url, {:class=> 'leaderboard_icon'} %>
-	<br /><div style="text-align:center;width:100%">Unlocked</div>
-	</td>
+        <td class="icon">
+          <%= image_tag achievement.icon.url, {:class=> 'leaderboard_icon'} %>
+          <br /><div style="text-align:center;width:100%">Unlocked</div>
+        </td>
         <td class="icon"><%= image_tag achievement.icon_locked.url, {:class=> 'leaderboard_icon'} %>
-	<br /><div style="text-align:center;width:100%">Locked</div>
-	</td>
+          <br /><div style="text-align:center;width:100%">Locked</div>
+        </td>
         <td class="name"><%= link_to achievement.name, [@app, achievement] %></td>
         <td class="id"><%= achievement.id %></td>
         <td class="goal"><%= achievement.goal %></td>

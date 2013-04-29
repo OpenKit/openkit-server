@@ -17,6 +17,10 @@ class Developer < ActiveRecord::Base
     score.leaderboard.app.developer == self
   end
 
+  def authorized_to_delete_achievement_score?(achievement_score)
+    achievement_score.achievement.app.developer == self
+  end
+
   # Remove the deliver message when using Delayed Job 3. See:
   # https://github.com/collectiveidea/delayed_job
   def deliver_password_reset_instructions!

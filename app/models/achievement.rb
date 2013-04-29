@@ -8,7 +8,7 @@ class Achievement < ActiveRecord::Base
   belongs_to :app
   has_many :achievement_scores, :dependent => :delete_all
 
-  def api_fields(base_uri, user_id)
+  def api_fields(base_uri, user_id = nil)
     fields = {
       :id => id,
       :app_id => app_id,
@@ -58,4 +58,5 @@ class Achievement < ActiveRecord::Base
     end
     achievement_score
   end
+
 end
