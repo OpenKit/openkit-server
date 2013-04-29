@@ -26,7 +26,7 @@ class AchievementsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @achievement.api_fields }
+      format.json { render json: @achievement.api_fields(request_base_uri) }
     end
   end
 
@@ -39,7 +39,7 @@ class AchievementsController < ApplicationController
 
     respond_to do |format|
       format.html # facebook.html.erb
-      format.json { render json: @achievement.api_fields }
+      format.json { render json: @achievement.api_fields(request_base_uri) }
     end
   end
 
@@ -50,7 +50,7 @@ class AchievementsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @achievement.api_fields }
+      format.json { render json: @achievement.api_fields(request_base_uri) }
     end
   end
 
@@ -66,7 +66,7 @@ class AchievementsController < ApplicationController
     respond_to do |format|
       if @achievement.save
         format.html { redirect_to [@app, @achievement], notice: 'Achievement was successfully created.' }
-        format.json { render json: @achievement.api_fields, status: :created, location: [@app, @achievement] }
+        format.json { render json: @achievement.api_fields(request_base_uri), status: :created, location: [@app, @achievement] }
       else
         format.html { render action: "new" }
         format.json { render json: @achievement.errors, status: :unprocessable_entity }

@@ -1,13 +1,13 @@
 class Leaderboard < ActiveRecord::Base
   attr_accessible :name, :icon, :in_development, :sort_type
   attr_accessible :type
-  validates_presence_of :name
+  validates_presence_of :name, :sort_type
   validates_uniqueness_of :name, :scope => :app_id
 
   belongs_to :app
   has_many :scores, :dependent => :delete_all
 
-  def api_fields(base_uri = "http://localhost:3000/")
+  def api_fields(base_uri)
     {
       :id => id,
       :app_id => app_id,
