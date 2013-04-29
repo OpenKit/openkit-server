@@ -37,19 +37,28 @@ class Achievement < ActiveRecord::Base
     res ? res.progress : 0
   end
 
-  def achievement_list(user_id)
-    AchievementScore.where(:achievement_id => id, :user_id => user_id)
-    achievement_score = achievement_scores.where({:user_id => user_id}).first(:include => :user)
-    if achievement_score
-      table = Arel::Table.new(:achievement_scores)
-      #order = (sort_type == HIGH_VALUE_SORT_TYPE) ? table[:value].desc : table[:value]
-      sub = table.project("*")
-      sub.where(table["achievement_id"].eq(id))
-      sub = sub.as("sub")
-      sub2 = AchievementScore.select("*").from(sub).group(:user_id).as("sub2")
-      achievement_score.rank = AchievementScore.select('*').from(sub2).count + 1
-    end
-    achievement_score
+  def best_scores
+    cond = ActiveRecord::Base.send(:sanitize_sql_array, ["achievement_id = ?", id])
+
+    query =<<-END
+    select achievement_scores.* from (
+      select t1.*, min(created_at) as first_time from (
+        select achievement_id, user_id, max(progress) as max_progress from achievement_scores
+        where #{cond}
+        group by user_id
+        order by max_progress DESC
+        limit 10
+      ) t1
+      left join achievement_scores x on t1.achievement_id=x.achievement_id and t1.user_id=x.user_id and t1.max_progress=x.progress
+      where x.#{cond}
+      group by x.user_id
+      ) t2
+    left join achievement_scores on t2.achievement_id=achievement_scores.achievement_id AND t2.user_id=achievement_scores.user_id AND t2.max_progress=achievement_scores.progress AND t2.first_time=achievement_scores.created_at
+    GROUP BY user_id
+    ORDER BY achievement_scores.progress DESC
+    END
+    query.gsub!(/\s+/, " ")
+    AchievementScore.find_by_sql(query)
   end
 
 end
