@@ -1,5 +1,19 @@
 OKDashboard::Application.routes.draw do
 
+  resources :oauth_clients
+
+  match '/oauth/test_request',  :to => 'oauth#test_request',  :as => :test_request
+
+  match '/oauth/token',         :to => 'oauth#token',         :as => :token
+
+  match '/oauth/access_token',  :to => 'oauth#access_token',  :as => :access_token
+
+  match '/oauth/request_token', :to => 'oauth#request_token', :as => :request_token
+
+  match '/oauth/authorize',     :to => 'oauth#authorize',     :as => :authorize
+
+  match '/oauth',               :to => 'oauth#index',         :as => :oauth
+
   # In the dashboard, the @app is set off of its id, which is part of the
   # request path.  When using the API, the app_key is used instead, and is
   # passed as a json param.
