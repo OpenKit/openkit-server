@@ -15,6 +15,7 @@ gem 'redis',         '3.0.2'
 gem 'daemons',       '1.1.9'
 gem 'json',          '1.7.7'
 gem 'aws-sdk',       '1.9.5'
+gem 'oauth-plugin',  '0.4.1'
 
 group :development do
   gem 'fog'
