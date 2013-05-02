@@ -14,9 +14,9 @@ class ApplicationController < ActionController::Base
     @current_developer = @access[:dashboard] && @access[:dashboard][:developer]
   end
 
-  def current_app
-    return @current_app if defined?(@current_app)
-    @current_app = @access[:api] && @access[:api][:app]
+  def authorized_app
+    return @authorized_app if defined?(@authorized_app)
+    @authorized_app = @access[:api] && @access[:api][:app]
   end
 
   def require_dashboard_access
@@ -27,51 +27,46 @@ class ApplicationController < ActionController::Base
           redirect_to login_path, notice: "You must be logged in to do that"
         }
         format.json {
-          render status: :forbidden, json: { message: "This action is only available through the developer dashboard." }
+          render :status => :forbidden, :json => { message: "This action is only available through the developer dashboard." }
         }
       end
     end
   end
 
   def require_api_access
-    if current_app
-      if !accepts_json?
-        render status: :bad_request, json: {message: %(Client must accept JSON.  Set the 'Accepts' header on your HTTP request to "application/json")}
-      end
+    unless accepts_json?
+      render :status => :bad_request, :text => %(Client must accept JSON.  Set the 'Accept' header on your HTTP request to "application/json")
     else
-      respond_to do |format|
-        format.html {
-          render status: :forbidden, text: "Requires API Access"
-        }
-        format.json {
-          message = params[:app_key] ? "Could not find an app by that app_key."
-                                     : "Please pass an app_key with your request."
-          render status: :forbidden, json: {message: message}
-        }
+      unless authorized_app
+        render :status => :forbidden, :json => { message: "Please make sure your app_key and secret_key are correct." }
       end
     end
   end
 
   def require_dashboard_or_api_access
-    unless current_app || current_developer
-      respond_to do |format|
-        format.html {
-          store_location
-          redirect_to login_path, notice: "You must be logged in to do that"
-        }
-        format.json {
-          render status: :forbidden, json: {message: "Please pass app_key with request"}
-        }
+    if api_request?
+      unless accepts_json?
+        render :status => :bad_request, :text => %(Client must accept JSON.  Set the 'Accept' header on your HTTP request to "application/json")
+      else
+        unless authorized_app
+          render :status => :forbidden, :json => { message: "Please make sure your app_key and secret_key are correct." }
+        end
+      end
+    else
+      unless current_developer
+        store_location
+        redirect_to login_path, notice: "You must be logged in to do that"
       end
     end
   end
 
   def set_access
     @access = {}
-    if params[:app_key]
+    if request.env[:authorized_app]
       @access[:api] = {}
-      @access[:api][:app] = App.find_by_app_key(params[:app_key].to_s)
+      @access[:api][:app] = request.env[:authorized_app]
     else
+      # Developer must provide credentials.  Not using oauth.
       @access[:dashboard] = {}
       @access[:dashboard][:developer] = current_developer_session && current_developer_session.record
     end
@@ -104,15 +99,15 @@ class ApplicationController < ActionController::Base
 
   def set_app
     if api_request?
-      @app = current_app
+      @app = authorized_app
     else
-      @app = current_developer.apps.find(params[:app_id].to_s)  # to_s because we use slug on app
+      @app = params[:app_id] && current_developer.apps.find(params[:app_id].to_s)  # to_s because we use slug on app
     end
 
     if !@app
       respond_to do |format|
-        format.html { render status: :forbidden, text: "Forbidden" }
-        format.json { render status: :forbidden, json: {message: "Please check your app_key."} }
+        format.html { render :status => :forbidden, :text => "Forbidden" }
+        format.json { render :status => :forbidden, :json => { message: "Please check your app_key and secret_key." } }
       end
     end
   end
