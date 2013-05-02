@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20130613190346) do
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
     t.string   "fbid"
+    t.string   "secret_key",        :limit => 40
   end
 
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
@@ -107,6 +108,15 @@ ActiveRecord::Schema.define(:version => 20130613190346) do
   end
 
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
+
+  create_table "oauth_nonces", :force => true do |t|
+    t.string   "nonce"
+    t.integer  "timestamp"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
 
   create_table "scores", :force => true do |t|
     t.integer  "sort_value",     :limit => 8, :null => false
