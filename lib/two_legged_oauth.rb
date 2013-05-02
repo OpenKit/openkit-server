@@ -15,10 +15,10 @@ class TwoLeggedOAuth
       return @app.call(env)
     end
 
-    # For debug, may inspect oath params with:
+    # For debug, may inspect oauth params with:
     # oauth_params = SimpleOAuth::Header.parse(env['HTTP_AUTHORIZATION'])
 
-    client_application = nil
+    authorizing_app = nil
     req_proxy = OAuth::RequestProxy.proxy(request)
 
     # There is no auth token for two-legged, so we return nil for token_secret in block.
@@ -29,8 +29,8 @@ class TwoLeggedOAuth
         return [401, {}, ["Unauthorized. Please use OAuth 1.0"]]
       end
 
-      client_application = ClientApplication.find_by_key(req_proxy.consumer_key)
-      [nil, client_application && client_application.secret]
+      authorizing_app = App.find_by_app_key(req_proxy.consumer_key)
+      [nil, authorizing_app && authorizing_app.secret_key]
     end
 
     if !OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
@@ -42,7 +42,7 @@ class TwoLeggedOAuth
     end
 
     # Made it!
-    request.env[:authorized_app] = client_application
+    request.env[:authorized_app] = authorizing_app
     @app.call(env)
   end
 

@@ -16,9 +16,10 @@ class App < ActiveRecord::Base
   has_many :subscriptions, :dependent => :destroy
   has_many :users, :through => :subscriptions
 
-  before_create :set_app_key
+  before_validation :set_app_key, :on => :create
+  before_validation :set_secret_key, :on => :create
 
-  validates_presence_of :name
+  validates_presence_of :name, :app_key, :secret_key
   validates_uniqueness_of :name, :scope => :developer_id
   has_attached_file :icon, :default_url => '/assets/app_icon.png'
 
@@ -49,5 +50,9 @@ class App < ActiveRecord::Base
     begin
       self.app_key = ::RandomGen.alphanumeric_string(10 + (rand() * 10).ceil)
     end until App.count(:conditions => {:app_key => self.app_key}) == 0
+  end
+
+  def set_secret_key
+    self.secret_key = OAuth::Helper.generate_key(40)[0, 40]
   end
 end
