@@ -29,4 +29,16 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1,   User.count
     assert_equal 123, User.first.custom_id
   end
+
+  test "should require custom_id, twitter_id, fb_id, or google_id" do
+    current_app = App.find_by_app_key(@app_key)
+
+    user = current_app.find_or_create_subscribed_user({:nick => 'Foo'})
+    assert user.new_record?
+
+    %w(fb_id twitter_id google_id custom_id).each do |service_id|
+      user = current_app.find_or_create_subscribed_user({:nick => 'Foo', service_id => 9})
+      assert !user.new_record?
+    end
+  end
 end

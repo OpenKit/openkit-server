@@ -44,15 +44,10 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     err_message = nil
-    if params[:user][:fb_id].blank? && params[:user][:twitter_id].blank? && params[:user][:custom_id].blank?
-      err_message = "Please pass either a fb_id, twitter_id, or custom_id"
-    end
 
-    if !err_message
-      @user = current_app.find_or_create_subscribed_user(params[:user])
-      err_message = "Could not create that user." if @user.nil?
-      err_message = "Couldn't subscribe user because:#{@user.errors.full_messages[0]}" if @user.errors.count != 0
-    end
+    @user = current_app.find_or_create_subscribed_user(params[:user])
+    err_message = "Could not create that user." if @user.nil?
+    err_message = "Couldn't subscribe user because:#{@user.errors.full_messages[0]}" if @user.errors.count != 0
 
     if !err_message
       render json: @user, status: :created, location: @user

@@ -26,8 +26,8 @@ class ScoreTest < ActiveSupport::TestCase
   def setup
     @hs_leaderboard = Leaderboard.create!(name: "high", sort_type: Leaderboard::HIGH_VALUE_SORT_TYPE)
     @ls_leaderboard = Leaderboard.create!(name: "low", sort_type: Leaderboard::LOW_VALUE_SORT_TYPE)
-    @user   = User.create!(nick: "foo")
-    @user2  = User.create!(nick: "bar")
+    @user   = User.create!(nick: "foo", :custom_id => 1)
+    @user2  = User.create!(nick: "bar", :custom_id => 2)
   end
 
   test "scores of the same leaderboard type should compare properly" do
@@ -184,7 +184,8 @@ class ScoreTest < ActiveSupport::TestCase
         vals << rand(best)
       end
 
-      user_val_arr << {:nick => "user#{x}",
+      user_val_arr << {:custom_id => x,
+                       :nick => "user#{x}",
                        :values => vals,
                        :best => best}
     end
@@ -193,7 +194,7 @@ class ScoreTest < ActiveSupport::TestCase
 
     # Create Score objects
     user_val_arr.each do |h|
-      user = User.create!(:nick => h[:nick])
+      user = User.create!(:nick => h[:nick], :custom_id => h[:custom_id])
       h[:values].each do |val|
         score_helper!(@hs_leaderboard, user, val)
       end

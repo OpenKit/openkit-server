@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130426174146) do
+ActiveRecord::Schema.define(:version => 20130502211458) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(:version => 20130426174146) do
     t.integer  "goal"
   end
 
-  add_index "achievements", ["app_id"], :name => "index_achievements_on_game_id"
+  add_index "achievements", ["app_id"], :name => "index_achievements_on_app_id"
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20130426174146) do
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
     t.string   "fbid"
+    t.string   "secret_key",        :limit => 40
   end
 
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
@@ -145,6 +146,15 @@ ActiveRecord::Schema.define(:version => 20130426174146) do
 
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
 
+  create_table "oauth_nonces", :force => true do |t|
+    t.string   "nonce"
+    t.integer  "timestamp"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
+
   create_table "scores", :force => true do |t|
     t.integer  "sort_value",     :limit => 8, :null => false
     t.integer  "user_id"
@@ -174,11 +184,13 @@ ActiveRecord::Schema.define(:version => 20130426174146) do
     t.integer  "twitter_id",   :limit => 8
     t.integer  "fb_id",        :limit => 8
     t.integer  "custom_id",    :limit => 8
+    t.integer  "google_id",    :limit => 8
   end
 
   add_index "users", ["custom_id"], :name => "index_users_on_custom_id"
   add_index "users", ["developer_id"], :name => "index_users_on_developer_id"
   add_index "users", ["fb_id"], :name => "index_users_on_fb_id"
+  add_index "users", ["google_id"], :name => "index_users_on_google_id"
   add_index "users", ["twitter_id"], :name => "index_users_on_twitter_id"
 
 end
