@@ -30,7 +30,7 @@ class ScoresController < ApplicationController
     err_message = "Please pass a user_id with your score."  if user_id.blank?
 
     if !err_message
-      user = user_id && current_app.users.find_by_id(user_id.to_i)
+      user = user_id && authorized_app.users.find_by_id(user_id.to_i)
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
@@ -66,7 +66,7 @@ class ScoresController < ApplicationController
     l_id1 = params[:score] && params[:score].delete(:leaderboard_id)
     l_id2 = params.delete(:leaderboard_id)
     if(leaderboard_id = l_id1 || l_id2)
-      @leaderboard = current_app.leaderboards.find_by_id(leaderboard_id.to_i)
+      @leaderboard = authorized_app.leaderboards.find_by_id(leaderboard_id.to_i)
     end
 
     unless @leaderboard

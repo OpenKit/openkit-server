@@ -24,9 +24,9 @@ class App < ActiveRecord::Base
   has_attached_file :icon, :default_url => '/assets/app_icon.png'
 
 
-  # First, see if the user already exists for the developer of this app. If it
-  # does, create a subscription to current_app for this user.  If it does not,
-  # create both the user and the subscription.
+  # First, see if the user already exists for the developer of this app, based
+  # on user_params. If user already exists, subscribe him/her to this app.  If
+  # user does not yet exist, create both the user and the subscription.
   def find_or_create_subscribed_user(user_params)
     u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_i)) ||
         (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_i)) ||

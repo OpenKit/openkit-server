@@ -61,7 +61,7 @@ class DeveloperDataController < ApplicationController
   private
   def get_interface(user_id, err_out)
     dev_data = nil
-    if api_developer = current_app && current_app.developer
+    if api_developer = authorized_app && authorized_app.developer
       dev_data = DeveloperData.new(api_developer)
       if user = api_developer.users.find_by_id(user_id)
         dev_data.user = user
