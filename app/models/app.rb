@@ -48,7 +48,7 @@ class App < ActiveRecord::Base
   private
   def set_app_key
     begin
-      self.app_key = ::RandomGen.alphanumeric_string(10 + (rand() * 10).ceil)
+      self.app_key = OAuth::Helper.generate_key(20)[0, 20]
     end until App.count(:conditions => {:app_key => self.app_key}) == 0
   end
 
