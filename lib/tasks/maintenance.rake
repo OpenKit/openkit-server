@@ -53,4 +53,20 @@ namespace :maintenance do
       User.unreferenced.destroy_all
     end
   end
+
+
+  desc "Move assets to S3"
+  task :move_ass do
+    key, secret = File.read(File.join(Dir.home, '.awssecret')).split("\n")
+    storage = Fog::Storage.new(:provider => 'AWS', :aws_access_key_id => key, :aws_secret_access_key => secret, :region => 'us-west-2')
+    ok_up = storage.directories.new(:key => 'ok-up')
+
+    attachment_files = nil
+    Dir.chdir("public/system") do
+      attachment_files = %x(find * -type f).split("\n")
+      attachment_files.each do |f|
+        foo = ok_up.files.create(:key => f, :body => File.open(f), :public => true)
+      end
+    end
+  end
 end
