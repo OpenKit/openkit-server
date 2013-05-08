@@ -12,7 +12,7 @@ module OKConfig
       :mail_domain              => nil || 'www.example.com',
       :mail_user                => nil || 'no-reply@www.example.com',
       :mail_pass                => nil || 'replaceme',
-      :mailer_host              => nil || 'www.example.com'
+      :mailer_host              => nil || 'www.example.com',
       :aws_key                  => nil || 'public-aws-key',
       :aws_secret               => nil || 'signing-key',
       :s3_attachment_bucket     => nil || 's3bucketname',
