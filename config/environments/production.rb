@@ -71,9 +71,9 @@ OKDashboard::Application.configure do
     key, secret = File.read(aws_creds_file).split("\n")
   end
   config.paperclip_defaults = {
-    :storage => OKConfig[:s3_attachment_bucket],
+    :storage => :s3,
     :s3_credentials => {
-      :bucket => 'ok-up',
+      :bucket => OKConfig[:s3_attachment_bucket],
       :access_key_id => key || OKConfig[:aws_key],
       :secret_access_key => secret || OKConfig[:aws_secret]
     }
