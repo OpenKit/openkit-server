@@ -5,9 +5,9 @@ class Developer < ActiveRecord::Base
   acts_as_authentic do |c|
     c.perishable_token_valid_for = 24.hours
   end
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :name
 
-  has_many :apps
+  has_many :apps, :dependent => :destroy
   has_many :users
 
   validates_presence_of :email
@@ -15,6 +15,10 @@ class Developer < ActiveRecord::Base
 
   def authorized_to_delete_score?(score)
     score.leaderboard.app.developer == self
+  end
+
+  def authorized_to_delete_achievement_score?(achievement_score)
+    achievement_score.achievement.app.developer == self
   end
 
   # Remove the deliver message when using Delayed Job 3. See:

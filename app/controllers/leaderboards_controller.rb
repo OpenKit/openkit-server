@@ -1,57 +1,51 @@
 class LeaderboardsController < ApplicationController
-  before_filter :require_dashboard_or_api_access, :only => [:index]
-  before_filter :require_dashboard_access, :except => [:index]
+  before_filter :require_dashboard_or_api_access, :only   => [:index, :create]
+  before_filter :require_dashboard_access,        :except => [:index, :create]
   before_filter :set_app
 
 
-  # GET /leaderboards
-  # GET /leaderboards.json
   def index
     @leaderboards = @app.leaderboards
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @leaderboards.map {|x| x.api_fields(base_uri)} }
+      format.html
+      format.json { render json: @leaderboards.map {|x| x.api_fields(request_base_uri)} }
     end
   end
 
-  # GET /leaderboards/1
-  # GET /leaderboards/1.json
+  # Dash only
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    @top_scores = @leaderboard.top_scores
+    @top_scores = Score.bests_for('all_time', @leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @leaderboard.api_fields }
+      format.json { render json: @leaderboard.api_fields(request_base_uri) }
     end
   end
 
-  # GET /leaderboards/new
-  # GET /leaderboards/new.json
+  # Dash only
   def new
     @leaderboard = @app.leaderboards.build
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @leaderboard.api_fields }
+      format.json { render json: @leaderboard.api_fields(request_base_uri) }
     end
   end
 
-  # GET /leaderboards/1/edit
+  # Dash only
   def edit
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
   end
 
-  # POST /leaderboards
-  # POST /leaderboards.json
   def create
     @leaderboard = @app.leaderboards.new(params[:leaderboard])
 
     respond_to do |format|
       if @leaderboard.save
         format.html { redirect_to [@app, @leaderboard], notice: 'Leaderboard was successfully created.' }
-        format.json { render json: @leaderboard.api_fields, status: :created, location: [@app, @leaderboard] }
+        format.json { render json: @leaderboard.api_fields(request_base_uri), status: :created, location: [@app, @leaderboard] }
       else
         format.html { render action: "new" }
         format.json { render json: @leaderboard.errors, status: :unprocessable_entity }
@@ -59,8 +53,7 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # PUT /leaderboards/1
-  # PUT /leaderboards/1.json
+  # Dash only
   def update
     params[:leaderboard].delete(:app_id)
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
@@ -76,8 +69,7 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # DELETE /leaderboards/1
-  # DELETE /leaderboards/1.json
+  # Dash only
   def destroy
     @leaderboard = @app.leaderboards.find_by_id(params[:id].to_i)
     if @leaderboard
@@ -91,25 +83,5 @@ class LeaderboardsController < ApplicationController
       format.html { redirect_to app_leaderboards_url(@app), notice: notice }
       format.json { head :no_content }
     end
-  end
-
-  private
-  def set_app
-    if api_request?
-      @app = current_app
-    else
-      @app = current_developer.apps.find(params[:app_id].to_s)
-    end
-
-    if !@app
-      respond_to do |format|
-        format.html { render status: :forbidden, text: "Forbidden" }
-        format.json { render status: :forbidden, json: {message: "Please check your app_key."} }
-      end
-    end
-  end
-
-  def base_uri
-    request.protocol + request.host_with_port
   end
 end

@@ -1,5 +1,5 @@
 class AppsController < ApplicationController
-  before_filter :require_dashboard_access
+  before_filter :require_dashboard_access, :except => [:purge_test_data]
 
   # GET /apps
   # GET /apps.json
@@ -81,6 +81,17 @@ class AppsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to apps_url }
       format.json { head :no_content }
+    end
+  end
+
+  def purge_test_data
+    test_app = App.find_by_app_key("end_to_end_test")
+    if test_app
+      test_app.leaderboards.destroy_all
+      test_app.achievements.destroy_all
+      render json: %|{"ok":true}|
+    else
+      render json: %|{"ok":false}|
     end
   end
 end

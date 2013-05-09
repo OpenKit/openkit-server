@@ -1,13 +1,8 @@
 class ScoresController < ApplicationController
-  # From the API, we need an app_key and leaderboard_id for all actions
-  # in this controller.  The only action that will be available from the
-  # developer dashboard is destroy.
   before_filter :require_dashboard_access, :only   => [:destroy]
   before_filter :require_api_access,       :except => [:destroy]
   before_filter :set_leaderboard,          :except => [:destroy]
 
-  # GET /scores
-  # GET /scores.json
   def index
     since = params[:since] && Time.parse(params[:since].to_s)
     user_id = params[:user_id].to_i
@@ -16,12 +11,10 @@ class ScoresController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @scores.to_json(:include => :user, :methods => :rank) }
+      format.json { render json: @scores.to_json(:include => :user, :methods => [:rank, :value]) }
     end
   end
 
-  # GET /scores/1
-  # GET /scores/1.json
   def show
     @score = @leaderboard.scores.find(params[:id].to_i)
 
@@ -31,8 +24,6 @@ class ScoresController < ApplicationController
     end
   end
 
-  # POST /scores
-  # POST /scores.json
   def create
     err_message = nil
     user_id = params[:score].delete(:user_id)
@@ -43,24 +34,23 @@ class ScoresController < ApplicationController
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
-
     if !err_message
+      value = params[:score].delete(:value)
       @score = @leaderboard.scores.build(params[:score])
+      @score.value = value
       @score.user = user
       if !@score.save
-        err_message = "Score could not be created"
+        err_message = "#{@score.errors.full_messages.join(", ")}"
       end
     end
 
-    if !err_message
-      render status: :created, json: @score, location: @score
-    else
+    if err_message
       render status: :bad_request, json: {message: err_message}
+    else
+      render json: @score, location: @score
     end
   end
 
-  # DELETE /scores/1
-  # DELETE /scores/1.json
   def destroy
     @score = Score.find(params[:id].to_i)
     if current_developer.authorized_to_delete_score?(@score)

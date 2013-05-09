@@ -10,7 +10,7 @@
 <div class="box right details">
   <div class="details_header">Leaderboard Details</div>
   <ul>
-    <li class="icon"><b>Icon:</b> <%= image_tag @leaderboard.icon.url, {:class=> 'leaderboard_icon'} if @leaderboard.icon.file? %></li>
+    <li class="icon"><b>Icon:</b> <%= image_tag @leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></li>
     <li><b>Name:</b> <span><%= @leaderboard.name %></span></li>
     <li><b>ID:</b> <span><%= @leaderboard.id %></span></li>
     <li><b>In Development:</b> <span><%= @leaderboard.in_development %></span></li>
@@ -23,7 +23,9 @@
 <table class="box left">
   <tr>
     <th>Nick</th>
+	<th>Display String</th>
     <th>Value</th>
+	<th>Metadata</th>
     <th>Scored at</th>
   </tr>
 
@@ -36,9 +38,11 @@
     <% @top_scores.each do |score| %>
       <tr>
         <td><%= score.user.nick %></td>
+		<td><%= score.display_string %></td>
         <td><%= score.value %></td>
+		<td><%= score.metadata %></td>
         <td><%= score.created_at %></td>
-      </tr>
+    </tr>
     <% end %>
 
   <% end %>

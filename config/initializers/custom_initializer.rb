@@ -1,5 +1,6 @@
 require 'random_gen'
 require 'ok_redis'
+require 'reaper'
 
 
 module ActiveModel
@@ -25,4 +26,14 @@ module ActiveModel
       end
     end
   end
+end
+
+Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
+
+begin
+  BestScore.refresh_cache_all
+  BestScore1.refresh_cache_all
+  BestScore7.refresh_cache_all
+rescue
 end

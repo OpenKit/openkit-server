@@ -6,6 +6,16 @@ require 'pp'
 require 'debugger'
 
 APP_KEY = "QBQ7ebzX3SymLZPQxbBR"
+APP_DOMAIN = "http://stage.openkit.io"
+#APP_PORT = ":3000/"
+#APP_DOMAIN = "http://stage.openkit.io"
+#APP_DOMAIN = "http://localhost"
+APP_PORT = ":3000/"
+APP_URL = APP_DOMAIN << APP_PORT
+TIP_LEADERBOARDS = "leaderboards"
+TIP_ACHIEVEMENTS = "achievements"
+TIP_USERS = "users"
+TIP_SCORES = "scores"
 
 def yes?(x)
   print x + " (y/n) "
@@ -38,7 +48,7 @@ end
 
 print "Which leaderboard id?"
 x = OKApi.new(APP_KEY,
-              "http://localhost:3000/leaderboards",
+              APP_URL << TIP_LEADERBOARDS,
               nil)
 pp JSON.parse(x.get())
 leaderboard_id = gets.chomp.to_i
@@ -48,7 +58,7 @@ if yes?("Find or create a user?")
   nick = gets.chomp
   print "Enter fb_id: "
   fb_id = gets.chomp.to_i
-  x = OKApi.new(APP_KEY, "http://localhost:3000/users", {:user => {:fb_id => fb_id, :nick => nick}})
+  x = OKApi.new(APP_KEY, APP_URL << TIP_USERS, {:user => {:fb_id => fb_id, :nick => nick}})
   res = JSON.parse(x.post())
   pp res
 
@@ -59,7 +69,7 @@ if yes?("Find or create a user?")
 
 
     x = OKApi.new(APP_KEY,
-                  "http://localhost:3000/scores",
+                  APP_URL << TIP_SCORES,
                   {:score => {:leaderboard_id => leaderboard_id, :user_id => res['id'], :value => score}})
     res = x.post()
     pp res
@@ -68,7 +78,7 @@ end
 
 
 if yes?("Get scores?")
-  x = OKApi.new(APP_KEY, "http://localhost:3000/scores", {:leaderboard_id => leaderboard_id})
+  x = OKApi.new(APP_KEY, APP_URL << TIP_SCORES, {:leaderboard_id => leaderboard_id})
   res = x.get()
   pp JSON.parse(res)
 end

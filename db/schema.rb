@@ -11,7 +11,38 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130206025130) do
+ActiveRecord::Schema.define(:version => 20130502211458) do
+
+  create_table "achievement_scores", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "achievement_id"
+    t.integer  "progress"
+    t.datetime "created_at",     :null => false
+  end
+
+  add_index "achievement_scores", ["user_id", "achievement_id"], :name => "index_achievement_progress_on_app_user_and_achievement_id"
+  add_index "achievement_scores", ["user_id"], :name => "index_achievement_progress_on_app_and_user_id"
+
+  create_table "achievements", :force => true do |t|
+    t.string   "name"
+    t.integer  "app_id"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.string   "icon_locked_file_name"
+    t.string   "icon_locked_content_type"
+    t.integer  "icon_locked_file_size"
+    t.datetime "icon_locked_updated_at"
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
+    t.boolean  "in_development",           :default => true
+    t.text     "desc"
+    t.integer  "points"
+    t.integer  "goal"
+  end
+
+  add_index "achievements", ["app_id"], :name => "index_achievements_on_app_id"
 
   create_table "apps", :force => true do |t|
     t.string   "name"
@@ -24,11 +55,51 @@ ActiveRecord::Schema.define(:version => 20130206025130) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
+    t.string   "fbid"
   end
 
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
   add_index "apps", ["developer_id", "slug"], :name => "index_apps_on_developer_id_and_slug"
   add_index "apps", ["developer_id"], :name => "index_apps_on_developer_id"
+
+  create_table "best_scores", :force => true do |t|
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
+    t.integer  "metadata"
+    t.string   "display_string"
+  end
+
+  add_index "best_scores", ["created_at"], :name => "index_best_scores_on_created_at"
+  add_index "best_scores", ["leaderboard_id"], :name => "index_best_scores_on_leaderboard_id"
+
+  create_table "best_scores_1", :force => true do |t|
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
+    t.integer  "metadata"
+    t.string   "display_string"
+  end
+
+  add_index "best_scores_1", ["created_at"], :name => "index_best_scores_1_on_created_at"
+  add_index "best_scores_1", ["leaderboard_id"], :name => "index_best_scores_1_on_leaderboard_id"
+
+  create_table "best_scores_7", :force => true do |t|
+    t.integer  "leaderboard_id",              :null => false
+    t.integer  "user_id",                     :null => false
+    t.integer  "score_id",                    :null => false
+    t.integer  "value",          :limit => 8, :null => false
+    t.datetime "created_at",                  :null => false
+    t.integer  "metadata"
+    t.string   "display_string"
+  end
+
+  add_index "best_scores_7", ["created_at"], :name => "index_best_scores_7_on_created_at"
+  add_index "best_scores_7", ["leaderboard_id"], :name => "index_best_scores_7_on_leaderboard_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -75,16 +146,15 @@ ActiveRecord::Schema.define(:version => 20130206025130) do
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
 
   create_table "scores", :force => true do |t|
-    t.decimal  "value",          :precision => 16, :scale => 2
+    t.integer  "sort_value",     :limit => 8, :null => false
     t.integer  "user_id"
     t.integer  "leaderboard_id"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at",                  :null => false
+    t.string   "display_string"
+    t.integer  "metadata"
   end
 
-  add_index "scores", ["leaderboard_id", "user_id", "value"], :name => "index_scores_on_leaderboard_id_and_user_id_and_value"
-  add_index "scores", ["leaderboard_id"], :name => "index_scores_on_leaderboard_id"
-  add_index "scores", ["user_id"], :name => "index_scores_on_user_id"
+  add_index "scores", ["leaderboard_id", "user_id"], :name => "index_scores_on_leaderboard_id_and_user_id"
 
   create_table "subscriptions", :force => true do |t|
     t.integer  "app_id"
@@ -103,10 +173,14 @@ ActiveRecord::Schema.define(:version => 20130206025130) do
     t.integer  "developer_id"
     t.integer  "twitter_id",   :limit => 8
     t.integer  "fb_id",        :limit => 8
+    t.integer  "custom_id",    :limit => 8
+    t.integer  "google_id",    :limit => 8
   end
 
+  add_index "users", ["custom_id"], :name => "index_users_on_custom_id"
   add_index "users", ["developer_id"], :name => "index_users_on_developer_id"
   add_index "users", ["fb_id"], :name => "index_users_on_fb_id"
+  add_index "users", ["google_id"], :name => "index_users_on_google_id"
   add_index "users", ["twitter_id"], :name => "index_users_on_twitter_id"
 
 end

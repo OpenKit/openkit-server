@@ -97,4 +97,23 @@ class ApplicationController < ActionController::Base
   def accepts_json?
     request.accepts.include?("application/json")
   end
+
+  def request_base_uri
+    request.protocol + request.host_with_port
+  end
+
+  def set_app
+    if api_request?
+      @app = current_app
+    else
+      @app = current_developer.apps.find(params[:app_id].to_s)  # to_s because we use slug on app
+    end
+
+    if !@app
+      respond_to do |format|
+        format.html { render status: :forbidden, text: "Forbidden" }
+        format.json { render status: :forbidden, json: {message: "Please check your app_key."} }
+      end
+    end
+  end
 end

@@ -22,7 +22,7 @@
   <% else %>
     <% @leaderboards.each do |leaderboard| %>
       <tr>
-        <td class="icon"><%= image_tag leaderboard.icon.url, {:class=> 'leaderboard_icon'} if leaderboard.icon.file? %></td>
+        <td class="icon"><%= image_tag leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></td>
         <td class="name"><%= link_to leaderboard.name, [@app, leaderboard] %></td>
         <td class="id"><%= leaderboard.id %></td>
         <td><%= leaderboard.in_development %></td>

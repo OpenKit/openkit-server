@@ -1,0 +1,64 @@
+<%= form_for([@app, @achievement]) do |f| %>
+  <% if @achievement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@achievement.errors.count, "error") %> prohibited this achievement from being saved:</h2>
+
+      <ul>
+      <% @achievement.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :desc %>
+    <%= f.text_field :desc %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :goal %>
+    <%= f.number_field :goal %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :points %>
+    <%= f.number_field :points %>
+  </div>
+
+
+  <div class="field">
+    <%# f.label :icon_locked %>
+    <label for="achievement_locked_icon">Locked Icon (optional) <span>(100 x 100)</span></label>
+    <%= f.file_field :icon_locked %>
+  </div>
+
+  <div class="field">
+    <%# f.label :icon %>
+    <label for="achievement_icon">Unlocked Icon <span>(100 x 100)</span></label>
+    <%= f.file_field :icon %>
+  </div>
+
+  <% if params[:action] == "edit" %>
+    <%# image_tag @achievement.icon.url if @achievement.icon.file? %>
+  <% end %>
+
+  <% if params[:action] == "edit" %>
+    <div class="field checkbox">
+      <%= f.check_box :in_development %>
+      <%= f.label :in_development %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %> <%= link_to 'Cancel', [@app, @achievement], {:class=> 'cancel'} %>
+  </div>
+
+<% end %>
