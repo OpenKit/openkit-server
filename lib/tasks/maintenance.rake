@@ -56,10 +56,10 @@ namespace :maintenance do
 
 
   desc "Move assets to S3"
-  task :move_ass do
+  task :move_ass, [:bucket] do |t, args|
     key, secret = File.read(File.join(Dir.home, '.awssecret')).split("\n")
     storage = Fog::Storage.new(:provider => 'AWS', :aws_access_key_id => key, :aws_secret_access_key => secret, :region => 'us-west-2')
-    ok_up = storage.directories.new(:key => 'ok-up')
+    ok_up = storage.directories.new(:key => args.bucket.to_s)
 
     attachment_files = nil
     Dir.chdir("public/system") do
