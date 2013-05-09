@@ -78,5 +78,4 @@ OKDashboard::Application.configure do
       :secret_access_key => secret || OKConfig[:aws_secret]
     }
   }
-}
 end
