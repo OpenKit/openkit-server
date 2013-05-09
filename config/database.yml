@@ -1,10 +1,10 @@
 development:
   adapter: mysql2
   encoding: utf8
-  database: leaderboard_dev 
-  username: foo
-  password: bar
-  host: 127.0.0.1 
+  database: leaderboard_dev
+  username: root
+  password: 
+  host: localhost
   port: 3306
 
 # Warning: The database defined as "test" will be erased and
@@ -22,8 +22,8 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: __:database:__
-  username: __:username:__
-  password: __:password:__
-  host: 127.0.0.1 
-  port: 3306
+  database: <%= OKConfig[:database_name] %> 
+  username: <%= OKConfig[:database_username] %>
+  password: <%= OKConfig[:database_password] %>
+  host: <%= OKConfig[:database_host] %>
+  port: <%= OKConfig[:database_port] %>

@@ -21,9 +21,7 @@ class Leaderboard < ActiveRecord::Base
     }
   end
 
-  # Move out to S3...
-  ATTACHMENT_URL = "/system/leaderboards/:attachment/:id_partition/:style/:filename"
-  has_attached_file :icon, url: ATTACHMENT_URL, :default_url => '/assets/leaderboard_icon.png'
+  has_attached_file :icon, :default_url => '/assets/leaderboard_icon.png'
 
   HIGH_VALUE_SORT_TYPE = "HighValue"
   LOW_VALUE_SORT_TYPE = "LowValue"

@@ -28,6 +28,9 @@ module ActiveModel
   end
 end
 
+Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
+
 begin
   BestScore.refresh_cache_all
   BestScore1.refresh_cache_all

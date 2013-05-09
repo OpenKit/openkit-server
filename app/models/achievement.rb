@@ -26,10 +26,8 @@ class Achievement < ActiveRecord::Base
     fields
   end
 
-  # Move to s3
-  ATTACHMENT_URL = "/system/achievements/:attachment/:id_partition/:style/:filename"
-  has_attached_file :icon,        url: ATTACHMENT_URL, :default_url => '/assets/achievement_icon.png'
-  has_attached_file :icon_locked, url: ATTACHMENT_URL, :default_url => '/assets/achievement_locked_icon.png'
+  has_attached_file :icon,        :default_url => '/assets/achievement_icon.png'
+  has_attached_file :icon_locked, :default_url => '/assets/achievement_locked_icon.png'
 
 
   def progress(user_id)

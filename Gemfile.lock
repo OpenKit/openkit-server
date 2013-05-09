@@ -40,6 +40,10 @@ GEM
     authlogic (3.1.3)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
+    aws-sdk (1.9.5)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
+      uuidtools (~> 2.1)
     builder (3.0.4)
     cocaine (0.4.2)
     coffee-rails (3.2.2)
@@ -64,8 +68,21 @@ GEM
       activerecord (>= 2.1.0, < 4)
       delayed_job (~> 3.0)
     erubis (2.7.0)
+    eventmachine (1.0.0)
+    excon (0.21.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    fog (1.11.1)
+      builder
+      excon (~> 0.20)
+      formatador (~> 0.2.0)
+      json (~> 1.7)
+      mime-types
+      net-scp (~> 1.1)
+      net-ssh (>= 2.1.3)
+      nokogiri (~> 1.5.0)
+      ruby-hmac
+    formatador (0.2.4)
     friendly_id (4.0.9)
     hike (1.2.2)
     i18n (0.6.1)
@@ -85,6 +102,10 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.7.2)
     mysql2 (0.3.11)
+    net-scp (1.1.0)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.6.6)
+    nokogiri (1.5.5)
     paperclip (3.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -119,6 +140,7 @@ GEM
       json (~> 1.4)
     redis (3.0.2)
     ref (1.0.4)
+    ruby-hmac (0.4.0)
     sass (3.2.8)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -132,6 +154,10 @@ GEM
     therubyracer (0.11.4)
       libv8 (~> 3.11.8.12)
       ref
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.3.7)
     treetop (1.4.12)
@@ -144,6 +170,7 @@ GEM
     uglifier (2.0.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    uuidtools (2.1.3)
     wirble (0.1.3)
 
 PLATFORMS
@@ -152,11 +179,13 @@ PLATFORMS
 DEPENDENCIES
   annotate!
   authlogic (= 3.1.3)
+  aws-sdk (= 1.9.5)
   coffee-rails (~> 3.2.1)
   daemons (= 1.1.9)
   debugger (= 1.2.2)
   delayed_job (= 3.0.4)
   delayed_job_active_record (= 0.3.3)
+  fog
   friendly_id (= 4.0.9)
   jquery-rails
   json (= 1.7.7)
@@ -167,6 +196,7 @@ DEPENDENCIES
   redis (= 3.0.2)
   sass-rails (~> 3.2.3)
   therubyracer
+  thin
   turbo-sprockets-rails3
   uglifier (>= 1.0.3)
   wirble
