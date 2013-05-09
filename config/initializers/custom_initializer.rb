@@ -1,6 +1,7 @@
 require 'random_gen'
 require 'ok_redis'
 require 'reaper'
+require 'paperclip_helper.rb'
 
 
 module ActiveModel
@@ -28,7 +29,9 @@ module ActiveModel
   end
 end
 
-Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+unless ENV['RAILS_ENV'] == 'development'
+  Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+end
 Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
 
 begin

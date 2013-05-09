@@ -19,8 +19,8 @@ class Achievement < ActiveRecord::Base
       :created_at => created_at,
       :updated_at => updated_at,
       :in_development => in_development,
-      :icon_url => base_uri + icon.url,
-      :icon_locked_url => base_uri + icon_locked.url,
+      :icon_url => PaperclipHelper.uri_for(icon, base_uri),
+      :icon_locked_url => PaperclipHelper.uri_for(icon_locked, base_uri)
     }
     fields[:progress] = progress(user_id) if user_id
     fields

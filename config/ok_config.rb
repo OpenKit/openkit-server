@@ -4,7 +4,7 @@ module OKConfig
   def config_hash
     @config_hash ||= begin
     {
-      :database_name            => nil || 'openkit',
+      :database_name            => nil || 'leaderboard_dev',
       :database_username        => nil || 'root',
       :database_password        => nil || '',
       :database_host            => nil || '127.0.0.1',

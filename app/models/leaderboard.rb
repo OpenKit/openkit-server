@@ -16,7 +16,7 @@ class Leaderboard < ActiveRecord::Base
       :updated_at => updated_at,
       :in_development => in_development,
       :sort_type => sort_type,
-      :icon_url => base_uri + icon.url,
+      :icon_url => PaperclipHelper.uri_for(icon, base_uri),
       :player_count => player_count
     }
   end
