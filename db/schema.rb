@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502211458) do
+ActiveRecord::Schema.define(:version => 20130510025425) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -61,45 +61,6 @@ ActiveRecord::Schema.define(:version => 20130502211458) do
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
   add_index "apps", ["developer_id", "slug"], :name => "index_apps_on_developer_id_and_slug"
   add_index "apps", ["developer_id"], :name => "index_apps_on_developer_id"
-
-  create_table "best_scores", :force => true do |t|
-    t.integer  "leaderboard_id",              :null => false
-    t.integer  "user_id",                     :null => false
-    t.integer  "score_id",                    :null => false
-    t.integer  "value",          :limit => 8, :null => false
-    t.datetime "created_at",                  :null => false
-    t.integer  "metadata"
-    t.string   "display_string"
-  end
-
-  add_index "best_scores", ["created_at"], :name => "index_best_scores_on_created_at"
-  add_index "best_scores", ["leaderboard_id"], :name => "index_best_scores_on_leaderboard_id"
-
-  create_table "best_scores_1", :force => true do |t|
-    t.integer  "leaderboard_id",              :null => false
-    t.integer  "user_id",                     :null => false
-    t.integer  "score_id",                    :null => false
-    t.integer  "value",          :limit => 8, :null => false
-    t.datetime "created_at",                  :null => false
-    t.integer  "metadata"
-    t.string   "display_string"
-  end
-
-  add_index "best_scores_1", ["created_at"], :name => "index_best_scores_1_on_created_at"
-  add_index "best_scores_1", ["leaderboard_id"], :name => "index_best_scores_1_on_leaderboard_id"
-
-  create_table "best_scores_7", :force => true do |t|
-    t.integer  "leaderboard_id",              :null => false
-    t.integer  "user_id",                     :null => false
-    t.integer  "score_id",                    :null => false
-    t.integer  "value",          :limit => 8, :null => false
-    t.datetime "created_at",                  :null => false
-    t.integer  "metadata"
-    t.string   "display_string"
-  end
-
-  add_index "best_scores_7", ["created_at"], :name => "index_best_scores_7_on_created_at"
-  add_index "best_scores_7", ["leaderboard_id"], :name => "index_best_scores_7_on_leaderboard_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
