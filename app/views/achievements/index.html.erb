@@ -8,7 +8,7 @@
 <div class="one_col">
   <table class="box">
     <tr>
-      <th colspan="2">Icons</th>
+      <th>Icon</th>
       <th>Name</th>
       <th>ID</th>
       <th>Goal</th>
@@ -23,13 +23,7 @@
   <% else %>
     <% @achievements.each do |achievement| %>
       <tr>
-        <td class="icon">
-          <%= image_tag achievement.icon.url, {:class=> 'leaderboard_icon'} %>
-          <br /><div style="text-align:center;width:100%">Unlocked</div>
-        </td>
-        <td class="icon"><%= image_tag achievement.icon_locked.url, {:class=> 'leaderboard_icon'} %>
-          <br /><div style="text-align:center;width:100%">Locked</div>
-        </td>
+        <td class="icon"><%= image_tag achievement.icon.url, {:class=> 'leaderboard_icon'} %></td>
         <td class="name"><%= link_to achievement.name, [@app, achievement] %></td>
         <td class="id"><%= achievement.id %></td>
         <td class="goal"><%= achievement.goal %></td>
