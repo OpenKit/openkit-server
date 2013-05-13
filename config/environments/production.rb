@@ -64,18 +64,12 @@ OKDashboard::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-
-  key, secret = nil
-  aws_creds_file = File.join(Dir.home, '.awssecret')
-  if File.exists?(aws_creds_file)
-    key, secret = File.read(aws_creds_file).split("\n")
-  end
   config.paperclip_defaults = {
     :storage => :s3,
     :s3_credentials => {
       :bucket => OKConfig[:s3_attachment_bucket],
-      :access_key_id => key || OKConfig[:aws_key],
-      :secret_access_key => secret || OKConfig[:aws_secret]
+      :access_key_id => OKConfig[:aws_key],
+      :secret_access_key => OKConfig[:aws_secret]
     }
   }
 end
