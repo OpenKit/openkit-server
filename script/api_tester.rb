@@ -2,7 +2,7 @@
 #
 # Setup:
 #   $ rails c
-#   > dev = Developer.create!(:email => "end_to_end@example.com", :name => "Test Developer", :password => "xxx", :password_confirmation => "xxx")
+#   > dev = Developer.create!(:email => "end_to_end@example.com", :name => "Test Developer", :password => "password", :password_confirmation => "password")
 #   > app = dev.apps.create!(:name => "End to end test")
 #   > app.update_attribute(:app_key, "end_to_end_test")
 require 'debugger'

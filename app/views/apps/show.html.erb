@@ -13,6 +13,7 @@
     <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
     <li><b>Name:</b> <span><%= @app.name %></span></li>
     <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
+    <li><b>Secret Key:</b> <a href="#" id='show_secret'>show me</a><span style="display:none;"><%= @app.secret_key %></span></li>
     <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
   </ul>
 </div>
@@ -27,6 +28,13 @@
 
 </div>
 
+
+<script type="text/javascript">
+  $('#show_secret').click(function(){
+      $(this).next().show();
+      $(this).hide();
+  });
+</script>
 
 
 
