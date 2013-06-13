@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130510025425) do
+ActiveRecord::Schema.define(:version => 20130613190346) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -102,6 +102,8 @@ ActiveRecord::Schema.define(:version => 20130510025425) do
     t.datetime "icon_updated_at"
     t.boolean  "in_development",                  :default => true
     t.string   "sort_type",         :limit => 20
+    t.string   "gamecenter_id"
+    t.string   "gpg_id"
   end
 
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
@@ -129,18 +131,20 @@ ActiveRecord::Schema.define(:version => 20130510025425) do
 
   create_table "users", :force => true do |t|
     t.string   "nick"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "developer_id"
-    t.integer  "twitter_id",   :limit => 8
-    t.integer  "fb_id",        :limit => 8
-    t.integer  "custom_id",    :limit => 8
-    t.integer  "google_id",    :limit => 8
+    t.integer  "twitter_id",    :limit => 8
+    t.integer  "fb_id",         :limit => 8
+    t.integer  "custom_id",     :limit => 8
+    t.integer  "google_id",     :limit => 8
+    t.string   "gamecenter_id"
   end
 
   add_index "users", ["custom_id"], :name => "index_users_on_custom_id"
   add_index "users", ["developer_id"], :name => "index_users_on_developer_id"
   add_index "users", ["fb_id"], :name => "index_users_on_fb_id"
+  add_index "users", ["gamecenter_id"], :name => "index_users_on_gamecenter_id"
   add_index "users", ["google_id"], :name => "index_users_on_google_id"
   add_index "users", ["twitter_id"], :name => "index_users_on_twitter_id"
 
