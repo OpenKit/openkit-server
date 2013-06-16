@@ -29,16 +29,11 @@ class DeveloperDataController < ApplicationController
     end
 
     if err_out.blank?
-      json = "{#{key.to_json}:#{x}}"
-      render json: json
+      render :text => "{#{key.to_json}:#{x ? x : "null"}}"   # Yikes.
     else
       render status: :bad_request, json: {message: err_out}
     end
 
-    #respond_to do |format|
-    #  format.html # show.html.erb
-    #  format.json { render json: @developer_data }
-    #end
   end
 
   # POST /developer_data

@@ -47,9 +47,7 @@ class DeveloperData
   def set(field_key, field_val)
     raise ArgumentError, "Doing it wrong." unless @user
     connection.sadd(all_users_key, @user.id)
-    if field_val.is_a?(Hash)
-      field_val = field_val.to_json
-    end
+    field_val = field_val.to_json
     connection.hmset(user_data_key(@user.id), field_key, field_val)
   end
 
