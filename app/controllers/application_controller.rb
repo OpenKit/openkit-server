@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
   end
 
   def accepts_json?
-    request.accepts.include?("application/json")
+    request.accepts.include?("application/json") || request.accepts.include?("*/*")
   end
 
   def request_base_uri
