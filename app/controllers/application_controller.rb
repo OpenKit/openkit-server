@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
       render :status => :bad_request, :text => %(Client must accept JSON.  Set the 'Accept' header on your HTTP request to "application/json")
     else
       unless authorized_app
-        render :status => :forbidden, :json => { message: "Please make sure your app_key and secret_key are correct." }
+        render :status => :forbidden, :json => { message: "Failed oauth 1.0a authentication." }
       end
     end
   end
@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
         render :status => :bad_request, :text => %(Client must accept JSON.  Set the 'Accept' header on your HTTP request to "application/json")
       else
         unless authorized_app
-          render :status => :forbidden, :json => { message: "Please make sure your app_key and secret_key are correct." }
+          render :status => :forbidden, :json => { message: "Failed oauth 1.0a authentication." }
         end
       end
     else
