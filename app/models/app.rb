@@ -31,6 +31,7 @@ class App < ActiveRecord::Base
         (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_i)) ||
         (user_params[:google_id]  && developer.users.find_by_google_id(user_params[:google_id].to_i)) ||
         (user_params[:custom_id]  && developer.users.find_by_custom_id(user_params[:custom_id].to_i)) ||
+        (user_params[:gamecenter_id]  && developer.users.find_by_gamecenter_id(user_params[:gamecenter_id].to_s))
 
     if !u
       u = developer.users.create(user_params)
