@@ -1,7 +1,7 @@
 require 'random_gen'
 require 'ok_redis'
 require 'paperclip_helper.rb'
-
+require 'two_legged_oauth'
 
 module ActiveModel
   class Errors
@@ -28,8 +28,8 @@ module ActiveModel
   end
 end
 
-unless ENV['RAILS_ENV'] == 'development'
+unless ENV['RACK_ENV'] == 'development'
   Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+  Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
 end
-Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
 

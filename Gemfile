@@ -15,13 +15,15 @@ gem 'redis',         '3.0.2'
 gem 'daemons',       '1.1.9'
 gem 'json',          '1.7.7'
 gem 'aws-sdk',       '1.9.5'
+gem 'oauth',         '0.4.7'
 
 group :development do
   gem 'fog'
   gem 'thin'
   gem 'debugger', '1.2.2'
   gem 'wirble'
-  gem 'annotate', :git => 'git://github.com/ctran/annotate_models.git'
+  gem 'simple_oauth',  '0.2.0'
+  gem 'what_methods'
 end
 
 group :test do

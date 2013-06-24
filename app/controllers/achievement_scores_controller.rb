@@ -9,7 +9,7 @@ class AchievementScoresController < ApplicationController
     err_message = "Please pass a user_id with your achievement_score."  if user_id.blank?
 
     if !err_message
-      user = user_id && current_app.users.find_by_id(user_id.to_i)
+      user = user_id && authorized_app.users.find_by_id(user_id.to_i)
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
@@ -44,7 +44,7 @@ class AchievementScoresController < ApplicationController
     l_id1 = params[:achievement_score] && params[:achievement_score].delete(:achievement_id)
     l_id2 = params.delete(:achievement_id)
     if(achievement_id = l_id1 || l_id2)
-      @achievement = current_app.achievements.find_by_id(achievement_id.to_i)
+      @achievement = authorized_app.achievements.find_by_id(achievement_id.to_i)
     end
 
     unless @achievement

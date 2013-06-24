@@ -16,16 +16,17 @@ class App < ActiveRecord::Base
   has_many :subscriptions, :dependent => :destroy
   has_many :users, :through => :subscriptions
 
-  before_create :set_app_key
+  before_validation :set_app_key, :on => :create
+  before_validation :set_secret_key, :on => :create
 
-  validates_presence_of :name
+  validates_presence_of :name, :app_key, :secret_key
   validates_uniqueness_of :name, :scope => :developer_id
   has_attached_file :icon, :default_url => '/assets/app_icon.png'
 
 
-  # First, see if the user already exists for the developer of this app. If it
-  # does, create a subscription to current_app for this user.  If it does not,
-  # create both the user and the subscription.
+  # First, see if the user already exists for the developer of this app, based
+  # on user_params. If user already exists, subscribe him/her to this app.  If
+  # user does not yet exist, create both the user and the subscription.
   def find_or_create_subscribed_user(user_params)
     u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_i)) ||
         (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_i)) ||
@@ -47,7 +48,11 @@ class App < ActiveRecord::Base
   private
   def set_app_key
     begin
-      self.app_key = ::RandomGen.alphanumeric_string(10 + (rand() * 10).ceil)
+      self.app_key = OAuth::Helper.generate_key(20)[0, 20]
     end until App.count(:conditions => {:app_key => self.app_key}) == 0
+  end
+
+  def set_secret_key
+    self.secret_key = OAuth::Helper.generate_key(40)[0, 40]
   end
 end

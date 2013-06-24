@@ -39,5 +39,7 @@ OKDashboard::Application.routes.draw do
   # Special request to purge end to end test data
   match "/purge_test_data", to: "apps#purge_test_data", via: :delete
 
+  match "/fun_with_rack", :to => proc {|env| [200, {}, ["Cool!"]]}
+
   root :to => 'apps#index'
 end

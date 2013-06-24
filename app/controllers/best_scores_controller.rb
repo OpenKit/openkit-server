@@ -9,7 +9,7 @@ class BestScoresController < ApplicationController
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
   end
-  
+
   def user
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
@@ -18,7 +18,7 @@ class BestScoresController < ApplicationController
 
   private
   def set_leaderboard
-    @leaderboard = current_app.leaderboards.find_by_id(params.delete(:leaderboard_id))
+    @leaderboard = authorized_app.leaderboards.find_by_id(params.delete(:leaderboard_id))
     unless @leaderboard
       render status: :forbidden, json: {message: "Pass a leaderboard_id that belongs to the app associated with app_key"}
     end

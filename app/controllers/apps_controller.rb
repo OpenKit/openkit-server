@@ -1,5 +1,6 @@
 class AppsController < ApplicationController
-  before_filter :require_dashboard_access, :except => [:purge_test_data]
+  before_filter :require_dashboard_access,  :except => [:purge_test_data]
+  before_filter :require_api_access,        :only   => [:purge_test_data]
 
   # GET /apps
   # GET /apps.json
