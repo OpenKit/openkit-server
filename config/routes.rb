@@ -24,6 +24,7 @@ OKDashboard::Application.routes.draw do
   # API only
   match "best_scores",          to: "best_scores#index",  via: :get
   match "best_scores/user",     to: "best_scores#user",   via: :get
+  match "best_scores/social",   to: "best_scores#social", via: :post
 
   resources :developers,          :only => [:edit, :update, :show, :new, :create]
   resources :developer_sessions,  :only => [:create]

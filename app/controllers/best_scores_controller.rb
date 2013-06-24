@@ -16,6 +16,11 @@ class BestScoresController < ApplicationController
     render json: @score.to_json(:include => :user, :methods => [:value, :rank])
   end
 
+  def social
+    @scores = Score.social(authorized_app, @leaderboard, params[:fb_friends])
+    render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
+  end
+
   private
   def set_leaderboard
     @leaderboard = authorized_app.leaderboards.find_by_id(params.delete(:leaderboard_id))
