@@ -5,6 +5,7 @@
 #   > dev = Developer.create!(:email => "end_to_end@example.com", :name => "Test Developer", :password => "password", :password_confirmation => "password")
 #   > app = dev.apps.create!(:name => "End to end test")
 #   > app.update_attribute(:app_key, "end_to_end_test")
+#   > app.update_attribute(:secret_key, "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU")
 require 'debugger'
 require 'json'
 require 'rest-client'
@@ -41,6 +42,13 @@ end
 def delete(path)
   blue "Response from DELETE to #{path}:"
   res = CONSUMER.request(:delete, path, nil, {}, { 'Accept' => 'application/json' })
+  response_log(res)
+  res
+end
+
+def put(path, req_params = {})
+  blue "Response from PUT to #{path}:"
+  res = CONSUMER.request(:put, path, nil, {}, req_params.to_json, { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
   response_log(res)
   res
 end
@@ -105,4 +113,8 @@ get '/achievements',               { }
 
 # Get progress of all user 1 achievements for this app:
 get '/achievements',               { user_id: user1['id'] }
+
+# Update a user
+put "/users/#{user1['id']}",       { gamecenter_id: 12345, fb_id: 12345 }
+
 
