@@ -45,12 +45,18 @@
     <%= f.text_field :gpg_id %>
   </div>
 
+  <div class="field">
+    <%= f.label :priority, "Priority (used to control the display order of your leaderboards)" %>
+    <%= f.text_field :priority %>
+  </div>
+
   <% if params[:action] == "edit" %>
     <div class="field checkbox">
       <%= f.check_box :in_development %>
       <%= f.label :in_development %>
     </div>
   <% end %>
+
 
   <div class="actions">
     <%= f.submit %> <%= link_to 'Cancel', [@app, @leaderboard], {:class=> 'cancel'} %>

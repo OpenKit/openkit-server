@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613190346) do
+ActiveRecord::Schema.define(:version => 20130711040819) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20130613190346) do
     t.string   "sort_type",         :limit => 20
     t.string   "gamecenter_id"
     t.string   "gpg_id"
+    t.integer  "priority",                        :default => 100,  :null => false
   end
 
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
