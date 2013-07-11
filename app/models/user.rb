@@ -2,7 +2,7 @@
 # user.apps
 # user.developer
 class User < ActiveRecord::Base
-  attr_accessible :nick, :fb_id, :twitter_id, :google_id, :custom_id
+  attr_accessible :nick, :fb_id, :twitter_id, :google_id, :custom_id, :gamecenter_id
   attr_accessor :cloud_data
   validates_presence_of :nick
   validate :has_service_id
@@ -20,8 +20,8 @@ class User < ActiveRecord::Base
 
   private
   def has_service_id
-    unless fb_id || twitter_id || google_id || custom_id
-      errors.add(:base, "Please provide a service id for this user (fb_id, twitter_id, google_id, or custom_id)")
+    unless fb_id || twitter_id || google_id || custom_id || gamecenter_id
+      errors.add(:base, "Please provide a service id for this user (fb_id, twitter_id, google_id, gamecenter_id, or custom_id)")
     end
   end
 

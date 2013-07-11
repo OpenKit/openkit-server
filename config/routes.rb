@@ -24,6 +24,7 @@ OKDashboard::Application.routes.draw do
   # API only
   match "best_scores",          to: "best_scores#index",  via: :get
   match "best_scores/user",     to: "best_scores#user",   via: :get
+  match "best_scores/social",   to: "best_scores#social", via: :post
 
   resources :developers,          :only => [:edit, :update, :show, :new, :create]
   resources :developer_sessions,  :only => [:create]
@@ -38,6 +39,8 @@ OKDashboard::Application.routes.draw do
 
   # Special request to purge end to end test data
   match "/purge_test_data", to: "apps#purge_test_data", via: :delete
+
+  match "/fun_with_rack", :to => proc {|env| [200, {}, ["Cool!"]]}
 
   root :to => 'apps#index'
 end

@@ -16,6 +16,7 @@
     <%= f.text_field :name %>
   </div>
 
+
   <div class="field">
     <%= f.label :sort_type, "Leaderboard Type" %>
     <%= f.select :sort_type, options_for_select([['Higher values are better', Leaderboard::HIGH_VALUE_SORT_TYPE],
@@ -33,6 +34,16 @@
   <% if params[:action] == "edit" %>
     <%# image_tag @leaderboard.icon.url if @leaderboard.icon.file? %>
   <% end %>
+
+  <div class="field">
+    <%= f.label :gamecenter_id, "Game Center Leaderboard ID" %>
+    <%= f.text_field :gamecenter_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gpg_id, "Google Play Games Leaderboard ID" %>
+    <%= f.text_field :gpg_id %>
+  </div>
 
   <% if params[:action] == "edit" %>
     <div class="field checkbox">

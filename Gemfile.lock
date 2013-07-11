@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/ctran/annotate_models.git
-  revision: 8bd159c7a484093fde84beaa9e6398f25ddacf09
-  specs:
-    annotate (2.6.0.beta1)
-      activerecord (>= 2.3.0)
-      rake (>= 0.8.7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -72,6 +64,8 @@ GEM
     excon (0.21.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    faraday (0.8.7)
+      multipart-post (~> 1.1)
     fog (1.11.1)
       builder
       excon (~> 0.20)
@@ -106,6 +100,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.6.6)
     nokogiri (1.5.5)
+    oauth (0.4.7)
     paperclip (3.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -146,6 +141,7 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    simple_oauth (0.2.0)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -171,13 +167,13 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     uuidtools (2.1.3)
+    what_methods (1.0.1)
     wirble (0.1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  annotate!
   authlogic (= 3.1.3)
   aws-sdk (= 1.9.5)
   coffee-rails (~> 3.2.1)
@@ -191,12 +187,15 @@ DEPENDENCIES
   json (= 1.7.7)
   mocha
   mysql2 (= 0.3.11)
+  oauth (= 0.4.7)
   paperclip (= 3.3.1)
   rails (= 3.2.13)
   redis (= 3.0.2)
   sass-rails (~> 3.2.3)
+  simple_oauth (= 0.2.0)
   therubyracer
   thin
   turbo-sprockets-rails3
   uglifier (>= 1.0.3)
+  what_methods
   wirble

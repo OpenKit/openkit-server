@@ -1,5 +1,5 @@
 class Leaderboard < ActiveRecord::Base
-  attr_accessible :name, :icon, :in_development, :sort_type
+  attr_accessible :name, :icon, :in_development, :sort_type, :gamecenter_id, :gpg_id
   attr_accessible :type
   validates_presence_of :name, :sort_type
   validates_uniqueness_of :name, :scope => :app_id
@@ -17,7 +17,9 @@ class Leaderboard < ActiveRecord::Base
       :in_development => in_development,
       :sort_type => sort_type,
       :icon_url => PaperclipHelper.uri_for(icon, base_uri),
-      :player_count => player_count
+      :player_count => player_count,
+      :gamecenter_id => gamecenter_id, 
+      :gpg_id => gpg_id
     }
   end
 

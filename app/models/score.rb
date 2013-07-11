@@ -39,6 +39,18 @@ class Score < ActiveRecord::Base
       boundary
     end
 
+    def social(app, leaderboard, fb_friends)
+      # Work for now.  Disable rank!!  Pass leaderboard obj instead of id!
+      bests = []
+      users = app.developer.users.where(:fb_id => fb_friends)
+      users.each {|u|
+        if (score = best_for('all_time', leaderboard.id, u.id))
+          bests << score
+        end
+      }
+      bests
+    end
+
     # Put composite index on leaderboard_id, user_id, created_at, sort_value DESC for this one.
     def best_for(frame, leaderboard_id, user_id)
       best_cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
