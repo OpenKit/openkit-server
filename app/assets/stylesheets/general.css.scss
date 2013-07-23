@@ -67,13 +67,12 @@ a{
 }
 
 #error_explanation{
-  padding:10px;
+  padding:20px;
   margin: 0 0 20px 0;
   color: #fff;
-  background: #db5135;
+  background: #e74c3c;
   font-weight: normal;
-  font-size: 12px;
-  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  font-size: 14px;
   @include rounded(5px);
 
   h2{
@@ -181,7 +180,7 @@ a.account {
     font-weight:bold;
     text-shadow:0 1px 0 #fff;
     float:left;
-    line-height: 28px;
+    line-height: 47px;
   }
   a{
     color:#444;
@@ -194,22 +193,18 @@ a.account {
 
 .header a.header_button{
   @include rounded(3px);
-  @include blueButton;
+  @include greenButton;
   float:right;
-  padding: 8px 10px;
-  margin-left:20px;
-  font-size:12px;
+
   i{
     margin-right:5px;
-    font-size:11px;
-    color:#133072;
-    text-shadow:0 1px 0 rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.5);
   }
 }
 
 
-.col_25{width:33%;}
-.col_75{width:67%;}
+.col_25{width:30%;}
+.col_75{width:70%;}
 .col_100{width:100%;}
 
 .col_25 .box{margin-left:20px;}
@@ -251,7 +246,7 @@ a.account {
 
 .details_header{
   border-bottom: 1px solid #ccc;
-  padding: 20px;
+  padding: 15px;
   font-weight: bold;
   text-shadow: 0 1px solid #fff;
   text-align: left;
@@ -293,6 +288,7 @@ a.account {
 
   li{
     padding:20px 0;
+    font-size: 12px;
     border-bottom:1px dotted #ccc;
   }
 
@@ -303,7 +299,10 @@ a.account {
     height:auto;
   }
   span{color:#666;}
-  li:last-child{border-bottom: none;}
+  li:last-child{
+    border-bottom: none;
+    padding-bottom: 10px;
+  }
 }
 
 .no_table{
@@ -311,9 +310,9 @@ a.account {
     li{
       border-top:1px dotted #ccc;
       margin:10px;
-      padding:10px 20px;
+      padding:20px;
       overflow:hidden;
-      line-height:72px;
+      line-height:32px;
       &:first-child{border:none;}
       img{
         display:block;
@@ -349,17 +348,17 @@ table .icon .leaderboard_icon{
   height:50px;
 }
 
-table .manage {width:150px;}
+table .manage {width:160px;}
 
 table .manage a {
-  padding:5px;
-  font-size:12px;
   @include silverButton;
   @include rounded(3px);
+  padding:10px;
+  float: left;
+  font-size:14px;
   i{
     margin-right:3px;
-
-    color:#7f8c9a;
+    color: rgba(255,255,255,0.5);
   }
 }
 
@@ -367,7 +366,7 @@ table .manage a:first-child{margin-right:5px;}
 
 table th {
   border-bottom: 1px solid #ccc;
-  padding: 20px 0 20px 20px;
+  padding: 15px 0 15px 15px;
   font-weight: bold;
   text-shadow: 0 1px solid #fff;
   font-size: 13px;
