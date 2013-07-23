@@ -27,6 +27,7 @@
   color:#fff;
   cursor: pointer;
   text-decoration: none;
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
   display: inline-block;
   text-align: center;
   padding: 15px 20px;
@@ -40,6 +41,9 @@
 @mixin blueButton{
   @include button;
   background: #3498db;
+  -webkit-box-shadow:0 2px 0 #2980B9;
+  -moz-box-shadow:0 2px 0 #2980B9;
+  box-shadow:0 2px 0 #2980B9;
   &:hover{  
     background: #5dade2;
   }
@@ -51,9 +55,12 @@
 @mixin silverButton{
     @include button;
     color:#fff;
-    background: #bdc3c7;
+    background: #95A5A6;
+    -webkit-box-shadow:0 2px 0 #7F8C8D;
+    -moz-box-shadow:0 2px 0 #7F8C8D;
+    box-shadow:0 2px 0 #7F8C8D;
     &:hover{
-      background: #cacfd2;
+      background: #aab7b7;
     }
     &:active{}
 }
@@ -61,6 +68,9 @@
 @mixin greenButton{
   @include button;
   background: #1abc9c;
+  -webkit-box-shadow:0 2px 0 #16A085;
+  -moz-box-shadow:0 2px 0 #16A085;
+  box-shadow:0 2px 0 #16A085;
   &:hover{
     background:#48c9b0;
   }
