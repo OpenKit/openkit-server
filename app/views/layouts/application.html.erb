@@ -12,15 +12,16 @@
 <div class="wrapper">
 <% if display_logout? %>
   <div class="top">
-    <h1 class="logo">OpenKit <sup>beta</sup></h1>
+    <h1 class="logo"><%= image_tag 'logo.png' %></h1>
 
     <ul class="nav">
-      <li><a href="/"><i class="icon-th-list"></i> Your Apps</a></li>
-      <li><a href="http://openkit.io/docs/downloads" target="_blank"><i class="icon-download-alt"></i> Downloads</a></li>
-      <li><a href="http://openkit.io/docs" target="_blank"><i class="icon-question-sign"></i> Documentation</a></li>
+      <li><a href="/">Your Apps</a></li>
     </ul>
 
     <ul class="admin">
+      <li><a href="http://openkit.io/docs/downloads" target="_blank">Downloads</a></li>
+      <li><a href="http://openkit.io/docs" target="_blank">Documentation</a></li>
+      <li><a href="http://openkit.io/docs" target="_blank">Help</a></li>
       <li>
         <a class="account">Account <i class="icon-chevron-down"></i></a>
         <div class="subnav">
