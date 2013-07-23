@@ -5,28 +5,36 @@
   <% end %>
 </div>
 
-<div class="two_col">
 
-<div class="box right details">
-  <div class="details_header">App Details</div>
-  <ul>
-    <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
-    <li><b>Name:</b> <span><%= @app.name %></span></li>
-    <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
-    <li><b>Secret Key:</b> <a href="#" id='show_secret'>show me</a><span style="display:none;"><%= @app.secret_key %></span></li>
-    <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
-  </ul>
-</div>
 
-<div class="box left no_table">
-  <ul>
-    <li><%= image_tag ("leaderboard_dash.png") %><%= link_to 'Leaderboards', app_leaderboards_path(@app) %></li>
-    <li><%= image_tag ("achievement_dash.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
-    <li><%= image_tag ("cloud_dash.png") %>Cloud Data Browser (coming soon)</li>
-  </ul>
-</div>
+  <div class="col_75 left">
+    <div class="box no_table">
+      <div class="details_header">Services</div>
+      <ul>
+        <li><%= image_tag ("leaderboard_dash.png") %><%= link_to 'Social Leaderboards', app_leaderboards_path(@app) %></li>
+        <li><%= image_tag ("invites_dash.png") %>Smart Invites</li>
+        <li><%= image_tag ("push_dash.png") %>Push Notifications</li>
+        <li><%= image_tag ("cloud_dash.png") %>Cloud Data Browser</li>
+        <li><%= image_tag ("achievement_dash.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
+      </ul>
+    </div>
+  </div>
 
-</div>
+
+  <div class="col_25 right">
+    <div class="box details">
+      <div class="details_header">App Details</div>
+      <ul>
+        <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
+        <li><b>Name:</b> <span><%= @app.name %></span></li>
+        <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
+        <li><b>Secret Key:</b> <a href="#" id='show_secret'>show me</a><span style="display:none;"><%= @app.secret_key %></span></li>
+        <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
+      </ul>
+    </div>
+  </div>
+  
+
 
 
 <script type="text/javascript">

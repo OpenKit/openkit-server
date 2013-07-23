@@ -1,39 +1,82 @@
 <div class="header">
-  <h1>Your Apps</h1>
-  <%= link_to new_app_path, {:class => 'header_button'} do %>
-    <i class="icon-plus"></i> Add a New App
+  <% if @apps.empty? %>
+    <h1></h1>
+  <% else %>
+    <h1>Your Apps</h1>
   <% end %>
 </div>
 
-<div class="one_col">
-  <table class="box">
-    <tr>
-      <th>Icon</th>
-      <th>Name</th>
-      <th></th>
-    </tr>
+<div class="two_col">
 
-  <% if @apps.empty? %>
-    <tr>
-        <td colspan="3">You have no apps in this account. <%= link_to "Add a New App", new_app_path %></td>
-  <% else %>
+  
 
-    <% @apps.each do |app| %>
-      <tr>
-        <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
-        <td class="name"><%= link_to app.name, app %></td>
-        <td class="manage">
-          <%= link_to edit_app_path(app) do %>
-            <i class='icon-edit'></i> <span>Edit</span>
-          <% end %>
-          <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
-            <i class='icon-remove'></i> <span>Destroy</span>
-          <% end %>
-        </td>
-      </tr>
+  <div class="col_25 right">
+
+    <div class="box details">
+      <div class="details_header">Downloads</div>
+      <ul>
+        <li><a href="#">Unity Plugin</a></li>
+        <li><a href="#">iOS SDK</a></li>
+        <li><a href="#">Android SDK</a></li>
+      </ul>
+    </div>
+
+    <div class="box details">
+      <div class="details_header">Documentation</div>
+      <ul>
+        <li><a href="#">Unity Getting Started</a></li>
+        <li><a href="#">iOS Getting Started</a></li>
+        <li><a href="#">Android Getting Started</a></li>
+      </ul>
+    </div>
+    
+  </div>
+
+
+  <div class="col_75 left">
+
+    <% if @apps.empty? %>
+
+      <div class="box welcome">
+        <h1>Welcome to OpenKit</h1>
+        <h2>Thanks for signing up!</h2>
+        <p>This is the developer dashboard where you can manage all of the OpenKit services. To get started lets add your first app.</p>
+        <%= link_to new_app_path do %>
+          Add a New App
+        <% end %>
+      </div>
+
+    <% else %>
+      <table class="box">
+        <tr>
+          <th>Icon</th>
+          <th>Name</th>
+          <th>App Key</th>
+          <th>Secret Key</th>
+          <th></th>
+        </tr>
+
+      <% @apps.each do |app| %>
+        <tr>
+          <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
+          <td class="name"><%= link_to app.name, app %></td>
+          <td></td>
+          <td></td>
+          <td class="manage">
+            <%= link_to edit_app_path(app) do %>
+              <i class='icon-edit'></i> <span>Edit</span>
+            <% end %>
+            <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <i class='icon-remove'></i> <span>Destroy</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
     <% end %>
 
-  <% end %>
+    </table>
+  </div>
+  
 
-  </table>
 </div>

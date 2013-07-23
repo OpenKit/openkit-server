@@ -54,6 +54,9 @@ a{
     color:#666;
   }
 
+  p{font-size:12px;margin-bottom:20px;color:#999;}
+  p a{color:#999;}
+
   input[type="submit"]{
     padding: 12px 0;
     font-size:14px;
@@ -100,26 +103,28 @@ p.forgot{
 }
 
 .logo{
-  padding:15px 20px 0 20px;
   color:#fff;
-  text-decoration:none;
   float:left;
-  font-size: 20px;
-  text-shadow:0 -1px 0 #000;
-
-  sup{
-    font-size: 10px;
-    color: #ccc;
-    font-weight: normal;
-    vertical-align: text-top;
+  padding: 0 20px;
+  img{
+    position: relative;
+    top:15px;
   }
 }
 
 .nav{
+  border-left:1px solid rgba(0,0,0,0.25);
+  box-shadow: -1px 0 0 rgba(255,255,255,0.25);
   float:left;
-  border-right:1px solid #555;
-  border-left:1px solid #333;
   li{float:left;}
+}
+
+.admin{
+  float:right;
+  li{
+    float:left;
+  }
+  li ul li{float:none;}
 }
 
 .nav a,
@@ -130,13 +135,12 @@ p.forgot{
 }
 
 a.account {
-  float:right;
-  border-left:1px solid #333;
-  -webkit-box-shadow:inset 1px 0 0 #555;
-  -moz-box-shadow:inset 1px 0 0 #555;
-  box-shadow:inset 1px 0 0 #555;
+  
   @include transition;
-  i{margin-left:5px;}
+
+  i{
+    margin-left:5px;
+  }
 }
 
 .subnav{
@@ -145,29 +149,25 @@ a.account {
   display: none;
   padding:0;
   right:0;
-  top:56px;
-  background:#333;
+  top:62px;
   width:200px;
   text-align:left;
 }
 
 .subnav li a {
-  background:#373737;
+  background:#133d5c;
   display:block;
   padding:20px 30px;
   border-bottom:1px solid #000;
-  border-top:1px solid #555;
+  border-top:1px solid rgba(255,255,255,0.15);
   border-left:1px solid #000;
 }
 
+.subnav li:first-child a{border-top:none;}
+
 .admin a.active{
   color:#fff;
-  background:#373737;
-  border-left:1px solid #222;
-  border-right:1px solid #222;
-  -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
-  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
+  background:#133d5c;
 }
 
 
@@ -207,9 +207,51 @@ a.account {
   }
 }
 
+
+.col_25{width:33%;}
+.col_75{width:67%;}
+.col_100{width:100%;}
+
+.col_25 .box{margin-left:20px;}
+
+.welcome{
+  padding:40px;
+
+  h1{
+    font-size:32px;
+    padding-bottom: 5px;
+    font-weight:bold;
+  }
+  h2{
+    font-size:22px;
+    color:#999;
+    padding-bottom: 20px;
+    display: block;
+  }
+  p{
+    display: block;
+    padding:20px 0;
+    line-height: 24px;
+  }
+  a{
+    display: block;
+    margin:20px 0 0 0;
+    padding:15px 20px;
+    @include rounded(3px);
+    @include greenButton;
+
+    i{
+      margin-right:5px;
+      font-size:11px;
+      color:#133072;
+      text-shadow:0 1px 0 rgba(255,255,255,0.25);
+    }
+  }
+}
+
 .details_header{
   border-bottom: 1px solid #ccc;
-  padding: 10px;
+  padding: 20px;
   font-weight: bold;
   text-shadow: 0 1px solid #fff;
   text-align: left;
@@ -226,8 +268,8 @@ a.account {
 
 .details{
   font-size: 14px;
-  width:30%;
   text-align:center;
+  margin-bottom: 20px;
 
   img.leaderboard_icon{
     width:50px;
@@ -241,6 +283,7 @@ a.account {
     height:50px;
     margin:0 0 0 10px;
     vertical-align: middle;
+    @include rounded(8px);
   }
 
   ul{
@@ -263,17 +306,12 @@ a.account {
   li:last-child{border-bottom: none;}
 }
 
-.one_col, .two_col{width:100%;}
-.one_col table{width:100%;}
-.two_col table{width:67%;}
-
 .no_table{
-    width:67%;
     margin-bottom:20px;
     li{
       border-top:1px dotted #ccc;
       margin:10px;
-      padding:20px;
+      padding:10px 20px;
       overflow:hidden;
       line-height:72px;
       &:first-child{border:none;}
@@ -291,7 +329,7 @@ a.account {
 
 }
 
-table{display:table;}
+table{display:table;width:100%;}
 
 table .icon{
     border-left: none;
@@ -320,8 +358,8 @@ table .manage a {
   @include rounded(3px);
   i{
     margin-right:3px;
-    font-size:11px;
-    color:#aaa;
+
+    color:#7f8c9a;
   }
 }
 
@@ -329,7 +367,7 @@ table .manage a:first-child{margin-right:5px;}
 
 table th {
   border-bottom: 1px solid #ccc;
-  padding: 10px 0 10px 20px;
+  padding: 20px 0 20px 20px;
   font-weight: bold;
   text-shadow: 0 1px solid #fff;
   font-size: 13px;
@@ -397,18 +435,14 @@ table tr:last-child td:last-child {
   form label span{display:inline}
 
   form input[type="submit"]{
-    padding: 8px 10px;
     margin-top: 20px;
-    font-size:12px;
-    font-weight:bold;
     cursor:pointer;
     @include rounded(3px);
     @include greenButton;
   }
 
   .cancel{
-    padding: 8px 10px;
-    font-size:12px;
+    margin-left: 8px;
     @include rounded(3px);
     @include silverButton;
   }
