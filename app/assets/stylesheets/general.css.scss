@@ -2,6 +2,10 @@
   display:none;
 }
 
+#developer_sessions_controller #flash{
+  display:none;
+}
+
 a{
   color:blue;
   @include transition;
