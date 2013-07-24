@@ -1,11 +1,12 @@
 development:
-  adapter: mysql2
+  adapter: postgresql
   encoding: utf8
   database: leaderboard_dev
-  username: root
-  password: 
+  username: ok_developer
+  pool: 5
   host: localhost
-  port: 3306
+  port: 5432
+  min_messages: WARNING
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -13,17 +14,22 @@ development:
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
 test:
-  adapter: mysql2
+  adapter: postgresql
   encoding: utf8
-  database: leaderboard_test 
-  host: 127.0.0.1 
-  port: 3306
+  database: leaderboard_test
+  username: ok_developer
+  pool: 5
+  host: localhost
+  port: 5432
+  min_messages: WARNING
 
 production:
-  adapter: mysql2
+  adapter: postgresql
   encoding: utf8
+  pool: 5
   database: <%= OKConfig[:database_name] %> 
   username: <%= OKConfig[:database_username] %>
   password: <%= OKConfig[:database_password] %>
   host: <%= OKConfig[:database_host] %>
   port: <%= OKConfig[:database_port] %>
+  min_messages: WARNING

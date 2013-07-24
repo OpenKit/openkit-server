@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711040819) do
+ActiveRecord::Schema.define(:version => 20130724031805) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(:version => 20130711040819) do
     t.datetime "created_at",     :null => false
   end
 
-  add_index "achievement_scores", ["user_id", "achievement_id"], :name => "index_achievement_progress_on_app_user_and_achievement_id"
-  add_index "achievement_scores", ["user_id"], :name => "index_achievement_progress_on_app_and_user_id"
+  add_index "achievement_scores", ["user_id", "achievement_id"], :name => "index_achievement_scores_on_user_id_and_achievement_id"
+  add_index "achievement_scores", ["user_id"], :name => "index_achievement_scores_on_user_id"
 
   create_table "achievements", :force => true do |t|
     t.string   "name"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(:version => 20130711040819) do
     t.integer  "priority",                        :default => 100,  :null => false
   end
 
-  add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
+  add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_app_id"
 
   create_table "oauth_nonces", :force => true do |t|
     t.string   "nonce"

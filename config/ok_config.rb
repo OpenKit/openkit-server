@@ -8,7 +8,7 @@ module OKConfig
       :database_username        => nil || 'root',
       :database_password        => nil || '',
       :database_host            => nil || '127.0.0.1',
-      :database_port            => nil || '3306',
+      :database_port            => nil || '5432',
       :redis_host               => nil || '127.0.0.1',
       :redis_port               => nil || '6379',
       :mail_domain              => nil || 'www.example.com',
