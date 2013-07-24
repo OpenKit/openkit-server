@@ -9,6 +9,8 @@ module OKConfig
       :database_password        => nil || '',
       :database_host            => nil || '127.0.0.1',
       :database_port            => nil || '3306',
+      :redis_host               => nil || '127.0.0.1',
+      :redis_port               => nil || '6379',
       :mail_domain              => nil || 'www.example.com',
       :mail_user                => nil || 'no-reply@www.example.com',
       :mail_pass                => nil || 'replaceme',
