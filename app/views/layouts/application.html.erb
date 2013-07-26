@@ -4,6 +4,9 @@
   <title>OKDashboard</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <!-- classie.js by @desandro: https://github.com/desandro/classie -->
+  <%= javascript_include_tag "classie" %>
+  <%= javascript_include_tag "modalEffects.js" %>
   <%= csrf_meta_tags %>
 </head>
 
@@ -27,7 +30,6 @@
         <div class="subnav">
           <ul>
             <li><a href="<%= developer_path(current_developer) if current_developer %>" ><i class="icon-cog"></i> Settings</a></li>
-            <li><a href="http://openkit.io/feedback" target="_blank"><i class="icon-comment"></i> Feedback</a></li>
             <li>
               <%= link_to logout_path, :method => :delete do %>
                 <i class="icon-off"></i> Logout
