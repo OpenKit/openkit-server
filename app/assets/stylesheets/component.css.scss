@@ -127,6 +127,11 @@ perspective effects (not including the modals and the overlay).
 	margin-top: 10px;
 }
 
+.md-content div ul li:last-child label{
+	line-height:normal;
+}
+
+
 
 a.md-close{
 	display: block;
