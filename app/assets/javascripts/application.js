@@ -63,6 +63,7 @@ $(document).ready(function () {
 
   $(".md-close").click(function(){
     $(".md-modal").removeClass("md-show");
+    return false;
   });
 
 });

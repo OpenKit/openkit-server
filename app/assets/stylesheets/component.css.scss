@@ -19,7 +19,7 @@ perspective effects (not including the modals and the overlay).
 }
 
 .container {
-	background: #fff;
+	background: #c60071;
 	min-height: 100%;
 }
 
@@ -28,7 +28,7 @@ perspective effects (not including the modals and the overlay).
 	top: 50%;
 	left: 50%;
 	width: 50%;
-	max-width: 630px;
+	max-width: 560px;
 	min-width: 320px;
 	height: auto;
 	z-index: 2000;
@@ -73,72 +73,78 @@ perspective effects (not including the modals and the overlay).
 	position: relative;
 	border-radius: 3px;
 	margin: 0 auto;
+	padding:10px;
 }
 
-.md-content h1 {
+.md-signup{
+	background: #ecf0f1;
+	text-align: left;
+	margin:10px 0 0 0;
+	border: 1px solid #ccc;
+	border-bottom: none;
+}
+
+.md-content div ul li {
 	margin: 0;
-	padding: 1em 0 0.25em 0;
-	text-align: center;
-	font-size: 2em;
-	font-weight: 600;
-}
-.md-content h3 {
-	margin: 0;
-	padding: 0.4em;
-	text-align: center;
-	font-size: 1em;
-	font-weight: 300;
-}
-
-.md-content > div {
-	padding: 15px 40px 30px;
-	margin: 0;
-	font-weight: 300;
-	font-size: 1.15em;
-	text-align: center;
-}
-
-.md-content > div p {
-	margin: 0;
-	padding: 10px 0;
-}
-
-.md-content > div ul {
-	margin: 0;
-	padding: 0 0 30px 20px;
+	padding:12px 20px;
+	color: #333;
+	font-weight: bold;
+	font-size: 14px;
+	text-shadow: 0 1px 0 #fff;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #fff;
+	label{
+		line-height: 32px;
+		display: inline-block;
+	}
+	span{
+		color: #999;
+		font-weight: normal;
+	}
+	input{
+		font-size: 13px;
+		width:380px;
+	}
+	a{
+		display: inline-block;
+		float: right;
+		@include rounded(3px);
+		@include greenButton;
+		font-size: 14px;
+		padding:8px 12px;
+	}
 }
 
-.md-content > div ul li {
-	padding: 5px 0;
+.md-content div ul li:last-child{
+	line-height: normal;
+	a{
+		position: relative;
+		top: 3px;
+	}
 }
 
-.md-content button {
-	display: block;
-	margin: 0 auto;
-	font-size: 0.8em;
+.md-content div ul li:last-child p:last-child{
+	margin-top: 10px;
 }
+
 
 a.md-close{
 	display: block;
-	background:#000;
-	color:#fff;
+	background:#fff;
+	color:#333;
 	padding:8px;
 	font-size: 12px;
 	text-decoration: none;
 	position: absolute;
-	border:2px solid #fff;
 	top:-10px;
-	right: -10px;
+	right:-10px;
 	border-radius: 30px;
   	-moz-border-radius: 30px;
   	-webkit-border-radius: 30px;
-  	box-shadow: 0 0 5px #000;
-  	-moz-box-shadow: 0 0 5px #000;
-  	-webkit-box-shadow: 0 0 5px #000;
 }
 
 a.md-close:hover{
-	color:#ccc;
+	color:#000;
 }
 
 /* Individual modal styles with animations/transitions */
