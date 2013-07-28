@@ -21,8 +21,8 @@
       <div class="details_header">Resources</div>
       <ul>
         <li><%= image_tag("unity_icon.png", :alt => "Unity Plugin") %><p><a href="#">Unity Plugin</a><a href="#">Unity Documentation</a></p></li>
-        <li><%= image_tag("ios_icon.png", :alt => "Unity Plugin") %><p><a href="#">iOS SDK</a><a href="#">iOS Documentation</a></p></li>
-        <li><%= image_tag("android_icon.png", :alt => "Unity Plugin") %><p><a href="#">Android SDK</a><a href="#">Android Documentation</a></p></li>
+        <li><%= image_tag("ios_icon.png", :alt => "iOS SDK") %><p><a href="#">iOS SDK</a><a href="#">iOS Documentation</a></p></li>
+        <li><%= image_tag("android_icon.png", :alt => "Android SDK") %><p><a href="#">Android SDK</a><a href="#">Android Documentation</a></p></li>
       </ul>
     </div>
 
@@ -66,11 +66,11 @@
           <td class="name"><%= link_to app.name, app %></td>
           <td></td>
           <td class="manage">
-            <%= link_to edit_app_path(app) do %>
-              <i class='icon-edit'></i> <span>Edit</span>
-            <% end %>
+            <%# link_to edit_app_path(app) do %>
+              <!--<i class='icon-edit'></i> <span>Edit</span>-->
+            <%# end %>
             <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
-              <i class='icon-remove'></i> <span>Destroy</span>
+              <i class='icon-remove'></i> <span>Delete</span>
             <% end %>
           </td>
         </tr>

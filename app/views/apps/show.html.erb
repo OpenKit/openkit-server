@@ -16,7 +16,7 @@
         <li><%= image_tag ("push_dash.png") %><a href="#">Push Notifications</a></li>
         <li><%= image_tag ("cloud_dash.png") %><a href="#">Cloud Data Browser</a></li>
         <li><%= image_tag ("achievement_dash.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
-        <li><%= image_tag ("multiplayer_dash.png") %><a href="#" class="md-trigger" data-modal="modal-1">Multiplayer</a></li>
+        <li><%= image_tag ("multiplayer_dash.png") %><a href="#" class="md-trigger" data-modal="modal-1">Multiplayer (Photon Server)</a></li>
       </ul>
     </div>
   </div>
@@ -38,10 +38,21 @@
   
 <div class="md-modal md-effect-1" id="modal-1">
       <div class="md-content">
-        <h1>Realtime. Multiplayer. Cross Platform.</h1>
-        <h3>The fastest realtime backend to develop multiplayer games and realtime apps.</h3>
-        <div>
-          <iframe src="http://www.slideshare.net/slideshow/embed_code/14092807" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
+        
+        <%= image_tag("photon-slide.png", :alt => "Photon Server") %>
+
+        <div class="md-signup">
+          <ul>
+            <li>
+              <p><label>Sign up now with toddham@gmail.com to get started.</label> <a href="">Sign Up</a></p>
+            </li>
+            <li>  
+              <p><span>Already have an account?</span><label>Enter your Photon dashboard url for quick access from OpenKit.</label></p>
+              <p><input type="text" placeholder="https://www.exitgames.com/Dashboard/toddham"><a href="">Activate</a></p>
+            </li> 
+          </ul>
+
+          
         </div>
         <a href="#" class="md-close"><i class="icon-remove"></i></a>
       </div>
