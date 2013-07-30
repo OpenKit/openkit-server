@@ -9,13 +9,13 @@ class Score < ActiveRecord::Base
 
   def value=(v)
     self.sort_value = v
-    self.sort_value *= -1 if leaderboard.is_low_value?
+    self.sort_value *= -1 if leaderboard && leaderboard.is_low_value?
     v
   end
 
   def value
     v = sort_value
-    v *= -1 if leaderboard.is_low_value?
+    v *= -1 if leaderboard && leaderboard.is_low_value?
     v
   end
 
@@ -51,7 +51,6 @@ class Score < ActiveRecord::Base
       bests
     end
 
-    # Put composite index on leaderboard_id, user_id, created_at, sort_value DESC for this one.
     def best_for(frame, leaderboard_id, user_id)
       best_cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
 
@@ -72,26 +71,17 @@ class Score < ActiveRecord::Base
           rank_cond[0] << " AND sort_value > ?"
           rank_cond << best_score.sort_value
           sanitized_rank_cond = ActiveRecord::Base.send(:sanitize_sql_array, rank_cond)
-          best_score.rank = connection.execute("select count(*) from (select * from scores where #{sanitized_rank_cond} group by user_id) t").first[0] + 1
+          records = connection.execute("select count(*) from (select user_id from scores where #{sanitized_rank_cond} group by user_id) t")
+          if records && (count_record = records.first)
+            best_score.rank = count_record["count"].to_i + 1
+          end
         end
       end
 
       best_score
     end
 
-    # Who knows what the index strategy should look like for this one.
-    # Could use the union hack here:
-    # http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/
-    #
-    # Note: the timestamp in the query will always break query cache!  Bad!  Use some modulo
-    # on time.
-    #
     # Cap number per page at 25 for now.
-    #
-    # Notes on this crazy query: The last group by user_id is necessary
-    # because, technically, two scores can be submitted at the same time, for
-    # the same user, with the same value, and these are the columns that we use to
-    # join scores on itself.
     def bests_for(frame, leaderboard_id, opts = {})
       page_num     = (opts[:page_num] && opts[:page_num].to_i) || 1
       num_per_page = (opts[:num_per_page] && opts[:num_per_page].to_i) || 25
@@ -107,22 +97,16 @@ class Score < ActiveRecord::Base
       created_cond = since && ActiveRecord::Base.send(:sanitize_sql_array, ["created_at > ?", since])
 
       query =<<-END
-      select scores.* from (
-        select t1.*, min(created_at) as first_time from (
-          select leaderboard_id, user_id, max(sort_value) as max_val from scores
+      select * from (
+        select distinct on (user_id) * from (
+          select * from scores
           where #{leaderboard_cond} #{created_cond ? "AND " + created_cond : ''}
-          group by user_id
-          order by max_val DESC
-          limit #{num_per_page.to_i}
-          offset #{(page_num.to_i - 1) * num_per_page.to_i}
-        ) t1
-        left join scores x on t1.leaderboard_id=x.leaderboard_id and t1.user_id=x.user_id and t1.max_val=x.sort_value
-        where x.#{leaderboard_cond} #{created_cond ? "AND x." + created_cond : ''}
-        group by x.user_id
-      ) t2
-      left join scores on t2.leaderboard_id=scores.leaderboard_id AND t2.user_id=scores.user_id AND t2.max_val=scores.sort_value AND t2.first_time=scores.created_at
-      GROUP BY user_id
-      ORDER BY scores.sort_value DESC
+          order by sort_value desc limit 1000)
+        t order by user_id, sort_value desc)
+      t2
+      order by sort_value desc
+      limit #{num_per_page.to_i}
+      offset #{(page_num.to_i - 1) * num_per_page.to_i}
       END
 
       query.gsub!(/\s+/, " ")
