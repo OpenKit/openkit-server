@@ -120,12 +120,16 @@ ActiveRecord::Schema.define(:version => 20130819221046) do
   add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
 
   create_table "scores", :force => true do |t|
-    t.integer  "sort_value",     :limit => 8, :null => false
+    t.integer  "sort_value",            :limit => 8, :null => false
     t.integer  "user_id"
     t.integer  "leaderboard_id"
-    t.datetime "created_at",                  :null => false
+    t.datetime "created_at",                         :null => false
     t.string   "display_string"
     t.integer  "metadata"
+    t.string   "meta_doc_file_name"
+    t.string   "meta_doc_content_type"
+    t.integer  "meta_doc_file_size"
+    t.datetime "meta_doc_updated_at"
   end
 
   add_index "scores", ["leaderboard_id", "sort_value", "created_at"], :name => "index_scores_composite_1"
