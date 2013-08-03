@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711040819) do
+ActiveRecord::Schema.define(:version => 20130803170905) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -120,12 +120,16 @@ ActiveRecord::Schema.define(:version => 20130711040819) do
   add_index "oauth_nonces", ["nonce", "timestamp"], :name => "index_oauth_nonces_on_nonce_and_timestamp", :unique => true
 
   create_table "scores", :force => true do |t|
-    t.integer  "sort_value",     :limit => 8, :null => false
+    t.integer  "sort_value",            :limit => 8, :null => false
     t.integer  "user_id"
     t.integer  "leaderboard_id"
-    t.datetime "created_at",                  :null => false
+    t.datetime "created_at",                         :null => false
     t.string   "display_string"
     t.integer  "metadata"
+    t.string   "meta_doc_file_name"
+    t.string   "meta_doc_content_type"
+    t.integer  "meta_doc_file_size"
+    t.datetime "meta_doc_updated_at"
   end
 
   add_index "scores", ["leaderboard_id", "user_id"], :name => "index_scores_on_leaderboard_id_and_user_id"

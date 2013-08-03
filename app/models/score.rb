@@ -1,11 +1,12 @@
 class Score < ActiveRecord::Base
   belongs_to :user
   belongs_to :leaderboard
-  attr_accessible :metadata, :display_string, :user_id
+  attr_accessible :metadata, :display_string, :user_id, :meta_doc
   attr_accessor :rank
 
   @@enable_user_rank = true
 
+  has_attached_file :meta_doc
 
   def value=(v)
     self.sort_value = v
