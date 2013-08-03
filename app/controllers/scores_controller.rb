@@ -47,7 +47,7 @@ class ScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      render json: @score, location: @score
+      render json: @score.to_json(:methods => [:value])
     end
   end
 
