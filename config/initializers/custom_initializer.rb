@@ -29,7 +29,7 @@ module ActiveModel
   end
 end
 
-unless ENV['RACK_ENV'] == 'development'
+if OKConfig[:s3_attachment_bucket]
   Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
   Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
 end

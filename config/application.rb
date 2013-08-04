@@ -61,5 +61,16 @@ module OKDashboard
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    if OKConfig[:s3_attachment_bucket]
+      config.paperclip_defaults = {
+        :storage => :s3,
+        :s3_credentials => {
+          :bucket => OKConfig[:s3_attachment_bucket],
+          :access_key_id => OKConfig[:aws_key],
+          :secret_access_key => OKConfig[:aws_secret]
+        }
+      }
+    end
   end
 end
