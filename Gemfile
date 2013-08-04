@@ -24,6 +24,7 @@ group :development do
   gem 'wirble'
   gem 'simple_oauth',  '0.2.0'
   gem 'what_methods'
+  gem 'tracer_bullet'
 end
 
 group :test do
