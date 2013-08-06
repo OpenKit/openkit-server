@@ -7,7 +7,7 @@ class Score < ActiveRecord::Base
 
   @@enable_user_rank = true
 
-  @@default_json_props = [
+  DEFAULT_JSON_PROPS = [
       :id,
       :leaderboard_id,
       :user_id,
@@ -16,13 +16,11 @@ class Score < ActiveRecord::Base
       :metadata,
       :created_at
   ]
-
-  @@default_json_methods = [
+  DEFAULT_JSON_METHODS = [
     :value,
     :meta_doc_url
   ]
-
-  @@default_json_includes = [
+  DEFAULT_JSON_INCLUDES = [
     :user,
   ]
 
@@ -34,10 +32,10 @@ class Score < ActiveRecord::Base
     if opts[:only]
       return super(opts)
     end
-    includes = @@default_json_includes | (opts[:include] || [])
-    methods  = @@default_json_methods  | (opts[:methods] || [])
+    includes = DEFAULT_JSON_INCLUDES | (opts[:include] || [])
+    methods  = DEFAULT_JSON_METHODS  | (opts[:methods] || [])
     methods << :rank if rank
-    super(:only => @@default_json_props, :methods => methods, :include => includes)
+    super(:only => DEFAULT_JSON_PROPS, :methods => methods, :include => includes)
   end
 
   def value=(v)
