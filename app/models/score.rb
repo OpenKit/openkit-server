@@ -3,10 +3,42 @@ class Score < ActiveRecord::Base
   belongs_to :leaderboard
   attr_accessible :metadata, :display_string, :user_id, :meta_doc
   attr_accessor :rank
+  has_attached_file :meta_doc
 
   @@enable_user_rank = true
 
-  has_attached_file :meta_doc
+  @@default_json_props = [
+      :id,
+      :leaderboard_id,
+      :user_id,
+      :value,
+      :display_string,
+      :metadata,
+      :created_at
+  ]
+
+  @@default_json_methods = [
+    :value,
+    :meta_doc_url
+  ]
+
+  @@default_json_includes = [
+    :user,
+  ]
+
+  # If 'only' is passed, skip defaults and pass off to super.  This is a least
+  # surprises implementation.
+  #
+  # Automatically include rank only if we already have it.
+  def as_json(opts = {})
+    if opts[:only]
+      return super(opts)
+    end
+    includes = @@default_json_includes | (opts[:include] || [])
+    methods  = @@default_json_methods  | (opts[:methods] || [])
+    methods << :rank if rank
+    super(:only => @@default_json_props, :methods => methods, :include => includes)
+  end
 
   def value=(v)
     self.sort_value = v
@@ -136,6 +168,10 @@ class Score < ActiveRecord::Base
 
   def is_better_than?(other_score)
     sort_value > other_score.sort_value
+  end
+
+  def meta_doc_url
+    meta_doc_file_name && meta_doc.url
   end
 
   private

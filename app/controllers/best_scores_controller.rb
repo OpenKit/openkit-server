@@ -7,18 +7,18 @@ class BestScoresController < ApplicationController
     y = params.delete(:num_per_page)
     @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id, {page_num: x, num_per_page: y})
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
-    render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
+    render json: @scores
   end
 
   def user
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
-    render json: @score.to_json(:include => :user, :methods => [:value, :rank])
+    render json: @score
   end
 
   def social
     @scores = Score.social(authorized_app, @leaderboard, params[:fb_friends])
-    render json: @scores.to_json(:include => :user, :methods => [:value, :rank])
+    render json: @scores
   end
 
   private
