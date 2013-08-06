@@ -49,7 +49,7 @@ class ScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      render json: @score.to_json(:methods => [:value])
+      render json: @score, :only => Score::DEFAULT_JSON_PROPS, :methods => [:value]
     end
   end
 
