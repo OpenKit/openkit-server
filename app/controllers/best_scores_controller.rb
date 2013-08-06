@@ -10,7 +10,7 @@ class BestScoresController < ApplicationController
     y = params.delete(:num_per_page)
     @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id, {page_num: x, num_per_page: y})
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
-    json_arr = @scores.as_json(:include => :user, :methods => [:value, :rank])
+    json_arr = @scores.as_json
     json_arr.each {|obj| ApiMolding.fb_fix_0_9(obj)}
     render json: json_arr
   end
@@ -18,14 +18,14 @@ class BestScoresController < ApplicationController
   def user
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
-    json = @score.as_json(:include => :user, :methods => [:value, :rank])
+    json = @score.as_json
     ApiMolding.fb_fix_0_9(json)
     render json: json
   end
 
   def social
     @scores = Score.social(authorized_app, @leaderboard, params[:fb_friends])
-    json_arr = @scores.as_json(:include => :user, :methods => [:value, :rank])
+    json_arr = @scores.as_json
     json_arr.each {|obj| ApiMolding.fb_fix_0_9(obj)}
     render json: json_arr
   end
