@@ -72,6 +72,9 @@ class Score < ActiveRecord::Base
 
     def social(app, leaderboard, fb_friends)
       # Work for now.  Disable rank!!  Pass leaderboard obj instead of id!
+      raise ArgumentError.new("Score#social takes an array of fb_friends.") unless fb_friends.is_a?(Array)
+      return [] if fb_friends.empty?
+
       bests = []
       users = app.developer.users.where(:fb_id => fb_friends)
       users.each {|u|

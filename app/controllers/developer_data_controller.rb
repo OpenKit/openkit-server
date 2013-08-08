@@ -46,7 +46,7 @@ class DeveloperDataController < ApplicationController
     end
 
     if err_out.blank?
-      render json: {ok: "yay"}
+      render json: {ok: "yay"}  # Should use 'status: 201' here with empty body.
     else
       render status: :bad_request, json: {message: err_out}
     end

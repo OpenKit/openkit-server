@@ -24,7 +24,7 @@ class BestScoresController < ApplicationController
   end
 
   def social
-    @scores = Score.social(authorized_app, @leaderboard, params[:fb_friends])
+    @scores = params[:fb_friends] && Score.social(authorized_app, @leaderboard, params[:fb_friends]) || []
     json_arr = @scores.as_json
     json_arr.each {|obj| ApiMolding.fb_fix_0_9(obj)}
     render json: json_arr
