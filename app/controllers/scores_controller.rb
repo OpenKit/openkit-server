@@ -39,11 +39,9 @@ class ScoresController < ApplicationController
       @score = @leaderboard.scores.build(params[:score])
       @score.value = value
       @score.user = user
-      tracer_bullet
       if !@score.save
         err_message = "#{@score.errors.full_messages.join(", ")}"
       end
-      tracer_bullet
     end
 
     if err_message
