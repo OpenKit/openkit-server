@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711040819) do
+ActiveRecord::Schema.define(:version => 20130809000348) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -128,7 +128,8 @@ ActiveRecord::Schema.define(:version => 20130711040819) do
     t.integer  "metadata"
   end
 
-  add_index "scores", ["leaderboard_id", "user_id"], :name => "index_scores_on_leaderboard_id_and_user_id"
+  add_index "scores", ["leaderboard_id", "sort_value", "created_at"], :name => "index_scores_composite_1"
+  add_index "scores", ["leaderboard_id", "user_id", "sort_value", "created_at"], :name => "index_scores_composite_2"
 
   create_table "subscriptions", :force => true do |t|
     t.integer  "app_id"
