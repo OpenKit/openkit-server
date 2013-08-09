@@ -1,4 +1,7 @@
 OKDashboard::Application.configure do
+  # Use this to help debug 'production' env running locally, like the asset pipeline.
+  # config.logger = Logger.new(STDOUT)
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
