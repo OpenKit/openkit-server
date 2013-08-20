@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130809000348) do
+ActiveRecord::Schema.define(:version => 20130819221046) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -143,14 +143,14 @@ ActiveRecord::Schema.define(:version => 20130809000348) do
 
   create_table "users", :force => true do |t|
     t.string   "nick"
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "developer_id"
-    t.integer  "twitter_id",    :limit => 8
-    t.integer  "fb_id",         :limit => 8
-    t.integer  "custom_id",     :limit => 8
-    t.integer  "google_id",     :limit => 8
-    t.string   "gamecenter_id"
+    t.string   "twitter_id",    :limit => 40
+    t.string   "fb_id",         :limit => 40
+    t.string   "custom_id",     :limit => 40
+    t.string   "google_id",     :limit => 40
+    t.string   "gamecenter_id", :limit => 40
   end
 
   add_index "users", ["custom_id"], :name => "index_users_on_custom_id"

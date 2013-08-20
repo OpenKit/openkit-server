@@ -28,10 +28,10 @@ class App < ActiveRecord::Base
   # on user_params. If user already exists, subscribe him/her to this app.  If
   # user does not yet exist, create both the user and the subscription.
   def find_or_create_subscribed_user(user_params)
-    u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_i)) ||
-        (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_i)) ||
-        (user_params[:google_id]  && developer.users.find_by_google_id(user_params[:google_id].to_i)) ||
-        (user_params[:custom_id]  && developer.users.find_by_custom_id(user_params[:custom_id].to_i)) ||
+    u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_s)) ||
+        (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_s)) ||
+        (user_params[:google_id]  && developer.users.find_by_google_id(user_params[:google_id].to_s)) ||
+        (user_params[:custom_id]  && developer.users.find_by_custom_id(user_params[:custom_id].to_s)) ||
         (user_params[:gamecenter_id]  && developer.users.find_by_gamecenter_id(user_params[:gamecenter_id].to_s))
 
     if !u
