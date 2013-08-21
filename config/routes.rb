@@ -9,7 +9,7 @@ OKDashboard::Application.routes.draw do
   end
 
   # API
-  resources :leaderboards, :only => [:index, :create]
+  resources :leaderboards, :only => [:index, :create, :show]
   resources :achievements, :only => [:index, :create]
   match "achievements/facebook",          to: "achievements#facebook",  via: :get
 
