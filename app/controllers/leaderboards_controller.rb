@@ -12,15 +12,27 @@ class LeaderboardsController < ApplicationController
     end
   end
 
-  # Dash only
   def show
-    @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    @top_scores = Score.bests_for('all_time', @leaderboard.id)
-    ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
+    if api_request?
+      err_message = nil
+      lid = params[:id] && params[:id].to_i
+      err_message = "You must pass a leaderboard id" unless lid
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @leaderboard.api_fields(request_base_uri) }
+      if !err_message
+        @leaderboard = @app.leaderboards.find_by_id(lid)
+        err_message = "Leaderboard #{lid} could not be found for app #{@app.app_key}" unless @leaderboard
+      end
+
+      if !err_message
+        render json: @leaderboard
+      else
+        render status: :bad_request, json: {message: err_message}
+      end
+    else
+      @leaderboard = @app.leaderboards.find(params[:id].to_i)
+      @top_scores = Score.bests_for('all_time', @leaderboard.id)
+      ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
+      # show.html.erb
     end
   end
 

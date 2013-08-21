@@ -84,7 +84,10 @@ low_board = JSON.parse(res1.body)
 high_board = JSON.parse(res2.body)
 
 # List leaderboards
-get '/leaderboards',               { }
+get '/leaderboards'
+
+# Show a leaderboard
+get "/leaderboards/#{high_board['id']}"
 
 # Create a couple achievements
 res1 = post '/achievements',       { achievement: {name: 'achievement 1', desc: "Get x foos and receive a bar", points: 100, goal: 5 } }
