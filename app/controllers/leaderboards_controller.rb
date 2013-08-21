@@ -20,11 +20,11 @@ class LeaderboardsController < ApplicationController
 
       if !err_message
         @leaderboard = @app.leaderboards.find_by_id(lid)
-        err_message = "Leaderboard #{lid} could not be found for app #{@app.app_key}" unless @leaderboard
+        err_message = "Your app does not have a leaderboard with id: #{lid}" unless @leaderboard
       end
 
       if !err_message
-        render json: @leaderboard
+        render json: @leaderboard.api_fields(request_base_uri)
       else
         render status: :bad_request, json: {message: err_message}
       end
