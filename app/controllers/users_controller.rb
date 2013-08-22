@@ -50,7 +50,9 @@ class UsersController < ApplicationController
     err_message = "Couldn't subscribe user because:#{@user.errors.full_messages[0]}" if @user.errors.count != 0
 
     if !err_message
-      render json: @user, status: :created, location: @user
+      u = @user.as_json
+      ApiMolding.fb_fix_0_9(u)
+      render json: u, status: :created
     else
       render status: :bad_request, json: {message: err_message}
     end
