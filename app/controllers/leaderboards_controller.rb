@@ -3,10 +3,11 @@ class LeaderboardsController < ApplicationController
   before_filter :require_dashboard_access,        :except => [:index, :create, :show]
   before_filter :set_app
 
-
   def index
-    if params[:tag]
-      @leaderboards = @app.leaderboards.tagged_with(params[:tag].to_s).order(:priority)
+    tag = params[:tag] && params[:tag].to_s
+    tag = "v1" if tag.blank? && api_request? && request.host == "pivvot.openkit.io"
+    if tag
+      @leaderboards = @app.leaderboards.tagged_with(tag).order(:priority)
     else
       @leaderboards = @app.leaderboards.order(:priority)
     end
