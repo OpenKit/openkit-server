@@ -12,8 +12,9 @@
       <th>Name</th>
       <th>ID</th>
       <th>In Development?</th>
-	  <th>Game Center ID</th>
-	  <th>Google Play Games ID</th>
+      <th>Game Center ID</th>
+      <th>Google Play Games ID</th>
+      <th>Tag List</th>
       <th></th>
     </tr>
 
@@ -28,8 +29,9 @@
         <td class="name"><%= link_to leaderboard.name, [@app, leaderboard] %></td>
         <td class="id"><%= leaderboard.id %></td>
         <td><%= leaderboard.in_development %></td>
-		<td><%= leaderboard.gamecenter_id %></td>
-		<td><%= leaderboard.gpg_id %></td>
+        <td><%= leaderboard.gamecenter_id %></td>
+        <td><%= leaderboard.gpg_id %></td>
+        <td><%= leaderboard.tag_list %></td>
         <td class="manage">
           <%= link_to edit_app_leaderboard_path(@app, leaderboard) do %>
             <i class="icon-edit"></i> Edit

@@ -54,10 +54,10 @@ def put(path, req_params = {})
 end
 
 def get(path, req_params = {})
-  blue "Response from GET to #{path}:"
   if !req_params.empty?
     path += "?" + req_params.collect { |k, v| "#{k.to_s}=#{CGI::escape(v.to_s)}" }.join('&')
   end
+  blue "Response from GET to #{path}:"
   res = CONSUMER.request(:get, path, nil, {}, { 'Accept' => 'application/json' })
   response_log(res)
   res
@@ -78,13 +78,16 @@ user1 = JSON.parse(res1.body)
 user2 = JSON.parse(res2.body)
 
 # Create a couple leaderboards
-res1 = post '/leaderboards',       { leaderboard: {name: 'leader 1', sort_type: 'LowValue'} }
-res2 = post '/leaderboards',       { leaderboard: {name: 'leader 2', sort_type: 'HighValue'} }
+res1 = post '/leaderboards',       { leaderboard: {name: 'leader 1', sort_type: 'LowValue', tag_list:"v1"} }
+res2 = post '/leaderboards',       { leaderboard: {name: 'leader 2', sort_type: 'HighValue', tag_list:"v1,v2"} }
 low_board = JSON.parse(res1.body)
 high_board = JSON.parse(res2.body)
 
 # List leaderboards
 get '/leaderboards'
+
+# List leaderboards with a certain tag:
+get '/leaderboards',               { tag: "v2" }
 
 # Show a leaderboard
 get "/leaderboards/#{high_board['id']}"
