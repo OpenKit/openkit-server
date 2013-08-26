@@ -1,8 +1,9 @@
 class Leaderboard < ActiveRecord::Base
-  attr_accessible :name, :icon, :in_development, :sort_type, :gamecenter_id, :gpg_id, :priority
+  attr_accessible :name, :icon, :in_development, :sort_type, :gamecenter_id, :gpg_id, :priority, :tag_list
   attr_accessible :type
   validates_presence_of :name, :sort_type
   validates_uniqueness_of :name, :scope => :app_id
+  acts_as_taggable
 
   belongs_to :app
   has_many :scores, :dependent => :delete_all

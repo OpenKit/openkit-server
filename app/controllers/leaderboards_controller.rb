@@ -5,7 +5,11 @@ class LeaderboardsController < ApplicationController
 
 
   def index
-    @leaderboards = @app.leaderboards.order(:priority)
+    if params[:tag]
+      @leaderboards = @app.leaderboards.tagged_with(params[:tag].to_s).order(:priority)
+    else
+      @leaderboards = @app.leaderboards.order(:priority)
+    end
     respond_to do |format|
       format.html
       format.json { render json: @leaderboards.map {|x| x.api_fields(request_base_uri)} }

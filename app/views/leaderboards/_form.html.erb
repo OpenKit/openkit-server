@@ -50,6 +50,11 @@
     <%= f.text_field :priority %>
   </div>
 
+  <div class="field">
+    <%= f.label :tag_list, "Tags (separated by commas)" %>
+    <%= f.text_field :tag_list %>
+  </div>
+
   <% if params[:action] == "edit" %>
     <div class="field checkbox">
       <%= f.check_box :in_development %>
