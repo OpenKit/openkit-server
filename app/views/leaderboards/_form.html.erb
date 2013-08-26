@@ -51,8 +51,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :tag_list, "Tags (separated by commas)" %>
-    <%= f.text_field :tag_list %>
+    <%= f.label :tag_list, "Tags (separated by commas).  The default request from the OpenKit client SDKs is for tag=v1" %>
+    <%= f.text_field :tag_list, :value => @leaderboard.tag_list.presence || "v1" %>
   </div>
 
   <% if params[:action] == "edit" %>
