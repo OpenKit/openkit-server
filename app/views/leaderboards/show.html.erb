@@ -7,52 +7,61 @@
 
 <div class="two_col">
 
-<div class="box right details">
-  <div class="details_header">Leaderboard Details</div>
-  <ul>
-    <li class="icon"><b>Icon:</b> <%= image_tag @leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></li>
-    <li><b>Name:</b> <span><%= @leaderboard.name %></span></li>
-    <li><b>ID:</b> <span><%= @leaderboard.id %></span></li>
-    <li><b>Game Center ID:</b> <span><%= @leaderboard.gamecenter_id %></span></li>
-    <li><b>Google Play Games ID:</b> <span><%= @leaderboard.gpg_id %></span></li>
-    <li><b>In Development:</b> <span><%= @leaderboard.in_development %></span></li>
-    <li><b>Tag List:</b> <span><%= @leaderboard.tag_list %></span></li>
-    <li><b>Type:</b> <span><%= @leaderboard.sort_type %></span></li>
-  </ul>
-</div>
+  <div class="col_25 right">
+
+    <div class="box details">
+      <div class="details_header">Leaderboard Details</div>
+      <ul>
+        <li class="icon"><b>Icon:</b> <%= image_tag @leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></li>
+        <li><b>Name:</b> <span><%= @leaderboard.name %></span></li>
+        <li><b>ID:</b> <span><%= @leaderboard.id %></span></li>
+        <li><b>Game Center ID:</b> <span><%= @leaderboard.gamecenter_id %></span></li>
+        <li><b>Google Play Games ID:</b> <span><%= @leaderboard.gpg_id %></span></li>
+        <li><b>In Development:</b> <span><%= @leaderboard.in_development %></span></li>
+        <li><b>Tag List:</b> <span><%= @leaderboard.tag_list %></span></li>
+        <li><b>Type:</b> <span><%= @leaderboard.sort_type %></span></li>
+      </ul>
+    </div>
+
+  </div>
 
 
-<!--Top Scores-->
-<table class="box left">
-  <tr>
-    <th>Nick</th>
-	<th>Display String</th>
-    <th>Value</th>
-	<th>Metadata</th>
-    <th>Scored at</th>
-  </tr>
+  <div class="col_75 left">
 
-  <% if @top_scores.empty? %>
-    <tr>
-      <td colspan="3">There are no players in this leaderboard.</td>
-    </tr>
-  <% else %>
-
-    <% @top_scores.each do |score| %>
+    <!--Top Scores-->
+    <table class="box">
       <tr>
-		<% if score.user %>
-        	<td><%= score.user.nick %></td>
-		<% end %>
-		<td><%= score.display_string %></td>
-        <td><%= score.value %></td>
-		<td><%= score.metadata %></td>
-        <td><%= score.created_at %></td>
-    </tr>
-    <% end %>
+        <th>Nick</th>
+    	<th>Display String</th>
+        <th>Value</th>
+    	<th>Metadata</th>
+        <th>Scored at</th>
+      </tr>
 
-  <% end %>
+      <% if @top_scores.empty? %>
+        <tr>
+          <td colspan="3">There are no players in this leaderboard.</td>
+        </tr>
+      <% else %>
 
-</table>
+        <% @top_scores.each do |score| %>
+          <tr>
+    		<% if score.user %>
+            	<td><%= score.user.nick %></td>
+    		<% end %>
+    		<td><%= score.display_string %></td>
+            <td><%= score.value %></td>
+    		<td><%= score.metadata %></td>
+            <td><%= score.created_at %></td>
+        </tr>
+        <% end %>
+
+      <% end %>
+
+    </table>
+
+  </div>
+
 
 </div>
 
