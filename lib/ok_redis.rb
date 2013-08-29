@@ -12,6 +12,6 @@ Example usage:
 module OKRedis
   extend self
   def connection
-    @connection ||= Redis.new(:host => OKConfig[:redis_host], :port => OKConfig[:redis_port])
+    @connection ||= Redis.new(:driver => :hiredis, :host => OKConfig[:redis_host], :port => OKConfig[:redis_port])
   end
 end

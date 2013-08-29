@@ -21,6 +21,12 @@ class Developer < ActiveRecord::Base
     achievement_score.achievement.app.developer == self
   end
 
+  def has_user?(u)
+    raise ArgumentError unless u.is_a?(Fixnum) || u.is_a?(User)
+    u = User.find_by_id(u) if u.is_a?(Fixnum)
+    u && (u.developer_id == id)
+  end
+
   # Remove the deliver message when using Delayed Job 3. See:
   # https://github.com/collectiveidea/delayed_job
   def deliver_password_reset_instructions!
@@ -30,5 +36,14 @@ class Developer < ActiveRecord::Base
 
   def developer_data
     OKData.find_all_for_developer(self)
+  end
+
+  def push_queue_key
+    "dev:#{id}:pn_queue"
+  end
+
+  # TODO: substitute in real path.
+  def push_cert_path
+    "/Users/Shared/AppleCerts/OKSampleApp/DevPush.pem"
   end
 end
