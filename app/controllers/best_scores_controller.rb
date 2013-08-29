@@ -19,7 +19,7 @@ class BestScoresController < ApplicationController
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
     json = @score.as_json
-    ApiMolding.fb_fix_0_9(json)
+    ApiMolding.fb_fix_0_9(json)  if !json.blank?
     render json: json
   end
 
