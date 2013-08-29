@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130826194151) do
+ActiveRecord::Schema.define(:version => 20130829152319) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -62,6 +62,20 @@ ActiveRecord::Schema.define(:version => 20130826194151) do
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true
   add_index "apps", ["developer_id", "slug"], :name => "index_apps_on_developer_id_and_slug"
   add_index "apps", ["developer_id"], :name => "index_apps_on_developer_id"
+
+  create_table "client_sessions", :force => true do |t|
+    t.string   "uuid"
+    t.string   "fb_id"
+    t.string   "google_id"
+    t.string   "custom_id"
+    t.string   "ok_id"
+    t.string   "push_token"
+    t.string   "client_db_version"
+    t.datetime "client_created_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "app_id"
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -161,6 +175,15 @@ ActiveRecord::Schema.define(:version => 20130826194151) do
   create_table "tags", :force => true do |t|
     t.string "name"
   end
+
+  create_table "tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "app_id"
+    t.string   "apns_token"
+    t.datetime "created_at", :null => false
+  end
+
+  add_index "tokens", ["user_id", "app_id"], :name => "index_tokens_on_user_id_and_app_id"
 
   create_table "users", :force => true do |t|
     t.string   "nick"

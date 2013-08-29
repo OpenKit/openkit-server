@@ -1,5 +1,7 @@
 OKDashboard::Application.routes.draw do
 
+  match "client_sessions",  to: "client_sessions#create", via: :post
+
   # In the dashboard, the @app is set off of its id, which is part of the
   # request path.  When using the API, the app_key is used instead, and is
   # passed as a json param.
