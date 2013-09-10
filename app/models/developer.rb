@@ -38,12 +38,8 @@ class Developer < ActiveRecord::Base
     OKData.find_all_for_developer(self)
   end
 
-  def push_queue_key
-    "dev:#{id}:pn_queue"
+  def has_push_cert?
+    File.exist?(OKConfig.pem_path(id))
   end
 
-  # TODO: substitute in real path.
-  def push_cert_path
-    "/Users/Shared/AppleCerts/OKSampleApp/DevPush.pem"
-  end
 end

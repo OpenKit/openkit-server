@@ -18,6 +18,7 @@ gem 'json',          '1.7.7'
 gem 'aws-sdk',       '1.9.5'
 gem 'oauth',         '0.4.7'
 gem 'acts-as-taggable-on', '2.4.1'
+gem 'gpgme'
 
 group :development do
   gem 'fog'

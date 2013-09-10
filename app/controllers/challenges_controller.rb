@@ -14,18 +14,29 @@ class ChallengesController < ApplicationController
     sender_id      = params[:sender_id] && params[:sender_id].to_i
     receiver_ids   = params[:receiver_ids] && params[:receiver_ids].is_a?(Array) && params[:receiver_ids].map(&:to_i)
 
-    challenge = Challenge.new(
-        sender_id: sender_id,
-        receiver_ids: receiver_ids,
-        leaderboard_id: @leaderboard.id,
-        developer: authorized_app.developer,
-        app_id: authorized_app.id
-    )
+    err_message = ''
+    if !authorized_app.developer.has_push_cert?
+      err_message << "You have not uploaded a push certificate yet. "
+    end
 
-    if challenge.save
+    if err_message.blank?
+      challenge = Challenge.new(
+          sender_id: sender_id,
+          receiver_ids: receiver_ids,
+          leaderboard_id: @leaderboard.id,
+          developer: authorized_app.developer,
+          app_id: authorized_app.id
+      )
+
+      if !challenge.save
+        err_message << challenge.errors.join(", ")
+      end
+    end
+
+    if err_message.blank?
       head :ok
     else
-      render status: :bad_request, json: {message: challenge.errors.join(", ")}
+      render status: :bad_request, json: {message: err_message}
     end
   end
 
