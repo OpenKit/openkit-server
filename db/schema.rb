@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130829152319) do
+ActiveRecord::Schema.define(:version => 20130911000023) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(:version => 20130829152319) do
   end
 
   add_index "achievements", ["app_id"], :name => "index_achievements_on_app_id"
+
+  create_table "api_whitelists", :force => true do |t|
+    t.string "app_key"
+    t.string "version", :limit => 5
+  end
+
+  add_index "api_whitelists", ["app_key", "version"], :name => "index_api_whitelists_on_app_key_and_version"
 
   create_table "apps", :force => true do |t|
     t.string   "name"
