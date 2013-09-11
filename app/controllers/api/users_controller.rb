@@ -16,5 +16,18 @@ class UsersController < ApplicationController
       render status: :bad_request, json: {message: err_message}
     end
   end
+
+  def update
+    @user = authorized_app.developer.users.find_by_id(params[:id].to_i)
+    if @user.nil?
+      render status: :forbidden, json: {message: "User with that id does not belong to you"}
+    else
+      if @user.update_attributes(params[:user])
+        render status: :ok, json: @user, location: @user
+      else
+        render status: :unprocessable_entity, json: {message: @user.errors.full_messages.join(', ')}
+      end
+    end
+  end
 end
 end
