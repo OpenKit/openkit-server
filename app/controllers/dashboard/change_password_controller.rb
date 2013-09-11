@@ -1,5 +1,5 @@
+module Dashboard
 class ChangePasswordController < ApplicationController
-  before_filter :require_dashboard_access
 
   # GET /change_password/new
   def new
@@ -16,4 +16,5 @@ class ChangePasswordController < ApplicationController
       render action: "new"
     end
   end
+end
 end

@@ -1,4 +1,6 @@
+module Dashboard
 class PasswordResetsController < ApplicationController
+  skip_before_filter :require_login
   before_filter :load_developer_using_perishable_token, :only => [ :edit, :update ]
 
   def new
@@ -43,4 +45,5 @@ class PasswordResetsController < ApplicationController
       redirect_to root_url
     end
   end
+end
 end

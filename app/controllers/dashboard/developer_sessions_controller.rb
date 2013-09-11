@@ -1,5 +1,6 @@
+module Dashboard
 class DeveloperSessionsController < ApplicationController
-  before_filter :require_dashboard_access, :except => [:new, :create]
+  skip_before_filter :require_login, :only => [:new, :create]
 
   # GET /developer_sessions/new
   def new
@@ -23,4 +24,5 @@ class DeveloperSessionsController < ApplicationController
     flash[:notice] = "Logout successful!"
     redirect_to root_url
   end
+end
 end
