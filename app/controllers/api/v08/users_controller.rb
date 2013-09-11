@@ -10,7 +10,12 @@ class UsersController < ApplicationController
 
     if !err_message
       u = @user.as_json
-      ApiMolding.fb_fix_0_9(u)
+      if !u.blank?
+        u['fb_id']      = u['fb_id'].to_i       if u['fb_id']
+        u['google_id']  = u['google_id'].to_i   if u['google_id']
+        u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
+        u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
+      end
       render json: u, status: :created
     else
       render status: :bad_request, json: {message: err_message}
@@ -23,7 +28,14 @@ class UsersController < ApplicationController
       render status: :forbidden, json: {message: "User with that id does not belong to you"}
     else
       if @user.update_attributes(params[:user])
-        render status: :ok, json: @user, location: @user
+        u = @user.as_json
+        if !u.blank?
+          u['fb_id']      = u['fb_id'].to_i       if u['fb_id']
+          u['google_id']  = u['google_id'].to_i   if u['google_id']
+          u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
+          u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
+        end
+        render status: :ok, json: u, location: @user
       else
         render status: :unprocessable_entity, json: {message: @user.errors.full_messages.join(', ')}
       end

@@ -6,9 +6,10 @@ class AppsController < ApplicationController
     if test_app
       test_app.leaderboards.destroy_all
       test_app.achievements.destroy_all
-      render json: %|{"ok":true}|
+      test_app.developer.users.destroy_all
+      head :ok
     else
-      render json: %|{"ok":false}|
+      render json: {message: "no test app on this endpoint."}
     end
   end
 end

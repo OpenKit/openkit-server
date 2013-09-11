@@ -11,22 +11,43 @@ class BestScoresController < ApplicationController
     @scores = Score.bests_for(params[:leaderboard_range], @leaderboard.id, {page_num: x, num_per_page: y})
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     json_arr = @scores.as_json
-    json_arr.each {|obj| ApiMolding.fb_fix_0_9(obj)}
+    json_arr.each do |j|
+      if j[:user]
+         j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
+         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
+         j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
+         j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+      end 
+    end
     render json: json_arr
   end
 
   def user
     @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
-    json = @score.as_json
-    ApiMolding.fb_fix_0_9(json)  if !json.blank?
-    render json: json
+    j = @score.as_json
+    if !j.blank?
+      if j[:user]
+         j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
+         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
+         j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
+         j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+      end
+    end
+    render json: j
   end
 
   def social
     @scores = params[:fb_friends] && Score.social(authorized_app, @leaderboard, params[:fb_friends]) || []
     json_arr = @scores.as_json
-    json_arr.each {|obj| ApiMolding.fb_fix_0_9(obj)}
+    json_arr.each do |j|
+      if j[:user]
+         j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
+         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
+         j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
+         j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+      end 
+    end
     render json: json_arr
   end
 

@@ -7,7 +7,16 @@ class ScoresController < ApplicationController
     user_id = params[:user_id].to_i
     @scores = @leaderboard.top_scores_with_users_best(user_id, since)
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
-    render json: @scores.to_json(:include => :user, :methods => [:rank, :value])
+    json_arr = @scores.as_json(:include => :user, :methods => [:rank, :value])
+    json_arr.each do |j|
+      if j[:user]
+         j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
+         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
+         j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
+         j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+      end 
+    end
+    render json: json_arr
   end
 
   def show
@@ -18,6 +27,7 @@ class ScoresController < ApplicationController
   def create
     err_message = nil
     user_id = params[:score].delete(:user_id)
+    # TODO MODIFY THIS ID.
     err_message = "Please pass a user_id with your score."  if user_id.blank?
 
     if !err_message
@@ -38,7 +48,16 @@ class ScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      render json: @score, :only => Score::DEFAULT_JSON_PROPS, :methods => [:value]
+      j = @score.as_json(:only => Score::DEFAULT_JSON_PROPS, :methods => [:value])
+      if !j.blank?
+        if j[:user]
+           j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
+           j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
+           j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
+           j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+        end 
+      end
+      render json: j
     end
   end
 

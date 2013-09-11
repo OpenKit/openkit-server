@@ -9,15 +9,14 @@ class UsersController < ApplicationController
     err_message = "Couldn't subscribe user because:#{@user.errors.full_messages[0]}" if @user.errors.count != 0
 
     if !err_message
-      u = @user.as_json
-      ApiMolding.fb_fix_0_9(u)
-      render json: u, status: :created
+      render json: @user, status: :created
     else
       render status: :bad_request, json: {message: err_message}
     end
   end
 
   def update
+    params[:user].delete :developer_id
     @user = authorized_app.developer.users.find_by_id(params[:id].to_i)
     if @user.nil?
       render status: :forbidden, json: {message: "User with that id does not belong to you"}
