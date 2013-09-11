@@ -1,4 +1,4 @@
-module Api
+module Api::V1
 class LeaderboardsController < ApplicationController
 
   def index

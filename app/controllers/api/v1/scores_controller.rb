@@ -1,4 +1,4 @@
-module Api
+module Api::V1
 class ScoresController < ApplicationController
   before_filter :set_leaderboard
 
