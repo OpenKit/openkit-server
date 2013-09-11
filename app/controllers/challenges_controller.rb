@@ -1,6 +1,6 @@
 class ChallengesController < ApplicationController
-  before_filter :require_api_access
-  before_filter :set_leaderboard
+  before_filter :require_api_access, :except => [:info]
+  before_filter :set_leaderboard, :except => [:info]
 
   # POST to /leaderboards/:leaderboard_id/challenges with params:
   # {

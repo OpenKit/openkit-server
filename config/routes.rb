@@ -40,6 +40,8 @@ OKDashboard::Application.routes.draw do
   # match "developer_data/:id",  to: "developer_data#destroy", via: :delete, :as => :developer_data   # Dashboard only
   match "developer_data/:id",  to: "developer_data#show",    via: :get,    :as => :developer_data   # API only
 
+  match "challenges/info", to: "challenges#info", via: :get, :as => :challenges_info
+
 
   # Special request to purge end to end test data
   match "/purge_test_data", to: "apps#purge_test_data", via: :delete
