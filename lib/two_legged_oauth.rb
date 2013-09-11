@@ -11,18 +11,20 @@ class TwoLeggedOAuth
     # If it doesn't exist, then the developer must provide credentials (i.e. access through dashboard)
     request = Rack::Request.new(env)
     request.env[:authorized_app] = nil
+
     if env['HTTP_AUTHORIZATION'].nil?
+      return @app.call(env) if %w(developer.openkit.io lab.openkit.io localhost).include?(request.host)   # Rely on developer creds for dashboard access.
+
+      # Either authorized_app is set via old API whitelist, or access denied.
       if request.host == "stage.openkit.io"
         app_key = request.params["app_key"] || (env["action_dispatch.request.request_parameters"] && env["action_dispatch.request.request_parameters"]["app_key"])
         if app_key && ::ApiWhitelist.find(:first, :conditions => {app_key: app_key, version: "0.8"})
+          # Made it!
           request.env[:authorized_app] = App.find_by_app_key(app_key)
-        else
-          return [401, {}, ["You are trying to access an old API.  Please email team@openkit.io for help."]]
+          return @app.call(env)
         end
       end
-
-      # Either authorized_app is set via old API, or we are about to rely on developer creds.
-      return @app.call(env)
+      return [401, {}, ["You are trying to access an old API.  Please email team@openkit.io for help."]]
     end
 
     # For debug, may inspect oauth params with:
