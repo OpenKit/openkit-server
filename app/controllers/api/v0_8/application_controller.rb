@@ -1,14 +1,15 @@
 module Api
 class ApplicationController < ActionController::Base
   layout false
+  respond_to :json
   before_filter :require_authorized_app
-  
+
   private
   def authorized_app
     return @authorized_app if defined?(@authorized_app)
     @authorized_app = request.env[:authorized_app]
   end
-  
+
   def require_authorized_app
     unless authorized_app
       render :status => :forbidden, :json => { message: "Please check your app_key and secret_key." }
