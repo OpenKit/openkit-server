@@ -1,6 +1,6 @@
+module Api
 class ChallengesController < ApplicationController
-  before_filter :require_api_access, :except => [:info]
-  before_filter :set_leaderboard, :except => [:info]
+  before_filter :set_leaderboard
 
   # POST to /leaderboards/:leaderboard_id/challenges with params:
   # {
@@ -47,9 +47,5 @@ class ChallengesController < ApplicationController
         render :status => :forbidden, :json => { message: "You do not have access to this leaderboard." }
     end
   end
-
-  def authorized_developer
-    authorized_app && authorized_app.developer
-  end
-
+end
 end

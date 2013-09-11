@@ -1,5 +1,5 @@
+module Api
 class BestScoresController < ApplicationController
-  before_filter :require_api_access
   before_filter :set_leaderboard
 
   # Note:
@@ -37,4 +37,5 @@ class BestScoresController < ApplicationController
       render status: :forbidden, json: {message: "Pass a leaderboard_id that belongs to the app associated with app_key"}
     end
   end
+end
 end

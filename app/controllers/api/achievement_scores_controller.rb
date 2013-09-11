@@ -1,7 +1,6 @@
+module Api
 class AchievementScoresController < ApplicationController
-  before_filter :require_dashboard_access, :only   => [:destroy]
-  before_filter :require_api_access,       :except => [:destroy]
-  before_filter :set_achievement,          :except => [:destroy]
+  before_filter :set_achievement
 
   def create
     err_message = nil
@@ -28,17 +27,6 @@ class AchievementScoresController < ApplicationController
     end
   end
 
-
-  def destroy
-    @achievement_score = AchievementScore.find(params[:id].to_i)
-    if current_developer.authorized_to_delete_achievement_score?(@achievement_score)
-      @achievement_score.destroy
-      redirect_to achievement_scores_url, notice: "Score was deleted."
-    else
-      redirect_to root_url, notice: "You can't delete that score."
-    end
-  end
-
   private
   def set_achievement
     l_id1 = params[:achievement_score] && params[:achievement_score].delete(:achievement_id)
@@ -51,4 +39,5 @@ class AchievementScoresController < ApplicationController
       render status: :forbidden, json: {message: "Pass a achievement_id that belongs to the app associated with app_key"}
     end
   end
+end
 end
