@@ -1,6 +1,6 @@
 module Api
 class ScoresController < ApplicationController
-  before_filter :set_leaderboard, :except => [:destroy]
+  before_filter :set_leaderboard
 
   def index
     since = params[:since] && Time.parse(params[:since].to_s)
