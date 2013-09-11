@@ -1,4 +1,4 @@
-module Api
+module Api::V08
 class UsersController < ApplicationController
   
   def create

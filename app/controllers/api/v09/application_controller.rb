@@ -1,4 +1,4 @@
-module Api
+module Api::V09
 class ApplicationController < ActionController::Base
   layout false
   respond_to :json

@@ -3,7 +3,7 @@ OKDashboard::Application.routes.draw do
   scope :module => :api, :defaults => {:format => :json} do
 
     # 0.8 API
-    scope :module => :v0_8 do
+    scope :module => :v08 do
       constraints :subdomain => 'stage' do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
@@ -19,7 +19,7 @@ OKDashboard::Application.routes.draw do
     end
 
     # 0.9 API
-    scope :module => :v0_9 do
+    scope :module => :v09 do
       constraints :subdomain => 'pivvot' do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
