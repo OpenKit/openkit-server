@@ -10,6 +10,10 @@
 
 <body id="<%= params[:controller].parameterize %>_controller">
 
+<% if request.host == "development.openkit.io" %>
+  This is a preview branch!  Developer dashboard is at developer.openkit.io
+<% end %>
+
 <div class="wrapper">
 <% if display_logout? %>
   <div class="top">
