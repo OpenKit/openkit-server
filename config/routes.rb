@@ -2,15 +2,18 @@ OKDashboard::Application.routes.draw do
 
   scope :module => :api, :defaults => {:format => :json} do
 
-    # 0.8 API
-    scope :module => :v08 do
-      constraints :subdomain => 'stage' do
+    # 1.0 API
+    constraints :subdomain => /(api|development)/ do
+      namespace :v1 do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
         resources :scores,                  only:  [:create, :index, :show]
         resources :achievement_scores,      only:  [:create]
-        resources :leaderboards,            only:  [:create, :index]
+        resources :leaderboards,            only:  [:create, :index, :show] do
+          resources :challenges,            only:  [:create]
+        end
 
+        match "client_sessions",            to: "client_sessions#create",  via: :post
         match "best_scores",                to: "best_scores#index",       via: :get
         match "best_scores/user",           to: "best_scores#user",        via: :get
         match "best_scores/social",         to: "best_scores#social",      via: :post
@@ -34,18 +37,15 @@ OKDashboard::Application.routes.draw do
       end
     end
 
-    # 1.0 API
-    constraints :subdomain => 'api' do
-      namespace :v1 do
+    # 0.8 API
+    scope :module => :v08 do
+      constraints :subdomain => 'stage' do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
         resources :scores,                  only:  [:create, :index, :show]
         resources :achievement_scores,      only:  [:create]
-        resources :leaderboards,            only:  [:create, :index, :show] do
-          resources :challenges,            only:  [:create]
-        end
+        resources :leaderboards,            only:  [:create, :index]
 
-        match "client_sessions",            to: "client_sessions#create",  via: :post
         match "best_scores",                to: "best_scores#index",       via: :get
         match "best_scores/user",           to: "best_scores#user",        via: :get
         match "best_scores/social",         to: "best_scores#social",      via: :post
@@ -56,7 +56,7 @@ OKDashboard::Application.routes.draw do
 
 
   scope :module => :dashboard do
-    constraints :subdomain => /^$|^develop(er|ment)$/ do
+    constraints :subdomain => /^$|^(developer|beta-developer)$/ do
 
       resources :change_password,         only:  [:new, :create]
       resources :password_resets,         only:  [:new, :create, :edit, :update]
@@ -76,4 +76,7 @@ OKDashboard::Application.routes.draw do
     end
   end
 
+  match '/404',  constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
+  match '/500',  constraints: {:format => :json}, to: proc {|env| [500, {}, [{message: "Internal Server Error."}.to_json]]}
+  match '*path', constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
 end
