@@ -3,23 +3,27 @@ OKDashboard::Application.routes.draw do
   scope :module => :api, :defaults => {:format => :json} do
 
     # 1.0 API
-    constraints :subdomain => /(api|development)/ do
-      namespace :v1 do
-        resources :users,                   only:  [:create, :update]
-        resources :achievements,            only:  [:create, :index]
-        resources :scores,                  only:  [:create, :index, :show]
-        resources :achievement_scores,      only:  [:create]
-        resources :leaderboards,            only:  [:create, :index, :show] do
-          resources :challenges,            only:  [:create]
-        end
-
-        match "client_sessions",            to: "client_sessions#create",  via: :post
-        match "best_scores",                to: "best_scores#index",       via: :get
-        match "best_scores/user",           to: "best_scores#user",        via: :get
-        match "best_scores/social",         to: "best_scores#social",      via: :post
-        match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
+    default_api_routes =-> do
+      resources :users,                   only:  [:create, :update]
+      resources :achievements,            only:  [:create, :index]
+      resources :scores,                  only:  [:create, :index, :show]
+      resources :achievement_scores,      only:  [:create]
+      resources :leaderboards,            only:  [:create, :index, :show] do
+        resources :challenges,            only:  [:create]
       end
+
+      match "client_sessions",            to: "client_sessions#create",  via: :post
+      match "best_scores",                to: "best_scores#index",       via: :get
+      match "best_scores/user",           to: "best_scores#user",        via: :get
+      match "best_scores/social",         to: "best_scores#social",      via: :post
+      match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
     end
+
+    constraints :subdomain => /(api|development)/ do
+      namespace :v1, &default_api_routes
+      scope :module => :v1, &default_api_routes
+    end
+
 
     # 0.9 API
     scope :module => :v09 do
@@ -78,5 +82,7 @@ OKDashboard::Application.routes.draw do
 
   match '/404',  constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
   match '/500',  constraints: {:format => :json}, to: proc {|env| [500, {}, [{message: "Internal Server Error."}.to_json]]}
+
+  # Catch all.
   match '*path', constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
 end
