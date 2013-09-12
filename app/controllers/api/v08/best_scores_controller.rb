@@ -17,13 +17,17 @@ class BestScoresController < ApplicationController
          j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
-      end 
+
+         j[:user]['id'] -= 100000 if j[:user]['id']
+      end
+
+      j['user_id'] -= 100000 if j['user_id']
     end
     render json: json_arr
   end
 
   def user
-    @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
+    @score = Score.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id].to_i + 100000)
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
     j = @score.as_json
     if !j.blank?
@@ -32,7 +36,11 @@ class BestScoresController < ApplicationController
          j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
+
+         j[:user]['id'] -= 100000 if j[:user]['id']
       end
+
+      j['user_id'] -= 100000 if j['user_id']
     end
     render json: j
   end

@@ -23,7 +23,7 @@ class AchievementScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      render json: @achievement_score, location: @achievement_score
+      render json: @achievement_score
     end
   end
 

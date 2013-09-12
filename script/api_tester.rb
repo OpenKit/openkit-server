@@ -29,7 +29,9 @@ def response_log(res)
   if res.code !~ /^20./
     red "code: #{res.code}"
   end
-  pp JSON.parse(res.body)
+  if res.body && res.body != " "  # When using 'head :ok', we get a response body of a single space.  Not sure why.
+    pp JSON.parse(res.body)
+  end
 end
 
 def post(path, req_params = {})
@@ -72,8 +74,8 @@ if res.code != "200"
 end
 
 # Create some users
-res1 = post '/v1/users',              { user: {nick: "test user 1", custom_id: 454} }
-res2 = post '/v1/users',              { user: {nick: "test user 2", custom_id: 600} }
+res1 = post '/v1/users',              { user: {nick: "test user 1", custom_id: "454"} }
+res2 = post '/v1/users',              { user: {nick: "test user 2", custom_id: "600"} }
 user1 = JSON.parse(res1.body)
 user2 = JSON.parse(res2.body)
 
@@ -121,6 +123,6 @@ get '/v1/achievements',               { }
 get '/v1/achievements',               { user_id: user1['id'] }
 
 # Update a user
-put "/v1/users/#{user1['id']}",       { gamecenter_id: 1234500000, fb_id: 12345 }
+put "/v1/users/#{user1['id']}",       { gamecenter_id: "234500000", fb_id: "12345" }
 
 

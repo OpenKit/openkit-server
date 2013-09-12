@@ -3,7 +3,7 @@ class AchievementsController < ApplicationController
 
   def index
     @achievements = authorized_app.achievements
-    user_id = params[:user_id] && params[:user_id].to_i
+    user_id = params[:user_id] && (params[:user_id].to_i + 100000)
     render json: @achievements.map {|x| x.api_fields(request_base_uri, user_id)}
   end
 

@@ -8,7 +8,7 @@ class AchievementScoresController < ApplicationController
     err_message = "Please pass a user_id with your achievement_score."  if user_id.blank?
 
     if !err_message
-      user = user_id && authorized_app.users.find_by_id(user_id.to_i)
+      user = user_id && authorized_app.users.find_by_id(user_id.to_i + 100000)
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
@@ -23,7 +23,9 @@ class AchievementScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      render json: @achievement_score, location: @achievement_score
+      j = @achievement_score.as_json
+      j['user_id'] -= 100000
+      render json: j
     end
   end
 

@@ -27,6 +27,8 @@ class UsersController < ApplicationController
     if @user.nil?
       render status: :forbidden, json: {message: "User with that id does not belong to you"}
     else
+      params[:user].delete :id
+      params[:user].delete :developer_id
       if @user.update_attributes(params[:user])
         u = @user.as_json
         if !u.blank?
@@ -35,7 +37,7 @@ class UsersController < ApplicationController
           u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
           u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
         end
-        render status: :ok, json: u, location: @user
+        render status: :ok, json: u
       else
         render status: :unprocessable_entity, json: {message: @user.errors.full_messages.join(', ')}
       end

@@ -4,7 +4,7 @@ class ScoresController < ApplicationController
 
   def index
     since = params[:since] && Time.parse(params[:since].to_s)
-    user_id = params[:user_id].to_i
+    user_id = params[:user_id].to_i + 100000
     @scores = @leaderboard.top_scores_with_users_best(user_id, since)
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     json_arr = @scores.as_json(:include => :user, :methods => [:rank, :value])
@@ -14,24 +14,29 @@ class ScoresController < ApplicationController
          j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
-      end 
+
+         j[:user]['id'] -= 100000 if j[:user]['id']
+      end
+
+      j['user_id'] -= 100000 if j['user_id']
     end
     render json: json_arr
   end
 
   def show
     @score = @leaderboard.scores.find(params[:id].to_i)
-    render json: @score
+    j = @score.as_json
+    j['user_id'] -= 100000 if j['user_id']
+    render json: j
   end
 
   def create
     err_message = nil
     user_id = params[:score].delete(:user_id)
-    # TODO MODIFY THIS ID.
     err_message = "Please pass a user_id with your score."  if user_id.blank?
 
     if !err_message
-      user = user_id && authorized_app.users.find_by_id(user_id.to_i)
+      user = user_id && authorized_app.users.find_by_id(user_id.to_i + 100000)
     end
 
     err_message = "User with that ID is not subscribed to this app."  if !user
@@ -55,7 +60,11 @@ class ScoresController < ApplicationController
            j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
            j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
            j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
-        end 
+
+           j[:user]['id'] -= 100000 if j[:user]['id']
+        end
+
+        j['user_id'] -= 100000 if j['user_id']
       end
       render json: j
     end

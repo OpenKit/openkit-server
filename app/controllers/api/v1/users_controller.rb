@@ -16,11 +16,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    params[:user].delete :developer_id
     @user = authorized_app.developer.users.find_by_id(params[:id].to_i)
     if @user.nil?
       render status: :forbidden, json: {message: "User with that id does not belong to you"}
     else
+      params[:user].delete :id
+      params[:user].delete :developer_id
       if @user.update_attributes(params[:user])
         render status: :ok, json: @user, location: @user
       else

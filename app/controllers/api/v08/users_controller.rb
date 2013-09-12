@@ -1,6 +1,6 @@
 module Api::V08
 class UsersController < ApplicationController
-  
+
   def create
     err_message = nil
 
@@ -15,6 +15,8 @@ class UsersController < ApplicationController
         u['google_id']  = u['google_id'].to_i   if u['google_id']
         u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
         u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
+
+        u['id'] -= 100000
       end
       render json: u, status: :created
     else
@@ -23,10 +25,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = authorized_app.developer.users.find_by_id(params[:id].to_i)
+    @user = authorized_app.developer.users.find_by_id(params[:id].to_i + 100000)
     if @user.nil?
       render status: :forbidden, json: {message: "User with that id does not belong to you"}
     else
+      params[:user].delete :id
+      params[:user].delete :developer_id
       if @user.update_attributes(params[:user])
         u = @user.as_json
         if !u.blank?
@@ -34,8 +38,10 @@ class UsersController < ApplicationController
           u['google_id']  = u['google_id'].to_i   if u['google_id']
           u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
           u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
+
+          u['id'] -= 100000
         end
-        render status: :ok, json: u, location: @user
+        render status: :ok, json: u
       else
         render status: :unprocessable_entity, json: {message: @user.errors.full_messages.join(', ')}
       end
