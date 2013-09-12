@@ -9,9 +9,19 @@ Example usage:
   JSON.parse(r.hget('key1', 'field2'))    #=> {"my"=>"hash"}
 
 =end
+require 'redis'
+
 module OKRedis
   extend self
   def connection
-    @connection ||= Redis.new(:host => "localhost", :port => 6379)
+    @connection ||= Redis.new(:driver => :hiredis, :host => OKConfig[:redis_host], :port => OKConfig[:redis_port])
+  end
+
+  def hiconnection
+     @hiconnection ||= begin
+       x = Hiredis::Connection.new
+       x.connect OKConfig[:redis_host], OKConfig[:redis_port].to_i
+       x
+     end
   end
 end

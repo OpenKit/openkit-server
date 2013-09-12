@@ -1,0 +1,81 @@
+<div class="header">
+  <% if @apps.empty? %>
+    <h1></h1>
+  <% else %>
+    <h1>Your Apps</h1>
+    <%= link_to new_app_path, {:class=>'header_button'} do %>
+      <i class="icon-plus"></i> Add a New App
+    <% end %>
+  <% end %>
+</div>
+
+<div class="two_col">
+
+  <div class="col_25 right">
+
+    <div class="box details resources">
+      <div class="details_header">Resources</div>
+      <ul>
+        <li><%= image_tag("unity_icon.png", :alt => "Unity Plugin") %><p><a href="#">Unity Plugin</a><a href="#">Unity Documentation</a></p></li>
+        <li><%= image_tag("ios_icon.png", :alt => "iOS SDK") %><p><a href="#">iOS SDK</a><a href="#">iOS Documentation</a></p></li>
+        <li><%= image_tag("android_icon.png", :alt => "Android SDK") %><p><a href="#">Android SDK</a><a href="#">Android Documentation</a></p></li>
+      </ul>
+    </div>
+
+    <div class="box details">
+      <div class="details_header">Support</div>
+      <ul>
+        <li><a href="#">Itegration assistance</a></li>
+        <li><a href="#">Report a bug</a></li>
+        <li><a href="#">Send feedback</a></li>
+      </ul>
+    </div>
+    
+  </div>
+
+
+  <div class="col_75 left">
+
+    <% if @apps.empty? %>
+
+      <div class="box welcome">
+        <h1>Welcome to OpenKit!</h1>
+        <h2>Thanks for signing up!</h2>
+        <p>This is the developer dashboard where you view and manage all of the OpenKit services. To get started lets add your first app.</p>
+        <%= link_to new_app_path do %>
+          Add a New App
+        <% end %>
+      </div>
+
+    <% else %>
+      <table class="box">
+        <tr>
+          <th>Icon</th>
+          <th>Name</th>
+          <th>App Key</th>
+          <th></th>
+        </tr>
+
+      <% @apps.each do |app| %>
+        <tr>
+          <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
+          <td class="name"><%= link_to app.name, app %></td>
+          <td></td>
+          <td class="manage">
+            <%# link_to edit_app_path(app) do %>
+              <!--<i class='icon-edit'></i> <span>Edit</span>-->
+            <%# end %>
+            <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <i class='icon-remove'></i> <span>Delete</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
+    <% end %>
+
+    </table>
+  </div>
+  
+
+</div>

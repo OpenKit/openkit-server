@@ -1,0 +1,129 @@
+# API:
+#
+#   p = PushService.new(dev_id)
+#   p.connect
+#   p.write_message(token, message)
+#   p.write(token, payload)
+#   p.disconnect
+#   p.reconnect
+#   p.is_connected?
+#
+# OR in IRB:
+#
+#   > PushService.chat_with_lou
+#   Each time you hit enter, Lou gets a push note. Use ctrl+d to exit.
+#
+# Example:
+# p.connect
+# p.write("7263097dd87a783c5d90dfa61ad3df3d17b11428143c788e77c1be4c2d162d38", {aps: {alert: "This is cool!", badge: 1, sound: "default"}, other_meta: 10})
+#
+# $ gpg --force-mdc -c 1p.txt
+# $ gpg -d 1p.txt.gpg
+require 'socket'
+require 'openssl'
+require 'json'
+require 'gpgme'
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'ok_config.rb'))
+
+class PushService
+  def is_connected?
+    @connected
+  end
+
+  def initialize(dev_id)
+    @dev_id = dev_id
+    @connected = false
+  end
+
+  def connect
+    if !pem_and_pass_exist?
+      $stderr.puts "Pem and pass files do not exist for developer #{@dev_id}"
+      return false
+    end
+
+    crypto = GPGME::Crypto.new(:password => OKConfig[:pem_disk_pass])
+    pass = crypto.decrypt(File.open(pass_path)).read.chomp
+
+    context      = OpenSSL::SSL::SSLContext.new
+    context.cert = OpenSSL::X509::Certificate.new(File.read(pem_path))
+    context.key  = OpenSSL::PKey::RSA.new(File.read(pem_path), pass)
+
+    retries = 0
+    begin
+      @sock         = TCPSocket.new(OKConfig[:apns_host], 2195)
+      @ssl          = OpenSSL::SSL::SSLSocket.new(@sock, context)
+      @ssl.connect
+      @connected = true
+      return true
+    rescue SystemCallError => e
+      if (retries += 1) < 5
+        $stderr.puts "Connection failed for developer #{@dev_id}.  Retrying..."
+        sleep 1
+        retry
+      else
+        $stderr.puts "Too many retries for developer #{@dev_id}.  Connection failed with error: #{e.message}"
+        return false
+      end
+    end
+  end
+
+  def write(token, payload)
+    begin
+      @ssl.write(packed_notification(token, payload))
+      @ssl.flush
+      return true
+    rescue => e
+      $stderr.puts "Connection for developer #{@dev_id} failed on write.  Message: #{e.message}"
+      @connected = false
+      return false
+    end
+  end
+
+  def write_message(token, message)
+    write(token, {aps: {alert: message, badge: 0, sound: "default"}})
+  end
+
+  def reconnect
+    disconnect if @connected
+    connect
+  end
+
+  def disconnect
+    @ssl.close rescue nil  # don't care
+    @sock.close rescue nil # same
+    @connected = false
+    true
+  end
+
+  class << self
+    def chat_with_lou
+      p = PushService.new(1)
+      p.connect
+      puts "ctrl+d to exit"
+      while ((line = gets) && p.is_connected?)
+        line.chomp! if line
+        p.write_message("7263097dd87a783c5d90dfa61ad3df3d17b11428143c788e77c1be4c2d162d38", line)
+      end
+      p.disconnect
+    end
+  end
+
+  private
+  def packed_notification(token, payload)
+    pt = [token].pack('H*')
+    pm = payload.to_json
+    [0, 0, 32, pt, 0, pm.size, pm].pack("ccca*cca*")
+  end
+
+  def pem_and_pass_exist?
+    File.exist?(pem_path) && File.exist?(pass_path)
+  end
+
+  def pem_path
+    @pem_path ||= OKConfig.pem_path(@dev_id)
+  end
+
+  def pass_path
+    @pass_path ||= OKConfig.pem_pass_path(@dev_id)
+  end
+end

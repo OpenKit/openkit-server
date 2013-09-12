@@ -1,0 +1,33 @@
+<div class="header">
+  <h1>Account</h1>
+  <%= link_to edit_developer_path(@developer), {:class => 'header_button'}  do %>
+    <i class="icon-edit"></i> Edit Account
+  <% end %>
+</div>
+
+<div class="two_col">
+
+  <div class="col_75 left">
+    <div class="box no_table">
+      <ul>
+        <li><%= link_to 'Change my password', new_change_password_path  %></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col_25 right">
+    <div class="box details">
+      <div class="details_header">Your Info</div>
+      <ul>
+        <li><b>Email:</b> <span><%= @developer.email %></span></li>
+        <li></li>
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+

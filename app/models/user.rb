@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :scores, :dependent => :delete_all
   has_many :subscriptions
   has_many :apps, :through => :subscriptions
+  has_many :tokens
   belongs_to :developer
 
   class << self

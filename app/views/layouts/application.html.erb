@@ -4,29 +4,34 @@
   <title>OKDashboard</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <!-- Don't put any more javascript_include_tags here.  Talk to Lou. -->
   <%= csrf_meta_tags %>
 </head>
 
 <body id="<%= params[:controller].parameterize %>_controller">
 
+<% if request.host == "beta-developer.openkit.io" %>
+  This is a preview branch!  Developer dashboard is at developer.openkit.io
+<% end %>
+
 <div class="wrapper">
 <% if display_logout? %>
   <div class="top">
-    <h1 class="logo">OpenKit <sup>beta</sup></h1>
+    <h1 class="logo"><a href="/"><%= image_tag 'logo.png' %></a></h1>
 
     <ul class="nav">
-      <li><a href="/"><i class="icon-th-list"></i> Your Apps</a></li>
-      <li><a href="http://openkit.io/docs/downloads" target="_blank"><i class="icon-download-alt"></i> Downloads</a></li>
-      <li><a href="http://openkit.io/docs" target="_blank"><i class="icon-question-sign"></i> Documentation</a></li>
+      <li><a href="/">Your Apps</a></li>
     </ul>
 
     <ul class="admin">
+      <li><a href="http://openkit.io/docs/downloads" target="_blank">Downloads</a></li>
+      <li><a href="http://openkit.io/documentation" target="_blank">Documentation</a></li>
+      <li><a href="http://openkit.io/help" target="_blank">Help</a></li>
       <li>
         <a class="account">Account <i class="icon-chevron-down"></i></a>
         <div class="subnav">
           <ul>
             <li><a href="<%= developer_path(current_developer) if current_developer %>" ><i class="icon-cog"></i> Settings</a></li>
-            <li><a href="http://openkit.io/feedback" target="_blank"><i class="icon-comment"></i> Feedback</a></li>
             <li>
               <%= link_to logout_path, :method => :delete do %>
                 <i class="icon-off"></i> Logout

@@ -1,0 +1,67 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %> <span>/</span> <%= link_to 'Leaderboards', app_leaderboards_path(@app) %> <span>/</span> <%= @leaderboard.name %></h1>
+  <%= link_to edit_app_leaderboard_path(@app, @leaderboard), {:class=> 'header_button'} do %>
+      <i class="icon-edit"></i> Edit Leaderboard
+  <% end %>
+</div>
+
+<div class="two_col">
+
+  <div class="col_25 right">
+
+    <div class="box details">
+      <div class="details_header">Leaderboard Details</div>
+      <ul>
+        <li class="icon"><b>Icon:</b> <%= image_tag @leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></li>
+        <li><b>Name:</b> <span><%= @leaderboard.name %></span></li>
+        <li><b>ID:</b> <span><%= @leaderboard.id %></span></li>
+        <li><b>Game Center ID:</b> <span><%= @leaderboard.gamecenter_id %></span></li>
+        <li><b>Google Play Games ID:</b> <span><%= @leaderboard.gpg_id %></span></li>
+        <li><b>In Development:</b> <span><%= @leaderboard.in_development %></span></li>
+        <li><b>Tag List:</b> <span><%= @leaderboard.tag_list %></span></li>
+        <li><b>Type:</b> <span><%= @leaderboard.sort_type %></span></li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  <div class="col_75 left">
+
+    <!--Top Scores-->
+    <table class="box">
+      <tr>
+        <th>Nick</th>
+    	<th>Display String</th>
+        <th>Value</th>
+    	<th>Metadata</th>
+        <th>Scored at</th>
+      </tr>
+
+      <% if @top_scores.empty? %>
+        <tr>
+          <td colspan="3">There are no players in this leaderboard.</td>
+        </tr>
+      <% else %>
+
+        <% @top_scores.each do |score| %>
+          <tr>
+    		<% if score.user %>
+            	<td><%= score.user.nick %></td>
+    		<% end %>
+    		<td><%= score.display_string %></td>
+            <td><%= score.value %></td>
+    		<td><%= score.metadata %></td>
+            <td><%= score.created_at %></td>
+        </tr>
+        <% end %>
+
+      <% end %>
+
+    </table>
+
+  </div>
+
+
+</div>
+

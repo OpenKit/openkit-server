@@ -1,0 +1,72 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= @app.name %></h1>
+  <%= link_to edit_app_path(@app), {:class => 'header_button'} do %>
+    <i class="icon-edit"></i> Edit App
+  <% end %>
+</div>
+
+
+
+  <div class="col_75 left">
+    <div class="box no_table">
+      <div class="details_header">Services</div>
+      <ul>
+        <li><%= image_tag ("leaderboard_dash.png") %><%= link_to 'Social Leaderboards', app_leaderboards_path(@app) %></li>
+        <!-- <li><%= image_tag ("invites_dash.png") %><a href="#">Smart Invites</a></li> -->
+        <li><%= image_tag ("push_dash.png") %><%= link_to 'Push Notifications', challenges_info_path %></li>
+        <!-- <li><%= image_tag ("cloud_dash.png") %><a href="#">Cloud Data Browser</a></li> --> 
+        <li><%= image_tag ("achievement_dash.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
+        <!--<li><%= image_tag ("multiplayer_dash.png") %><a href="#" class="md-trigger" data-modal="modal-1">Multiplayer (Photon Server)</a></li>-->
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="col_25 right">
+    <div class="box details app">
+      <div class="details_header">App Details</div>
+      <ul>
+        <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
+        <li><b>Name:</b> <span><%= @app.name %></span></li>
+        <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
+        <li class="secret"><b>Secret Key:</b> <a href="#" id='show_secret'>show me</a><span style="display:none;"><%= @app.secret_key %></span></li>
+        <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
+      </ul>
+    </div>
+
+  </div>
+  
+<div class="md-modal md-effect-1" id="modal-1">
+      <div class="md-content">
+        
+        <%= image_tag("photon-slide.png", :alt => "Photon Server") %>
+
+        <div class="md-signup">
+          <ul>
+            <li>
+              <p><label>Sign up now with to get started.</label> <a href="">Sign Up</a></p>
+            </li>
+            <li>  
+              <p><span>Already have an account?</span><label>Enter your Photon dashboard url for quick access from OpenKit.</label></p>
+              <p><input type="text" placeholder="https://www.exitgames.com/Dashboard/toddham"><a href="">Activate</a></p>
+            </li> 
+          </ul>
+
+          
+        </div>
+        <a href="#" class="md-close"><i class="icon-remove"></i></a>
+      </div>
+    </div>
+
+<div class="md-overlay"></div>
+
+
+<script type="text/javascript">
+  $('#show_secret').click(function(){
+      $(this).next().show();
+      $(this).hide();
+  });
+</script>
+
+
+

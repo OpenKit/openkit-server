@@ -1,4 +1,7 @@
 OKDashboard::Application.configure do
+  # Use this to help debug 'production' env running locally, like the asset pipeline.
+  # config.logger = Logger.new(STDOUT)
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests
@@ -64,12 +67,4 @@ OKDashboard::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-  config.paperclip_defaults = {
-    :storage => :s3,
-    :s3_credentials => {
-      :bucket => OKConfig[:s3_attachment_bucket],
-      :access_key_id => OKConfig[:aws_key],
-      :secret_access_key => OKConfig[:aws_secret]
-    }
-  }
 end

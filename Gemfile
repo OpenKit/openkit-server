@@ -12,11 +12,13 @@ gem 'paperclip',    '3.3.1'
 gem 'delayed_job',  '3.0.4'
 gem 'delayed_job_active_record', '0.3.3'
 gem 'redis',         '3.0.2'
+gem 'hiredis',       '0.4.5'
 gem 'daemons',       '1.1.9'
 gem 'json',          '1.7.7'
 gem 'aws-sdk',       '1.9.5'
 gem 'oauth',         '0.4.7'
 gem 'acts-as-taggable-on', '2.4.1'
+gem 'gpgme'
 
 group :development do
   gem 'fog'
@@ -25,6 +27,7 @@ group :development do
   gem 'wirble'
   gem 'simple_oauth',  '0.2.0'
   gem 'what_methods'
+  gem 'tracer_bullet'
 end
 
 group :test do

@@ -1,11 +1,42 @@
 class Score < ActiveRecord::Base
   belongs_to :user
   belongs_to :leaderboard
-  attr_accessible :metadata, :display_string, :user_id
+  attr_accessible :metadata, :display_string, :user_id, :meta_doc
   attr_accessor :rank
+  has_attached_file :meta_doc
 
   @@enable_user_rank = true
 
+  DEFAULT_JSON_PROPS = [
+      :id,
+      :leaderboard_id,
+      :user_id,
+      :value,
+      :display_string,
+      :metadata,
+      :created_at
+  ]
+  DEFAULT_JSON_METHODS = [
+    :value,
+    :meta_doc_url
+  ]
+  DEFAULT_JSON_INCLUDES = [
+    :user,
+  ]
+
+  # If 'only' is passed, skip defaults and pass off to super.  This is a least
+  # surprises implementation.
+  #
+  # Automatically include rank only if we already have it.
+  def as_json(opts = {})
+    if opts[:only]
+      return super(opts)
+    end
+    includes = DEFAULT_JSON_INCLUDES | (opts[:include] || [])
+    methods  = DEFAULT_JSON_METHODS  | (opts[:methods] || [])
+    methods << :rank if rank
+    super(:only => DEFAULT_JSON_PROPS, :methods => methods, :include => includes)
+  end
 
   def value=(v)
     self.sort_value = v
@@ -41,6 +72,9 @@ class Score < ActiveRecord::Base
 
     def social(app, leaderboard, fb_friends)
       # Work for now.  Disable rank!!  Pass leaderboard obj instead of id!
+      raise ArgumentError.new("Score#social takes an array of fb_friends.") unless fb_friends.is_a?(Array)
+      return [] if fb_friends.empty?
+
       bests = []
       users = app.developer.users.where(:fb_id => fb_friends)
       users.each {|u|
@@ -135,6 +169,10 @@ class Score < ActiveRecord::Base
 
   def is_better_than?(other_score)
     sort_value > other_score.sort_value
+  end
+
+  def meta_doc_url
+    meta_doc_file_name && meta_doc.url
   end
 
   private

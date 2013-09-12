@@ -24,193 +24,82 @@
 }
 
 @mixin button{
-  color: white;
+  color:#fff;
   cursor: pointer;
-  font-weight:bold;
   text-decoration: none;
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
   display: inline-block;
   text-align: center;
+  padding: 15px 20px;
+  font-size: 16px;
+  border:none;
+  &:hover{
+    color:#fff;
+  }
 }
 
 @mixin blueButton{
   @include button;
-  text-shadow: 0 1px 0 #133072;
-  border: 1px solid #1B5496;
-  -moz-box-shadow: inset 0 1px #92b8f8,0 2px 3px #999;
-  -webkit-box-shadow: inset 0 1px #92b8f8,0 2px 3px #999;
-  box-shadow: inset 0 1px #92b8f8,0 2px 3px #999;
-  background: -moz-linear-gradient(top, #4185f4 0%, #194fdc 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4185f4), color-stop(100%,#194fdc));
-  background: -webkit-linear-gradient(top, #4185f4 0%,#194fdc 100%);
-  background: -o-linear-gradient(top, #4185f4 0%,#194fdc 100%);
-  background: -ms-linear-gradient(top, #4185f4 0%,#194fdc 100%);
-  background: linear-gradient(top, #4185f4 0%,#194fdc 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4185f4', endColorstr='#194fdc',GradientType=0 );
-  &:hover{
-    border:1px solid #143f7c;
-    text-shadow:0 1px 0 #0e246e;
-    -moz-box-shadow: inset 0 1px #77a6f6,0 2px 3px #999;
-    -webkit-box-shadow: inset 0 1px #77a6f6,0 2px 3px #999;
-    box-shadow: inset 0 1px #77a6f6,0 2px 3px #999;
-    background: #133cd3;
-    background: -moz-linear-gradient(top, #3165f1 0%, #133cd3 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3165f1), color-stop(100%,#133cd3));
-    background: -webkit-linear-gradient(top, #3165f1 0%,#133cd3 100%);
-    background: -o-linear-gradient(top, #3165f1 0%,#133cd3 100%);
-    background: -ms-linear-gradient(top, #3165f1 0%,#133cd3 100%);
-    background: linear-gradient(top, #3165f1 0%,#133cd3 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3165f1', endColorstr='#133cd3',GradientType=0 );
+  background: #3498db;
+  -webkit-box-shadow:0 2px 0 #2980B9;
+  -moz-box-shadow:0 2px 0 #2980B9;
+  box-shadow:0 2px 0 #2980B9;
+  &:hover{  
+    background: #5dade2;
   }
-  &:active{
-    background: -moz-linear-gradient(top, #194fdc 0%, #4185f4 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#194fdc), color-stop(100%,#4185f4));
-    background: -webkit-linear-gradient(top, #194fdc 0%,#4185f4 100%);
-    background: -o-linear-gradient(top, #194fdc 0%,#4185f4 100%);
-    background: -ms-linear-gradient(top, #194fdc 0%,#4185f4 100%);
-    background: linear-gradient(top, #194fdc 0%,#4185f4 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#194fdc', endColorstr='#4185f4',GradientType=0 );
-  }
+  &:active{}
 
 }
 
 
 @mixin silverButton{
     @include button;
-    color:#666;
-    border: 1px solid #aaa;
-    text-shadow: 0 1px 0 #fff;
-    -moz-box-shadow: inset 0 1px #fff, 0 1px 2px #ccc;
-    -webkit-box-shadow: inset 0 1px #fff, 0 1px 2px #ccc;
-    box-shadow: inset 0 1px #fff, 0 1px 2px #ccc;
-    background: #eeeeee;
-    background: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eeeeee));
-    background: -webkit-linear-gradient(top, #ffffff 0%,#eeeeee 100%);
-    background: -o-linear-gradient(top, #ffffff 0%,#eeeeee 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%,#eeeeee 100%);
-    background: linear-gradient(top, #ffffff 0%,#eeeeee 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 );
+    color:#fff;
+    background: #95A5A6;
+    -webkit-box-shadow:0 2px 0 #7F8C8D;
+    -moz-box-shadow:0 2px 0 #7F8C8D;
+    box-shadow:0 2px 0 #7F8C8D;
     &:hover{
-      border:1px solid #959595;
-      color:#333;
-      background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 100%);
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#eaeaea));
-      background: -webkit-linear-gradient(top, #ffffff 0%,#eaeaea 100%);
-      background: -o-linear-gradient(top, #ffffff 0%,#eaeaea 100%);
-      background: -ms-linear-gradient(top, #ffffff 0%,#eaeaea 100%);
-      background: linear-gradient(top, #ffffff 0%,#eaeaea 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eaeaea',GradientType=0 );
+      background: #aab7b7;
     }
-    &:active{
-      border:1px solid #959595;
-      color:#333;
-      background: -moz-linear-gradient(top, #eeeeee 0%, #ffffff 100%);
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#ffffff));
-      background: -webkit-linear-gradient(top, #eeeeee 0%,#ffffff 100%);
-      background: -o-linear-gradient(top, #eeeeee 0%,#ffffff 100%);
-      background: -ms-linear-gradient(top, #eeeeee 0%,#ffffff 100%);
-      background: linear-gradient(top, #eeeeee 0%,#ffffff 100%);
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#ffffff',GradientType=0 );
-    }
+    &:active{}
 }
 
 @mixin greenButton{
   @include button;
-  border: 1px solid #428c00;
-  text-shadow: 0 1px 0 #3d591c;
-  -moz-box-shadow: inset 0 1px #cee99d, 0 1px 2px #ccc;
-  -webkit-box-shadow: inset 0 1px #cee99d, 0 1px 2px #ccc;
-  box-shadow: inset 0 1px #cee99d, 0 1px 2px #ccc;
-  background: #9fd43e;
-  background: -moz-linear-gradient(top, #9ed33e 0%, #68a135 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9ed33e), color-stop(100%,#68a135));
-  background: -webkit-linear-gradient(top, #9ed33e 0%,#68a135 100%);
-  background: -o-linear-gradient(top, #9ed33e 0%,#68a135 100%);
-  background: -ms-linear-gradient(top, #9ed33e 0%,#68a135 100%);
-  background: linear-gradient(top, #9ed33e 0%,#68a135 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ed33e', endColorstr='#68a135',GradientType=0 );
+  background: #1abc9c;
+  -webkit-box-shadow:0 2px 0 #16A085;
+  -moz-box-shadow:0 2px 0 #16A085;
+  box-shadow:0 2px 0 #16A085;
   &:hover{
-    text-shadow:0 1px 0 #2d4f15;
-    border: 1px solid #316f00;
-    background: -moz-linear-gradient(top, #86c82e 0%, #4e8928 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#86c82e), color-stop(100%,#4e8928));
-    background: -webkit-linear-gradient(top, #86c82e 0%,#4e8928 100%);
-    background: -o-linear-gradient(top, #86c82e 0%,#4e8928 100%);
-    background: -ms-linear-gradient(top, #86c82e 0%,#4e8928 100%);
-    background: linear-gradient(top, #86c82e 0%,#4e8928 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#86c82e', endColorstr='#4e8928',GradientType=0 );
+    background:#48c9b0;
   }
-  &:active{
-    background: -moz-linear-gradient(top, #68a135 0%, #9ed33e 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#68a135), color-stop(100%,#9ed33e));
-    background: -webkit-linear-gradient(top, #68a135 0%,#9ed33e 100%);
-    background: -o-linear-gradient(top, #68a135 0%,#9ed33e 100%);
-    background: -ms-linear-gradient(top, #68a135 0%,#9ed33e 100%);
-    background: linear-gradient(top, #68a135 0%,#9ed33e 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#68a135', endColorstr='#9ed33e',GradientType=0 );
-  }
+  &:active{}
 }
 
 @mixin redButton{
   @include button;
-  border: 1px solid #8c0000;
-  text-shadow: 0 1px 0 #551b1b;
-  -moz-box-shadow: inset 0 1px #e99d9d, 0 1px 2px #ccc;
-  -webkit-box-shadow: inset 0 1px #e99d9d, 0 1px 2px #ccc;
-  box-shadow: inset 0 1px #e99d9d, 0 1px 2px #ccc;
-  background: #d33e3e;
-  background: -moz-linear-gradient(top, #d33e3e 0%, #973232 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d33e3e), color-stop(100%,#973232));
-  background: -webkit-linear-gradient(top, #d33e3e 0%,#973232 100%);
-  background: -o-linear-gradient(top, #d33e3e 0%,#973232 100%);
-  background: -ms-linear-gradient(top, #d33e3e 0%,#973232 100%);
-  background: linear-gradient(top, #d33e3e 0%,#973232 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d33e3e', endColorstr='#973232 ',GradientType=0 );
+  background: #e74c3c;
   &:hover{
-    text-shadow:0 1px 0 #4b1414;
-    border: 1px solid #6f0000;
-    -moz-box-shadow: inset 0 1px #e38484, 0 1px 2px #ccc;
-    -webkit-box-shadow: inset 0 1px #e38484, 0 1px 2px #ccc;
-    box-shadow: inset 0 1px #e38484, 0 1px 2px #ccc;
-    background: -moz-linear-gradient(top, #c82e2e 0%, #7d2525 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c82e2e), color-stop(100%,#7d2525));
-    background: -webkit-linear-gradient(top, #c82e2e 0%,#7d2525 100%);
-    background: -o-linear-gradient(top, #c82e2e 0%,#7d2525 100%);
-    background: -ms-linear-gradient(top, #c82e2e 0%,#7d2525 100%);
-    background: linear-gradient(top, #c82e2e 0%,#7d2525 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c82e2e', endColorstr='#7d2525',GradientType=0 );
+    background:#ec7063;
   }
-  &:active{
-    background: -moz-linear-gradient(top, #973232 0%, #d33e3e 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#973232), color-stop(100%,#d33e3e));
-    background: -webkit-linear-gradient(top, #973232 0%,#d33e3e 100%);
-    background: -o-linear-gradient(top, #973232 0%,#d33e3e 100%);
-    background: -ms-linear-gradient(top, #973232 0%,#d33e3e 100%);
-    background: linear-gradient(top, #973232 0%,#d33e3e 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#973232', endColorstr='#d33e3e',GradientType=0 );
-  }
+  &:active{}
 }
 
 @mixin topButton{
-  color:#ccc;
-  font-size:14px;
-  padding:20px;
+  color:#d6eaf8;
+  font-size:13px;
+  letter-spacing: 1px;
+  padding:24px 20px;
   display:inline-block;
   font-weight:normal;
   text-decoration:none;
   cursor: pointer;
-  text-shadow: 0 -1px 0 #1e1e1e;
-  border-left:1px solid #555;
-  border-right:1px solid #333;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
   &:hover{
     color:#fff;
-    background:#373737;
-    border-left:1px solid #222;
-    border-right:1px solid #222;
-    -moz-box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.25);
   }
+
 }
 
 
