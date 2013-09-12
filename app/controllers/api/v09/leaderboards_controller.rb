@@ -2,8 +2,10 @@ module Api::V09
 class LeaderboardsController < ApplicationController
 
   def index
-    if params[:tag]
-      @leaderboards = authorized_app.leaderboards.tagged_with(params[:tag].to_s).order(:priority)
+    tag = params[:tag] && params[:tag].to_s
+    tag = "v1" if tag.blank?
+    if tag
+      @leaderboards = @app.leaderboards.tagged_with(tag).order(:priority)
     else
       @leaderboards = authorized_app.leaderboards.order(:priority)
     end
