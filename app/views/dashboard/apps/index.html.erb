@@ -61,9 +61,9 @@
           <td class="name"><%= link_to app.name, app %></td>
 
           <td class="manage">
-            <%= link_to edit_app_path(app) do %>
-              <i class='icon-edit'></i> <span>Edit</span>
-            <% end %>
+            <%# link_to edit_app_path(app) do %>
+              <!--<i class='icon-edit'></i> <span>Edit</span>-->
+            <%# end %>
             <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
               <i class='icon-remove'></i> <span>Delete</span>
             <% end %>
