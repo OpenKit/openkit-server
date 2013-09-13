@@ -6,8 +6,8 @@
 =end
 class Challenge
 
-  attr_accessor :sender_id, :receiver_ids, :leaderboard_id, :app_id, :challenge_uuid
-  attr_accessor :developer
+  attr_accessor :sender_id, :receiver_ids, :leaderboard_id, :challenge_uuid
+  attr_accessor :app
 
   def errors
     @errors ||= []
@@ -28,13 +28,12 @@ class Challenge
     errors.push "sender_id is required"               unless sender_id
     errors.push "receiver_ids is required"            unless !receiver_ids.blank?
     errors.push "leaderboard_id is required"          unless leaderboard_id
-    errors.push "app_id is required"                  unless app_id
-    errors.push "developer is required"               unless developer
-    errors.push "sender_id is not an accessible user" unless developer.has_user?(sender_id)
+    errors.push "app is required"                     unless app
+    errors.push "sender_id is not an accessible user" unless app.developer.has_user?(sender_id)
 
     @safe_receivers = []
     receiver_ids.each do |r_id|
-      if developer.has_user?(r_id)
+      if app.developer.has_user?(r_id)
         @safe_receivers << r_id
       end
     end
@@ -55,17 +54,16 @@ class Challenge
       @safe_receivers.each do |r_id|
         u = User.find_by_id(r_id)
         if u
-          t = u.tokens.where(app_id: app_id).uniq_by(&:apns_token)
+          t = u.tokens.where(app_id: app.id).uniq_by(&:apns_token)
           tokens |= t if !t.empty?
         end
       end
 
       if !tokens.empty?
-        OKRedis.connection.sadd(OKConfig[:pn_dev_ids_key], developer.id)
         tokens.each do |token|
           package = {aps: {alert: "Your friend #{sender.nick} beat you!", badge: 1, sound: "default"}, challenge_uuid: challenge_uuid}
-          entry = [developer.id, token.apns_token, package]
-          OKRedis.connection.lpush("pn_queue", entry.to_json)
+          entry = [app.app_key, token.apns_token, package]
+          OKRedis.connection.lpush(OKConfig[:pn_queue_key], entry.to_json)
         end
       end
     end

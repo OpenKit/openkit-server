@@ -15,8 +15,8 @@ class ChallengesController < ApplicationController
     receiver_ids   = params[:receiver_ids] && params[:receiver_ids].is_a?(Array) && params[:receiver_ids].map(&:to_i)
 
     err_message = ''
-    if !authorized_app.developer.has_push_cert?
-      err_message << "You have not uploaded a push certificate yet. "
+    if !authorized_app.has_push_cert?
+      err_message << "You have not uploaded a push certificate for this app. "
     end
 
     if err_message.blank?

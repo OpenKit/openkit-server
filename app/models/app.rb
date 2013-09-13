@@ -45,6 +45,10 @@ class App < ActiveRecord::Base
     u
   end
 
+  def has_push_cert?
+    File.exist?(OKConfig.pem_path(app_key))
+  end
+
   private
   def set_app_key
     begin

@@ -1,6 +1,6 @@
 # API:
 #
-#   p = PushService.new(dev_id)
+#   p = PushService.new(app_key)
 #   p.connect
 #   p.write_message(token, message)
 #   p.write(token, payload)
@@ -30,14 +30,14 @@ class PushService
     @connected
   end
 
-  def initialize(dev_id)
-    @dev_id = dev_id
+  def initialize(app_key)
+    @app_key = app_key
     @connected = false
   end
 
   def connect
     if !pem_and_pass_exist?
-      $stderr.puts "Pem and pass files do not exist for developer #{@dev_id}"
+      $stderr.puts "Pem and pass files do not exist for app_key #{@app_key}"
       return false
     end
 
@@ -57,11 +57,11 @@ class PushService
       return true
     rescue SystemCallError => e
       if (retries += 1) < 5
-        $stderr.puts "Connection failed for developer #{@dev_id}.  Retrying..."
+        $stderr.puts "Connection failed for app_key #{@app_key}.  Retrying..."
         sleep 1
         retry
       else
-        $stderr.puts "Too many retries for developer #{@dev_id}.  Connection failed with error: #{e.message}"
+        $stderr.puts "Too many retries for app_key #{@app_key}.  Connection failed with error: #{e.message}"
         return false
       end
     end
@@ -73,7 +73,7 @@ class PushService
       @ssl.flush
       return true
     rescue => e
-      $stderr.puts "Connection for developer #{@dev_id} failed on write.  Message: #{e.message}"
+      $stderr.puts "Connection for app_key #{@app_key} failed on write.  Message: #{e.message}"
       @connected = false
       return false
     end
@@ -97,7 +97,7 @@ class PushService
 
   class << self
     def chat_with_lou
-      p = PushService.new(1)
+      p = PushService.new("doesnotwork")
       p.connect
       puts "ctrl+d to exit"
       while ((line = gets) && p.is_connected?)
@@ -120,10 +120,10 @@ class PushService
   end
 
   def pem_path
-    @pem_path ||= OKConfig.pem_path(@dev_id)
+    @pem_path ||= OKConfig.pem_path(@app_key)
   end
 
   def pass_path
-    @pass_path ||= OKConfig.pem_pass_path(@dev_id)
+    @pass_path ||= OKConfig.pem_pass_path(@app_key)
   end
 end
