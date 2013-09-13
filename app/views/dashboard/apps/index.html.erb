@@ -25,9 +25,9 @@
     <div class="box details">
       <div class="details_header">Support</div>
       <ul>
-        <li><a href="#">Itegration assistance</a></li>
-        <li><a href="#">Report a bug</a></li>
-        <li><a href="#">Send feedback</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Integration Assistance">Itegration assistance</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Bug Report">Report a bug</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Feedback">Send feedback</a></li>
       </ul>
     </div>
     
@@ -52,7 +52,6 @@
         <tr>
           <th>Icon</th>
           <th>Name</th>
-          <th>App Key</th>
           <th></th>
         </tr>
 
@@ -60,11 +59,11 @@
         <tr>
           <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
           <td class="name"><%= link_to app.name, app %></td>
-          <td></td>
+
           <td class="manage">
-            <%# link_to edit_app_path(app) do %>
-              <!--<i class='icon-edit'></i> <span>Edit</span>-->
-            <%# end %>
+            <%= link_to edit_app_path(app) do %>
+              <i class='icon-edit'></i> <span>Edit</span>
+            <% end %>
             <%= link_to app, method: :delete, data: { confirm: 'Are you sure?' } do %>
               <i class='icon-remove'></i> <span>Delete</span>
             <% end %>
