@@ -48,11 +48,11 @@ class TwoLeggedOAuth
     end
 
     if !OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
-      return [400, {}, ["Bad Request.  Nonce has already been used."]]
+      return [401, {}, ["Bad Request.  Nonce has already been used."]]
     end
 
     if !signature.verify
-      return [400, {}, ["Unauthorized.  OAuth 1.0 signature failed."]]
+      return [401, {}, ["Unauthorized.  OAuth 1.0 signature failed."]]
     end
 
     # Made it!

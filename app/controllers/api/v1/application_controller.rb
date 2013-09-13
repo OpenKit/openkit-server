@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   def require_authorized_app
     unless authorized_app
-      render :status => :forbidden, :json => { message: "Please check your app_key and secret_key." }
+      render :status => 401, :json => { message: "Please check your app_key and secret_key." }
     end
   end
 
