@@ -23,7 +23,7 @@ class TwoLeggedOAuth
           request.env[:authorized_app] = App.find_by_app_key(app_key)
           return @app.call(env)
         else
-          return [401, {}, ["You are trying to access an old API.  Please email team@openkit.io for help."]]
+          return [401, {}, ["The developer dashboard is now at developer.openkit.io.  Please email team@openkit.io for help."]]
         end
       end
       return [401, {}, ["You must use oauth 1.0a to access this API.  Please email team@openkit.io for help."]]
