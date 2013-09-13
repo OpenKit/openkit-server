@@ -17,14 +17,21 @@ class ScoresController < ApplicationController
 
   def create
     err_message = nil
+    err_code = nil
     user_id = params[:score].delete(:user_id)
-    err_message = "Please pass a user_id with your score."  if user_id.blank?
+    if user_id.blank?
+      err_message = "Please pass a user_id with your score."
+      err_code = :bad_request
+    end
 
     if !err_message
       user = user_id && authorized_app.users.find_by_id(user_id.to_i)
+      if !user
+        err_message = "User with that ID is not subscribed to this app."
+        err_code = 410
+      end
     end
 
-    err_message = "User with that ID is not subscribed to this app."  if !user
     if !err_message
       value = params[:score].delete(:value)
       @score = @leaderboard.scores.build(params[:score])
@@ -32,11 +39,12 @@ class ScoresController < ApplicationController
       @score.user = user
       if !@score.save
         err_message = "#{@score.errors.full_messages.join(", ")}"
+        err_code = :bad_request
       end
     end
 
     if err_message
-      render status: :bad_request, json: {message: err_message}
+      render status: err_code, json: {message: err_message}
     else
       render json: @score, :only => Score::DEFAULT_JSON_PROPS, :methods => [:value]
     end
