@@ -1,6 +1,6 @@
 module Api::V1
 class UsersController < ApplicationController
-  
+
   def create
     err_message = nil
 
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   def update
     @user = authorized_app.developer.users.find_by_id(params[:id].to_i)
     if @user.nil?
-      render status: :forbidden, json: {message: "User with that id does not belong to you"}
+      render status: 410, json: {message: "User with that id does not belong to you"}
     else
       params[:user].delete :id
       params[:user].delete :developer_id
