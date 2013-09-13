@@ -4,6 +4,7 @@ class Score < ActiveRecord::Base
   attr_accessible :metadata, :display_string, :user_id, :meta_doc
   attr_accessor :rank
   has_attached_file :meta_doc
+  after_create :add_player_to_set
 
   @@enable_user_rank = true
 
@@ -18,10 +19,12 @@ class Score < ActiveRecord::Base
   ]
   DEFAULT_JSON_METHODS = [
     :value,
-    :meta_doc_url
+    :meta_doc_url,
+    :is_users_best
   ]
   DEFAULT_JSON_INCLUDES = [
     :user,
+    :leaderboard
   ]
 
   # If 'only' is passed, skip defaults and pass off to super.  This is a least
@@ -175,7 +178,16 @@ class Score < ActiveRecord::Base
     meta_doc_file_name && meta_doc.url
   end
 
+  # 1.0 and above, hits index_scores_composite_2
+  def is_users_best
+    !Score.find(:first, :conditions => ["leaderboard_id = ? AND user_id = ? AND sort_value > ? ", leaderboard_id, user_id, sort_value])
+  end
+
   private
+  def add_player_to_set
+    k = "leaderboard:#{leaderboard_id}:players"
+    OKRedis.connection.sadd(k, user_id)
+  end
 
 end
 
