@@ -50,20 +50,20 @@ $(document).ready(function () {
 
 
   //Document Click
-  $(document).mouseup(function(){
-    $(".subnav").hide();
-    $(".account").attr('id', '');
-    $(".account").removeClass('active');
-  });
+  // $(document).mouseup(function(){
+  //   $(".subnav").hide();
+  //   $(".account").attr('id', '');
+  //   $(".account").removeClass('active');
+  // });
 
-  $(".md-trigger").click(function(){
-    $(".md-modal").addClass("md-show");
-    return false;
-  });
+  // $(".md-trigger").click(function(){
+  //   $(".md-modal").addClass("md-show");
+  //   return false;
+  // });
 
-  $(".md-close").click(function(){
-    $(".md-modal").removeClass("md-show");
-    return false;
-  });
+  // $(".md-close").click(function(){
+  //   $(".md-modal").removeClass("md-show");
+  //   return false;
+  // });
 
 });
