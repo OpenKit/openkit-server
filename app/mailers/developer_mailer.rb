@@ -4,6 +4,6 @@ class DeveloperMailer < ActionMailer::Base
 
   def password_reset_instructions(developer)
     @edit_password_reset_url = edit_password_reset_url(developer.perishable_token)
-    mail(:to => developer.email, :subject => "OpenKit Reset Password Instructions")
+    mail(template_path: 'dashboard/developer_mailer', template_name: 'password_reset_instructions', to: developer.email, subject: "OpenKit Reset Password Instructions")
   end
 end
