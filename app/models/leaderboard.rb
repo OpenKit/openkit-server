@@ -40,7 +40,8 @@ class Leaderboard < ActiveRecord::Base
   end
 
   def player_count
-    scores.count(:user_id, :distinct => true)
+    k = "leaderboard:#{id}:players"
+    OKRedis.connection.scard(k)
   end
 
   private

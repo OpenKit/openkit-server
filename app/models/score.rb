@@ -4,6 +4,7 @@ class Score < ActiveRecord::Base
   attr_accessible :metadata, :display_string, :user_id, :meta_doc
   attr_accessor :rank
   has_attached_file :meta_doc
+  after_create :add_player_to_set
 
   @@enable_user_rank = true
 
@@ -176,6 +177,10 @@ class Score < ActiveRecord::Base
   end
 
   private
+  def add_player_to_set
+    k = "leaderboard:#{leaderboard_id}:players"
+    OKRedis.connection.sadd(k, user_id)
+  end
 
 end
 
