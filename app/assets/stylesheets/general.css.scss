@@ -2,8 +2,12 @@
   display:none;
 }
 
-#developer_sessions_controller #flash{
+#dashboard-developer_sessions_controller #flash{
   display:none;
+}
+
+#dashboard-developer_sessions_controller{
+  .top{display:none;}
 }
 
 a{
@@ -111,7 +115,7 @@ p.forgot{
   padding: 0 23px 0 20px;
   img{
     position: relative;
-    top:17px;
+    top:16px;
   }
 }
 
