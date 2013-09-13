@@ -40,7 +40,7 @@ a{
 
 }
 
-.session form{
+.session form, .session .reset{
   border: 1px solid #b5b5b5;
   background: #fff;
   display: block;
@@ -72,6 +72,15 @@ a{
     @include blueButton;
     @include rounded(3px);
   }
+}
+
+.reset a{
+  padding: 12px 0;
+  font-size:14px;
+  width: 228px;
+  margin-top:20px;
+  @include blueButton;
+  @include rounded(3px);
 }
 
 #error_explanation{
