@@ -19,7 +19,7 @@ OKDashboard::Application.routes.draw do
       match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
     end
 
-    constraints :subdomain => /(api|development)/ do
+    constraints :subdomain => /^$|(api|development)/ do
       namespace :v1, &default_api_routes
       scope :module => :v1, &default_api_routes
     end
@@ -60,7 +60,7 @@ OKDashboard::Application.routes.draw do
 
 
   scope :module => :dashboard do
-    constraints :subdomain => /^$|^(developer|beta-developer)$/ do
+    constraints :subdomain => /^(developer|beta-developer)$/ do
 
       resources :change_password,         only:  [:new, :create]
       resources :password_resets,         only:  [:new, :create, :edit, :update]
@@ -84,5 +84,5 @@ OKDashboard::Application.routes.draw do
   match '/500',  constraints: {:format => :json}, to: proc {|env| [500, {}, [{message: "Internal Server Error."}.to_json]]}
 
   # Catch all.
-  match '*path', constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
+  match '*path', constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Nothing exists at that path."}.to_json]]}
 end
