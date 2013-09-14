@@ -39,7 +39,7 @@ class PushLoop
           app_key, token, payload = JSON.parse(entry[1])
 
           # Make sure this is a sane push
-          if app_key.is_a?(String) && !app_key.blank? && token.is_a?(String) && token.length == 64 && payload.is_a?(Hash) && payload.has_key?('aps')
+          if app_key.is_a?(String) && !app_key.empty? && token.is_a?(String) && token.length == 64 && payload.is_a?(Hash) && payload.has_key?('aps')
             log "push_thread: Push is sane for app_key #{app_key}"
 
             pn_containers[app_key] ||= PNContainer.new(PushService.new(app_key), Mutex.new)
