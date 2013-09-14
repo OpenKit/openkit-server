@@ -2,8 +2,9 @@
   display:none;
 }
 
-#developer_sessions_controller #flash{
-  display:none;
+
+#dashboard-developer_sessions_controller{
+  .top{display:none;}
 }
 
 a{
@@ -36,7 +37,7 @@ a{
 
 }
 
-.session form{
+.session form, .session .reset{
   border: 1px solid #b5b5b5;
   background: #fff;
   display: block;
@@ -68,6 +69,15 @@ a{
     @include blueButton;
     @include rounded(3px);
   }
+}
+
+.reset a{
+  padding: 12px 0;
+  font-size:14px;
+  width: 228px;
+  margin-top:20px;
+  @include blueButton;
+  @include rounded(3px);
 }
 
 #error_explanation{
@@ -111,7 +121,7 @@ p.forgot{
   padding: 0 23px 0 20px;
   img{
     position: relative;
-    top:17px;
+    top:16px;
   }
 }
 
@@ -234,16 +244,14 @@ a.account {
   }
   a{
     display: block;
-    margin:20px 0 0 0;
+    margin:20px 10px 0 0;
     padding:15px 20px;
     @include rounded(3px);
     @include greenButton;
 
     i{
       margin-right:5px;
-      font-size:11px;
-      color:#133072;
-      text-shadow:0 1px 0 rgba(255,255,255,0.25);
+      color: rgba(255, 255, 255, 0.5);
     }
   }
 }
@@ -497,5 +505,31 @@ input[type="text"]:focus, input[type="password"]:focus{
 
 }
 
+.services{
+
+  a{
+    text-decoration:none;
+    display:block;
+    label{
+      cursor:pointer;
+      display:block;
+      text-decoration:underline;
+      margin:0;
+      padding:0;
+    }
+    span{
+      margin:0;
+      padding:0;
+      display:bock; 
+      text-decoration:none;
+      color:#666;
+      font-size:14px;
+    }
+    &:hover{
+      cursor:pointer;
+    }
+  }
+
+}
 
 

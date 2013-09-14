@@ -19,10 +19,12 @@ class Score < ActiveRecord::Base
   ]
   DEFAULT_JSON_METHODS = [
     :value,
-    :meta_doc_url
+    :meta_doc_url,
+    :is_users_best
   ]
   DEFAULT_JSON_INCLUDES = [
     :user,
+    :leaderboard
   ]
 
   # If 'only' is passed, skip defaults and pass off to super.  This is a least
@@ -174,6 +176,11 @@ class Score < ActiveRecord::Base
 
   def meta_doc_url
     meta_doc_file_name && meta_doc.url
+  end
+
+  # 1.0 and above, hits index_scores_composite_2
+  def is_users_best
+    !Score.find(:first, :conditions => ["leaderboard_id = ? AND user_id = ? AND sort_value > ? ", leaderboard_id, user_id, sort_value])
   end
 
   private

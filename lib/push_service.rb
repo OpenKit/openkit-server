@@ -1,6 +1,6 @@
 # API:
 #
-#   p = PushService.new(dev_id)
+#   p = PushService.new(app_key)
 #   p.connect
 #   p.write_message(token, message)
 #   p.write(token, payload)
@@ -18,7 +18,10 @@
 # p.write("7263097dd87a783c5d90dfa61ad3df3d17b11428143c788e77c1be4c2d162d38", {aps: {alert: "This is cool!", badge: 1, sound: "default"}, other_meta: 10})
 #
 # $ gpg --force-mdc -c 1p.txt
-# $ gpg -d 1p.txt.gpg
+# $ gpg --yes --batch -d --passphrase='password' 1p.txt.gpg
+#
+# $ bundle exec ruby lib/push_loop.rb
+#
 require 'socket'
 require 'openssl'
 require 'json'
@@ -30,19 +33,20 @@ class PushService
     @connected
   end
 
-  def initialize(dev_id)
-    @dev_id = dev_id
+  def initialize(app_key)
+    @app_key = app_key
     @connected = false
   end
 
   def connect
     if !pem_and_pass_exist?
-      $stderr.puts "Pem and pass files do not exist for developer #{@dev_id}"
+      $stderr.puts "Pem and pass files do not exist for app_key #{@app_key}"
       return false
     end
 
-    crypto = GPGME::Crypto.new(:password => OKConfig[:pem_disk_pass])
-    pass = crypto.decrypt(File.open(pass_path)).read.chomp
+    pass = %x(gpg --yes --batch -d --passphrase='#{OKConfig[:pem_disk_pass]}' #{pass_path}).chomp
+    #crypto = GPGME::Crypto.new(:password => OKConfig[:pem_disk_pass])
+    #pass = crypto.decrypt(File.open(pass_path)).read.chomp
 
     context      = OpenSSL::SSL::SSLContext.new
     context.cert = OpenSSL::X509::Certificate.new(File.read(pem_path))
@@ -57,11 +61,11 @@ class PushService
       return true
     rescue SystemCallError => e
       if (retries += 1) < 5
-        $stderr.puts "Connection failed for developer #{@dev_id}.  Retrying..."
+        $stderr.puts "Connection failed for app_key #{@app_key}.  Retrying..."
         sleep 1
         retry
       else
-        $stderr.puts "Too many retries for developer #{@dev_id}.  Connection failed with error: #{e.message}"
+        $stderr.puts "Too many retries for app_key #{@app_key}.  Connection failed with error: #{e.message}"
         return false
       end
     end
@@ -73,7 +77,7 @@ class PushService
       @ssl.flush
       return true
     rescue => e
-      $stderr.puts "Connection for developer #{@dev_id} failed on write.  Message: #{e.message}"
+      $stderr.puts "Connection for app_key #{@app_key} failed on write.  Message: #{e.message}"
       @connected = false
       return false
     end
@@ -97,7 +101,7 @@ class PushService
 
   class << self
     def chat_with_lou
-      p = PushService.new(1)
+      p = PushService.new("doesnotwork")
       p.connect
       puts "ctrl+d to exit"
       while ((line = gets) && p.is_connected?)
@@ -120,10 +124,10 @@ class PushService
   end
 
   def pem_path
-    @pem_path ||= OKConfig.pem_path(@dev_id)
+    @pem_path ||= OKConfig.pem_path(@app_key)
   end
 
   def pass_path
-    @pass_path ||= OKConfig.pem_pass_path(@dev_id)
+    @pass_path ||= OKConfig.pem_pass_path(@app_key)
   end
 end

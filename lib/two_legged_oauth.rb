@@ -13,7 +13,7 @@ class TwoLeggedOAuth
     request.env[:authorized_app] = nil
 
     if env['HTTP_AUTHORIZATION'].nil?
-      return @app.call(env) if %w(developer.openkit.io beta-developer.openkit.io localhost).include?(request.host)   # Rely on developer creds for dashboard access.
+      return @app.call(env) if request.host =~ /^(beta-)?developer/   # Rely on developer creds for dashboard access.
 
       # Either authorized_app is set via old API whitelist, or access denied.
       if request.host == "stage.openkit.io"
@@ -23,7 +23,7 @@ class TwoLeggedOAuth
           request.env[:authorized_app] = App.find_by_app_key(app_key)
           return @app.call(env)
         else
-          return [401, {}, ["You are trying to access an old API.  Please email team@openkit.io for help."]]
+          return [401, {}, ["The developer dashboard is now at developer.openkit.io.  Please email team@openkit.io for help."]]
         end
       end
       return [401, {}, ["You must use oauth 1.0a to access this API.  Please email team@openkit.io for help."]]
@@ -48,11 +48,11 @@ class TwoLeggedOAuth
     end
 
     if !OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
-      return [400, {}, ["Bad Request.  Nonce has already been used."]]
+      return [401, {}, ["Bad Request.  Nonce has already been used."]]
     end
 
     if !signature.verify
-      return [400, {}, ["Unauthorized.  OAuth 1.0 signature failed."]]
+      return [401, {}, ["Unauthorized.  OAuth 1.0 signature failed."]]
     end
 
     # Made it!

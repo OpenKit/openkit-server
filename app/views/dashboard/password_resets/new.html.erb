@@ -1,6 +1,6 @@
 <div class="session">
 
-<h1>OpenKit</h1>
+<h1><%= image_tag 'login_logo.png' %></h1>
 
 <%= form_tag password_resets_path do %>
 
@@ -14,6 +14,7 @@
   <%= submit_tag "Reset Password" %>
 
 <% end %>
+
 
 <p class="forgot"><%= link_to 'Back to Login', login_path %></p>
 

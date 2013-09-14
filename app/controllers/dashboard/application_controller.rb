@@ -19,7 +19,11 @@ class ApplicationController < ActionController::Base
   def require_login
     unless current_developer
       store_location
-      redirect_to login_path, notice: "You must be logged in to do that"
+      if request.path == "/"
+        redirect_to login_path
+      else
+        redirect_to login_path, notice: "You must be logged in to do that"
+      end
     end
   end
 

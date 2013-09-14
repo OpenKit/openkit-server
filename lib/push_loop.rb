@@ -21,7 +21,7 @@ class PushLoop
 
   def run
     log "starting..."
-    # Keyed by developer id
+    # Keyed by app_key
     pn_containers = {}
     last_write_mutexes = {}
     active_ids_mutex = Mutex.new
@@ -30,32 +30,32 @@ class PushLoop
       sleep 1
       log "push_thread: Beginning..."
       current_thread = Thread.current
-      current_thread[:active_dev_ids] = []
+      current_thread[:active_app_keys] = []
 
       begin
         while(1)
           entry = OKRedis.connection.brpop(OKConfig[:pn_queue_key])
           log "push_thread: Popped a push entry: #{entry}"
-          dev_id, token, payload = JSON.parse(entry[1])
+          app_key, token, payload = JSON.parse(entry[1])
 
           # Make sure this is a sane push
-          if dev_id.is_a?(Fixnum) && dev_id != 0 && token.is_a?(String) && token.length == 64 && payload.is_a?(Hash) && payload.has_key?('aps')
-            log "push_thread: Push is sane for dev #{dev_id}"
+          if app_key.is_a?(String) && !app_key.empty? && token.is_a?(String) && token.length == 64 && payload.is_a?(Hash) && payload.has_key?('aps')
+            log "push_thread: Push is sane for app_key #{app_key}"
 
-            pn_containers[dev_id] ||= PNContainer.new(PushService.new(dev_id), Mutex.new)
-            last_write_mutexes[dev_id] ||= Mutex.new
+            pn_containers[app_key] ||= PNContainer.new(PushService.new(app_key), Mutex.new)
+            last_write_mutexes[app_key] ||= Mutex.new
 
             active_ids_mutex.synchronize {
-              if !current_thread[:active_dev_ids].include?(dev_id)
-                  current_thread[:active_dev_ids] << dev_id
+              if !current_thread[:active_app_keys].include?(app_key)
+                  current_thread[:active_app_keys] << app_key
               end
             }
 
-            log "push_thread: Sending - Dev id: #{dev_id}, Token: #{token}, Payload: #{payload.inspect}"
-            c = pn_containers[dev_id]
+            log "push_thread: Sending - app_key: #{app_key}, Token: #{token}, Payload: #{payload.inspect}"
+            c = pn_containers[app_key]
             c.push_service_lock.synchronize {
               if !c.push_service.is_connected?
-                log "push_thread: Push service for dev #{dev_id} is not yet connected. Connecting now..."
+                log "push_thread: Push service for app_key #{app_key} is not yet connected. Connecting now..."
                 if c.push_service.reconnect
                   log "push_service: connected!"
                 end
@@ -65,8 +65,8 @@ class PushLoop
               c.push_service.write(token, payload)
             }
 
-            last_write_mutexes[dev_id].synchronize {
-              current_thread["dev_#{dev_id}_last"] = Time.now
+            last_write_mutexes[app_key].synchronize {
+              current_thread["#{app_key}_last"] = Time.now
             }
           end
         end
@@ -85,30 +85,30 @@ class PushLoop
           log "disconnect_thread: Sleeping for #{IDLE_TIMEOUT}"
           sleep IDLE_TIMEOUT
 
-          # Get the developer ids that we are watching
-          dev_ids = nil
+          # Get the app_keys that we are watching
+          app_keys = nil
           log "disconnect_thread: About to get active_ids_mutex..."
           active_ids_mutex.synchronize {
-            dev_ids = push_thread[:active_dev_ids]
+            app_keys = push_thread[:active_app_keys]
           }
-          log "disconnect_thread: Monitoring #{dev_ids.inspect}"
+          log "disconnect_thread: Monitoring #{app_keys.inspect}"
 
           close_ids = []
-          dev_ids.each do |dev_id|
-            log "disconnect_thread: Getting last write mutex for #{dev_id}..."
-            last_write_mutexes[dev_id].synchronize {
-              if Time.now - push_thread["dev_#{dev_id}_last"] > IDLE_TIMEOUT
-                log "disconnect_thread: There was NO write within the last #{IDLE_TIMEOUT} seconds for developer #{dev_id}."
-                close_ids << dev_id
+          app_keys.each do |app_key|
+            log "disconnect_thread: Getting last write mutex for #{app_key}..."
+            last_write_mutexes[app_key].synchronize {
+              if Time.now - push_thread["#{app_key}_last"] > IDLE_TIMEOUT
+                log "disconnect_thread: There was NO write within the last #{IDLE_TIMEOUT} seconds for app_key #{app_key}."
+                close_ids << app_key
               else
-                log "disconnect_thread: Developer #{dev_id} has been active in last #{IDLE_TIMEOUT} seconds."
+                log "disconnect_thread: app_key #{app_key} has been active in last #{IDLE_TIMEOUT} seconds."
               end
             }
           end
 
-          close_ids.each do |dev_id|
-            c = pn_containers[dev_id]
-            log "disconnect_thread: Getting push service mutex for #{dev_id}"
+          close_ids.each do |app_key|
+            c = pn_containers[app_key]
+            log "disconnect_thread: Getting push service mutex for #{app_key}"
             c.push_service_lock.synchronize {
               if c.push_service.is_connected?
                 log "** No write in the last #{IDLE_TIMEOUT}! Disconnecting from Apple."
@@ -119,7 +119,7 @@ class PushLoop
 
           log "disconnect_thread: Getting the active_ids_mutex to remove #{close_ids.inspect}"
           active_ids_mutex.synchronize {
-            push_thread[:active_dev_ids] -= close_ids
+            push_thread[:active_app_keys] -= close_ids
           }
 
         end

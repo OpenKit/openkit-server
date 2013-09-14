@@ -10,12 +10,30 @@
   <div class="col_75 left">
     <div class="box no_table">
       <div class="details_header">Services</div>
-      <ul>
-        <li><%= image_tag ("leaderboard_dash.png") %><%= link_to 'Social Leaderboards', app_leaderboards_path(@app) %></li>
+      <ul class="services">
+        <li>
+          <%= image_tag ("leaderboard_dash.png") %>
+          <a href="<%= app_leaderboards_path(@app) %>">
+            <label>Social Leaderboards</label>
+            <span>Setup up cross platform leaderboards and connect them to Game Center.</span>
+          </a>
+        </li>
         <!-- <li><%= image_tag ("invites_dash.png") %><a href="#">Smart Invites</a></li> -->
-        <li><%= image_tag ("push_dash.png") %><%= link_to 'Push Notifications', challenges_info_path %></li>
+        <li>
+          <%= image_tag ("push_dash.png") %>
+          <a href="<%= challenges_info_path %>">
+            <label>Social Challenges</label>
+            <span>Configure your leaderboards to send push notifications as ranks change.</span>
+          </a>
+        </li>
         <!-- <li><%= image_tag ("cloud_dash.png") %><a href="#">Cloud Data Browser</a></li> --> 
-        <li><%= image_tag ("achievement_dash.png") %><%= link_to 'Achievements', app_achievements_path(@app) %></li>
+        <li>
+          <%= image_tag ("achievement_dash.png") %>
+          <a href="<%= app_achievements_path(@app) %>">
+            <label>Achievements</label>
+            <span>Add achievments to your game.</span>
+          </a>
+        </li>
         <!--<li><%= image_tag ("multiplayer_dash.png") %><a href="#" class="md-trigger" data-modal="modal-1">Multiplayer (Photon Server)</a></li>-->
       </ul>
     </div>
@@ -36,6 +54,7 @@
 
   </div>
   
+<!--
 <div class="md-modal md-effect-1" id="modal-1">
       <div class="md-content">
         
@@ -59,7 +78,7 @@
     </div>
 
 <div class="md-overlay"></div>
-
+-->
 
 <script type="text/javascript">
   $('#show_secret').click(function(){

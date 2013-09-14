@@ -1,12 +1,10 @@
 <div class="session">
 
-  <h1>OpenKit</h1>
+  <h1><%= image_tag 'login_logo.png' %></h1>
 
   <%= render 'form' %>
 
-  <p class="forgot">
-    Forgot your password? <a href="<%= new_password_reset_path %>">Click here</a> <!-- | -->
-    <%= link_to 'Sign Up', new_developer_path %>
-  </p>
+  <p class="forgot">Forgot your password? <a href="<%= new_password_reset_path %>">Click here</a></p>
+  <p class="forgot">Don't have an account? <%= link_to 'Sign Up', new_developer_path %></p>  
 
 </div>

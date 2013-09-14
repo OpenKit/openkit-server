@@ -1,12 +1,14 @@
-<h1>Update your password</h1>
+<div class="session">
+  <h1><%= image_tag 'login_logo.png' %></h1>
 
-<p>Please enter the new password below and then press "Update Password".</p>
+  <%= form_tag password_reset_path, :method => :put do %>
+    <h2>Update Password</h2>
+    <%= label_tag :password %><br />
+    <%= password_field_tag :password %>
 
-<%= form_tag password_reset_path, :method => :put do %>
-  <%= label_tag :password %><br />
-  <%= password_field_tag :password %>
+    <%= label_tag :password_confirmation %><br />
+    <%= password_field_tag :password_confirmation %>
+    <%= submit_tag "Update Password" %>
+  <% end %>
 
-  <%= label_tag :password_confirmation %><br />
-  <%= password_field_tag :password_confirmation %>
-  <%= submit_tag "Update Password" %>
-<% end %>
+</div>

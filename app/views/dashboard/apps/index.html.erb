@@ -25,9 +25,9 @@
     <div class="box details">
       <div class="details_header">Support</div>
       <ul>
-        <li><a href="#">Itegration assistance</a></li>
-        <li><a href="#">Report a bug</a></li>
-        <li><a href="#">Send feedback</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Integration Assistance" target="_blank">Itegration assistance</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Bug Report" target="_blank">Report a bug</a></li>
+        <li><a href="mailto:team@openkit.io?Subject=Feedback" target="_blank">Send feedback</a></li>
       </ul>
     </div>
     
@@ -39,12 +39,17 @@
     <% if @apps.empty? %>
 
       <div class="box welcome">
-        <h1>Welcome to OpenKit!</h1>
+        <h1>Welcome to OpenKit</h1>
         <h2>Thanks for signing up!</h2>
         <p>This is the developer dashboard where you view and manage all of the OpenKit services. To get started lets add your first app.</p>
         <%= link_to new_app_path do %>
+          <i class="icon-plus"></i>
           Add a New App
         <% end %>
+        <!--
+        <a href="#"><i class="icon-question-sign"></i>View the Getting Started Guides</a>
+        <a href="#"><i class="icon-download-alt"></i>Download the SDKs</a>
+      -->
       </div>
 
     <% else %>
@@ -52,7 +57,6 @@
         <tr>
           <th>Icon</th>
           <th>Name</th>
-          <th>App Key</th>
           <th></th>
         </tr>
 
@@ -60,7 +64,7 @@
         <tr>
           <td class="icon"><%= image_tag app.icon.url, {:class=> 'app_icon'}  %></td>
           <td class="name"><%= link_to app.name, app %></td>
-          <td></td>
+
           <td class="manage">
             <%# link_to edit_app_path(app) do %>
               <!--<i class='icon-edit'></i> <span>Edit</span>-->

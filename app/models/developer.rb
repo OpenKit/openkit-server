@@ -38,8 +38,5 @@ class Developer < ActiveRecord::Base
     OKData.find_all_for_developer(self)
   end
 
-  def has_push_cert?
-    File.exist?(OKConfig.pem_path(id))
-  end
 
 end
