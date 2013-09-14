@@ -18,7 +18,10 @@
 # p.write("7263097dd87a783c5d90dfa61ad3df3d17b11428143c788e77c1be4c2d162d38", {aps: {alert: "This is cool!", badge: 1, sound: "default"}, other_meta: 10})
 #
 # $ gpg --force-mdc -c 1p.txt
-# $ gpg -d 1p.txt.gpg
+# $ gpg --yes --batch -d --passphrase='password' 1p.txt.gpg
+#
+# $ bundle exec ruby lib/push_loop.rb
+#
 require 'socket'
 require 'openssl'
 require 'json'
@@ -41,8 +44,9 @@ class PushService
       return false
     end
 
-    crypto = GPGME::Crypto.new(:password => OKConfig[:pem_disk_pass])
-    pass = crypto.decrypt(File.open(pass_path)).read.chomp
+    pass = %x(gpg --yes --batch -d --passphrase='#{OKConfig[:pem_disk_pass]}' #{pass_path}).chomp
+    #crypto = GPGME::Crypto.new(:password => OKConfig[:pem_disk_pass])
+    #pass = crypto.decrypt(File.open(pass_path)).read.chomp
 
     context      = OpenSSL::SSL::SSLContext.new
     context.cert = OpenSSL::X509::Certificate.new(File.read(pem_path))
