@@ -10,7 +10,7 @@
 
 <body id="<%= params[:controller].parameterize %>_controller">
 
-<% if request.host == "beta-developer.openkit.io" %>
+<% if request.host =~ /^beta-developer/ %>
   This is a preview branch!  Developer dashboard is at developer.openkit.io
 <% end %>
 
