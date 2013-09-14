@@ -2,16 +2,16 @@
 
 <h1><%= image_tag 'login_logo.png' %></h1>
 
-<@ form_tag password_resets_path do %>
+<%= form_tag password_resets_path do %>
 
   <h2>Reset Password</h2>
 
   <div class="field">
     <label>Please enter your email address below</label>
-    <% text_field_tag :email %>
+    <%= text_field_tag :email %>
   </div>
 
-  <% submit_tag "Reset Password" %>
+  <%= submit_tag "Reset Password" %>
 
 <% end %>
 
