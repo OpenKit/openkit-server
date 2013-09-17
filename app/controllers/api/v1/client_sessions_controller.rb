@@ -9,10 +9,7 @@ class ClientSessionsController < ApplicationController
     # handle is adding push tokens to a users list, if we have that info.
     if @client_session.ok_id && @client_session.push_token
       if user = authorized_app.developer.users.find_by_id(@client_session.ok_id.to_i)
-        tokens = user.tokens.where(app_id: authorized_app.id)
-        if !tokens.include?(@client_session.push_token)
-          user.tokens.create(app_id: authorized_app.id, apns_token: @client_session.push_token)
-        end
+        Token.find_or_create_by_user_id_and_app_id_and_apns_token(user.id, authorized_app.id, @client_session.push_token)
       end
     end
 
