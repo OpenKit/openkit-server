@@ -23,7 +23,6 @@ gem 'gpgme'
 group :development do
   gem 'fog'
   gem 'thin'
-  gem 'debugger', '1.2.2'
   gem 'wirble'
   gem 'simple_oauth',  '0.2.0'
   gem 'what_methods'

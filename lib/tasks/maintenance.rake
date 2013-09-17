@@ -69,4 +69,22 @@ namespace :maintenance do
       end
     end
   end
+
+
+  desc "Populate player sets"
+  task :fill_player_sets => :environment do
+    STDOUT.print "You are in the #{Rails.env.upcase} environment.  Are you sure about this? (y/n) "
+    if STDIN.gets.chomp == "y"
+      Leaderboard.all.each do |leaderboard|
+        STDOUT.print "Populating player set for leaderboard #{leaderboard.id}..."
+        Score.where(:leaderboard_id => leaderboard.id).group(:user_id).each do |score|
+          k = "leaderboard:#{leaderboard.id}:players"
+          if !score.user_id.blank? && score.user_id != 0
+            OKRedis.connection.sadd(k, score.user_id)
+          end
+        end
+        STDOUT.print "done.\n"
+      end
+    end
+  end
 end
