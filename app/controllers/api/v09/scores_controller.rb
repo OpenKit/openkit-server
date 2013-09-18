@@ -2,23 +2,6 @@ module Api::V09
 class ScoresController < ApplicationController
   before_filter :set_leaderboard
 
-  def index
-    since = params[:since] && Time.parse(params[:since].to_s)
-    user_id = params[:user_id].to_i
-    @scores = @leaderboard.top_scores_with_users_best(user_id, since)
-    ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
-    json_arr = @scores.as_json(:include => :user, :methods => [:rank, :value])
-    json_arr.each do |j|
-      if j[:user]
-         j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
-         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
-         j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
-         j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
-      end 
-    end
-    render json: json_arr
-  end
-
   def show
     @score = @leaderboard.scores.find(params[:id].to_i)
     render json: @score

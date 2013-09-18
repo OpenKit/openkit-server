@@ -6,7 +6,7 @@ OKDashboard::Application.routes.draw do
     default_api_routes =-> do
       resources :users,                   only:  [:create, :update]
       resources :achievements,            only:  [:create, :index]
-      resources :scores,                  only:  [:create, :index, :show]
+      resources :scores,                  only:  [:create, :show]
       resources :achievement_scores,      only:  [:create]
       resources :leaderboards,            only:  [:create, :index, :show] do
         resources :challenges,            only:  [:create]
@@ -30,7 +30,7 @@ OKDashboard::Application.routes.draw do
       constraints :subdomain => 'pivvot' do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
-        resources :scores,                  only:  [:create, :index, :show]
+        resources :scores,                  only:  [:create, :show]
         resources :achievement_scores,      only:  [:create]
         resources :leaderboards,            only:  [:create, :index, :show]
 
@@ -46,7 +46,7 @@ OKDashboard::Application.routes.draw do
       constraints :subdomain => 'stage' do
         resources :users,                   only:  [:create, :update]
         resources :achievements,            only:  [:create, :index]
-        resources :scores,                  only:  [:create, :index, :show]
+        resources :scores,                  only:  [:create, :show]
         resources :achievement_scores,      only:  [:create]
         resources :leaderboards,            only:  [:create, :index]
 
