@@ -7,8 +7,9 @@ class Achievement < ActiveRecord::Base
 
   belongs_to :app
   has_many :achievement_scores, :dependent => :delete_all
+  has_many :sandbox_achievement_scores, :dependent => :delete_all
 
-  def api_fields(base_uri, user_id = nil)
+  def api_fields(base_uri, sandbox, user_id = nil)
     fields = {
       :id => id,
       :app_id => app_id,
@@ -22,19 +23,23 @@ class Achievement < ActiveRecord::Base
       :icon_url => PaperclipHelper.uri_for(icon, base_uri),
       :icon_locked_url => PaperclipHelper.uri_for(icon_locked, base_uri)
     }
-    fields[:progress] = progress(user_id) if user_id
+    fields[:progress] = progress(user_id, sandbox) if user_id
     fields
   end
 
   has_attached_file :icon,        :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_icon.png'
   has_attached_file :icon_locked, :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_locked_icon.png'
 
-
-  def progress(user_id)
-    res = achievement_scores.where(:user_id => user_id).order("progress DESC").limit(1)[0]
+  def progress(user_id, sandbox)
+    if sandbox
+      res = sandbox_achievement_scores.where(:user_id => user_id).order("progress DESC").limit(1)[0]
+    else
+      res = achievement_scores.where(:user_id => user_id).order("progress DESC").limit(1)[0]
+    end
     res ? res.progress : 0
   end
 
+  # Dashboard only
   def best_scores
     cond = ActiveRecord::Base.send(:sanitize_sql_array, ["achievement_id = ?", id])
 

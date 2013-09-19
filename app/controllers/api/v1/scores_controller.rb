@@ -3,7 +3,7 @@ class ScoresController < ApplicationController
   before_filter :set_leaderboard
 
   def show
-    @score = @leaderboard.scores.find(params[:id].to_i)
+    @score = @leaderboard.send(scores_association).find(params[:id].to_i)
     render json: @score
   end
 
@@ -26,7 +26,7 @@ class ScoresController < ApplicationController
 
     if !err_message
       value = params[:score].delete(:value)
-      @score = @leaderboard.scores.build(params[:score])
+      @score = @leaderboard.send(scores_association).build(params[:score])
       @score.value = value
       @score.user = user
       if !@score.save
@@ -53,6 +53,10 @@ class ScoresController < ApplicationController
     unless @leaderboard
       render status: :forbidden, json: {message: "Pass a leaderboard_id that belongs to the app associated with app_key"}
     end
+  end
+  
+  def scores_association
+    in_sandbox? ? :sandbox_scores : :scores
   end
 end
 end

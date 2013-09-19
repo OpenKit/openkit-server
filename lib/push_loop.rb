@@ -34,7 +34,7 @@ class PushLoop
 
       begin
         while(1)
-          entry = OKRedis.connection.brpop(OKConfig[:pn_queue_key])
+          entry = OKRedis.connection.brpop('sandbox_pn_queue')  # 'pn_queue'
           log "push_thread: Popped a push entry: #{entry}"
           app_key, token, payload = JSON.parse(entry[1])
 

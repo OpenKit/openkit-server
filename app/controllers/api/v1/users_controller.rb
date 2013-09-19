@@ -23,7 +23,7 @@ class UsersController < ApplicationController
       params[:user].delete :id
       params[:user].delete :developer_id
       if @user.update_attributes(params[:user])
-        render status: :ok, json: @user, location: @user
+        render status: :ok, json: @user
       else
         render status: :unprocessable_entity, json: {message: @user.errors.full_messages.join(', ')}
       end

@@ -20,7 +20,7 @@ class AchievementScoresController < ApplicationController
     end
 
     if !err_message
-      @achievement_score = @achievement.achievement_scores.build(params[:achievement_score])
+      @achievement_score = @achievement.send(achievement_scores_association).build(params[:achievement_score])
       @achievement_score.user = user
       if !@achievement_score.save
         err_message = "#{@achievement_score.errors.full_messages.join(", ")}"
@@ -31,7 +31,7 @@ class AchievementScoresController < ApplicationController
     if err_message
       render status: err_code, json: {message: err_message}
     else
-      render json: @achievement_score, location: @achievement_score
+      render json: @achievement_score
     end
   end
 
@@ -46,6 +46,10 @@ class AchievementScoresController < ApplicationController
     unless @achievement
       render status: :forbidden, json: {message: "Pass a achievement_id that belongs to the app associated with app_key"}
     end
+  end
+  
+  def achievement_scores_association
+    in_sandbox? ? :sandbox_achievement_scores : :achievement_scores
   end
 end
 end

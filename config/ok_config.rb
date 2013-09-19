@@ -22,8 +22,7 @@ module OKConfig
       :rails_session_store_key  => nil || '_openkit_session',
       :apns_host                => nil || 'gateway.sandbox.push.apple.com',
       :apns_pem_path            => nil || '/var/openkit/apple_certs/sandbox',
-      :pem_disk_pass            => nil || 'password',
-      :pn_queue_key             => nil || 'pn_queue'
+      :pem_disk_pass            => nil || 'password'
     }
     end
   end

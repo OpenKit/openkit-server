@@ -6,7 +6,7 @@
 =end
 class Challenge
 
-  attr_accessor :sender_id, :receiver_ids, :leaderboard_id, :challenge_uuid
+  attr_accessor :sender_id, :receiver_ids, :leaderboard_id, :challenge_uuid, :sandbox
   attr_accessor :app
 
   def errors
@@ -63,11 +63,15 @@ class Challenge
         tokens.each do |token|
           package = {aps: {alert: "Your friend #{sender.nick} beat you!", badge: 1, sound: "default"}, challenge_uuid: challenge_uuid}
           entry = [app.app_key, token.apns_token, package]
-          OKRedis.connection.lpush(OKConfig[:pn_queue_key], entry.to_json)
+          OKRedis.connection.lpush(pn_queue_key, entry.to_json)
         end
       end
     end
 
     true
+  end
+
+  def pn_queue_key
+    sandbox ? 'sandbox_pn_queue' : 'pn_queue'
   end
 end

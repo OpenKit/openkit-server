@@ -24,7 +24,8 @@ class ChallengesController < ApplicationController
           sender_id: sender_id,
           receiver_ids: receiver_ids,
           leaderboard_id: @leaderboard.id,
-          app: authorized_app
+          app: authorized_app,
+          sandbox: in_sandbox?
       )
 
       if !challenge.save

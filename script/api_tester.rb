@@ -12,7 +12,7 @@ require 'rest-client'
 require 'pp'
 require 'oauth'
 
-EP = "http://localhost:3000"
+EP = "http://sandbox.openkit.lan:3000"
 KEY = "end_to_end_test"        # Special app_key for running end to end tests on
 SECRET = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
 CONSUMER = OAuth::Consumer.new(KEY, SECRET, {:site => EP})

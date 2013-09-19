@@ -9,7 +9,7 @@ class LeaderboardsController < ApplicationController
     else
       @leaderboards = authorized_app.leaderboards.order(:priority)
     end
-    render json: @leaderboards.map {|x| x.api_fields(request_base_uri)}
+    render json: @leaderboards.map {|x| x.api_fields(request_base_uri, false)}
   end
 
   def show
@@ -23,7 +23,7 @@ class LeaderboardsController < ApplicationController
     end
 
     if !err_message
-      render json: @leaderboard.api_fields(request_base_uri)
+      render json: @leaderboard.api_fields(request_base_uri, false)
     else
       render status: :bad_request, json: {message: err_message}
     end
@@ -32,7 +32,7 @@ class LeaderboardsController < ApplicationController
   def create
     @leaderboard = authorized_app.leaderboards.new(params[:leaderboard])
     if @leaderboard.save
-      render json: @leaderboard.api_fields(request_base_uri), status: :created, location: [authorized_app, @leaderboard]
+      render json: @leaderboard.api_fields(request_base_uri, false), status: :created
     else
       render json: @leaderboard.errors, status: :unprocessable_entity 
     end

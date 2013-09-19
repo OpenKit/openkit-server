@@ -7,8 +7,9 @@ class Leaderboard < ActiveRecord::Base
 
   belongs_to :app
   has_many :scores, :dependent => :delete_all
+  has_many :sandbox_scores, :dependent => :delete_all
 
-  def api_fields(base_uri)
+  def api_fields(base_uri, sandbox)
     {
       :id => id,
       :app_id => app_id,
@@ -18,7 +19,7 @@ class Leaderboard < ActiveRecord::Base
       :in_development => in_development,
       :sort_type => sort_type,
       :icon_url => PaperclipHelper.uri_for(icon, base_uri),
-      :player_count => player_count,
+      :player_count => player_count(sandbox),
       :gamecenter_id => gamecenter_id,
       :gpg_id => gpg_id
     }
@@ -39,8 +40,8 @@ class Leaderboard < ActiveRecord::Base
     sort_type == LOW_VALUE_SORT_TYPE
   end
 
-  def player_count
-    k = "leaderboard:#{id}:players"
+  def player_count(sandbox)
+    k = sandbox ? "leaderboard:#{id}:sandbox_players" : "leaderboard:#{id}:players"
     OKRedis.connection.scard(k)
   end
 

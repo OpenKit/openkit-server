@@ -27,5 +27,10 @@ class ApplicationController < ActionController::Base
   def request_base_uri
     request.protocol + request.host_with_port
   end
+  
+  def in_sandbox?
+    !!request.subdomain.match(/^(?:beta-)?sandbox$/)
+  end
+  
 end
 end

@@ -32,7 +32,7 @@ class ScoresController < ApplicationController
     if err_message
       render status: :bad_request, json: {message: err_message}
     else
-      j = @score.as_json(:only => Score::DEFAULT_JSON_PROPS, :methods => [:value])
+      j = @score.as_json(:only => ScoreBase::DEFAULT_JSON_PROPS, :methods => [:value])
       if !j.blank?
         if j[:user]
            j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
