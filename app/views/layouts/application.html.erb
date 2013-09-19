@@ -11,7 +11,7 @@
 <body id="<%= params[:controller].parameterize %>_controller">
 
 <% if request.host =~ /^beta-developer/ %>
-  This is a preview branch!  Developer dashboard is at developer.openkit.io
+  <div class="preview_branch">This is a preview branch!  Developer dashboard is at developer.openkit.io</div>
 <% end %>
 
 <div class="wrapper">
@@ -24,9 +24,9 @@
     </ul>
 
     <ul class="admin">
-      <li><a href="http://openkit.io/docs/downloads" target="_blank">Downloads</a></li>
+      <li><a href="http://openkit.io/downloads" target="_blank">Downloads</a></li>
       <li><a href="http://openkit.io/documentation" target="_blank">Documentation</a></li>
-      <li><a href="mailto:team@openkit.io?Subject=OpenKit Support" target="_blank">Help</a></li>
+      <li><a href="http://openkit.io/help" target="_blank">Help</a></li>
       <li>
         <a class="account">Account <i class="icon-chevron-down"></i></a>
         <div class="subnav">

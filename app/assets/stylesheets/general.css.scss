@@ -7,6 +7,8 @@
   .top{display:none;}
 }
 
+.preview_branch{background:#333;padding:20px;color:#fff;font-weight:normal;font-size:14px;}
+
 a{
   color:blue;
   @include transition;
@@ -15,11 +17,9 @@ a{
 
 .session{
   width: 320px;
-  margin: 0 auto 0 -160px;
+  margin: 40px auto 0 -160px;
   position: absolute;
-  top: 50px;
   left: 50%;
-
   h1{
     font-weight: 100;
     color:#ccc;
@@ -59,7 +59,7 @@ a{
     color:#666;
   }
 
-  p{font-size:12px;margin-bottom:20px;color:#999;}
+  p{font-size:11px;margin-bottom:20px;color:#999;line-height:14px}
   p a{color:#999;}
 
   input[type="submit"]{
