@@ -8,13 +8,13 @@ class BestScoresController < ApplicationController
   def index
     x = params.delete(:page_num)
     y = params.delete(:num_per_page)
-    @scores = score_class.bests_for(params[:leaderboard_range], @leaderboard.id, {page_num: x, num_per_page: y})
+    @scores = score_class.bests_1_0(@leaderboard.id, {page_num: x, num_per_page: y})
     ActiveRecord::Associations::Preloader.new(@scores, [:user]).run
     render json: @scores
   end
 
   def user
-    @score = score_class.best_for(params[:leaderboard_range], @leaderboard.id, params[:user_id])
+    @score = score_class.best_1_0(@leaderboard.id, params[:user_id])
     ActiveRecord::Associations::Preloader.new(@score, [:user]).run
     render json: @score
   end
