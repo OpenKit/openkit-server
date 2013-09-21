@@ -43,7 +43,7 @@ module BaseScore
 
     def social(app, leaderboard, fb_friends)
       # Work for now.  Disable rank!!  Pass leaderboard obj instead of id!
-      raise ArgumentError.new("ScoreBase#social takes an array of fb_friends.") unless fb_friends.is_a?(Array)
+      raise ArgumentError.new("BaseScore#social takes an array of fb_friends.") unless fb_friends.is_a?(Array)
       return [] if fb_friends.empty?
 
       bests = []
