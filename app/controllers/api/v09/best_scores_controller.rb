@@ -14,7 +14,6 @@ class BestScoresController < ApplicationController
     json_arr.each do |j|
       if j[:user]
          j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
-         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
       end 
@@ -29,7 +28,6 @@ class BestScoresController < ApplicationController
     if !j.blank?
       if j[:user]
          j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
-         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
       end
@@ -43,7 +41,6 @@ class BestScoresController < ApplicationController
     json_arr.each do |j|
       if j[:user]
          j[:user]['fb_id']      = j[:user]['fb_id'].to_i       if j[:user]['fb_id']
-         j[:user]['google_id']  = j[:user]['google_id'].to_i   if j[:user]['google_id']
          j[:user]['twitter_id'] = j[:user]['twitter_id'].to_i  if j[:user]['twitter_id']
          j[:user]['custom_id']  = j[:user]['custom_id'].to_i   if j[:user]['custom_id']
       end 

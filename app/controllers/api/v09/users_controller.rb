@@ -12,7 +12,6 @@ class UsersController < ApplicationController
       u = @user.as_json
       if !u.blank?
         u['fb_id']      = u['fb_id'].to_i       if u['fb_id']
-        u['google_id']  = u['google_id'].to_i   if u['google_id']
         u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
         u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
       end
@@ -33,7 +32,6 @@ class UsersController < ApplicationController
         u = @user.as_json
         if !u.blank?
           u['fb_id']      = u['fb_id'].to_i       if u['fb_id']
-          u['google_id']  = u['google_id'].to_i   if u['google_id']
           u['twitter_id'] = u['twitter_id'].to_i  if u['twitter_id']
           u['custom_id']  = u['custom_id'].to_i   if u['custom_id']
         end
