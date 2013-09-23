@@ -33,10 +33,4 @@ class Developer < ActiveRecord::Base
     reset_perishable_token!
     DeveloperMailer.delay.password_reset_instructions(self)
   end
-
-  def developer_data
-    OKData.find_all_for_developer(self)
-  end
-
-
 end
