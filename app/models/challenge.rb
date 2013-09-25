@@ -1,12 +1,12 @@
 =begin
   # Send myself a challenge from Todd:
   >
-  > challenge = Challenge.new(sender_id: 2, receiver_ids:[3], leaderboard_id: 1, developer: Developer.first, app_id: 1)
+  > challenge = Challenge.new(sender_id: 119941, receiver_ids:[119979], leaderboard: Leaderboard.first, app: App.find(552), sandbox: true)
   > challenge.save
 =end
 class Challenge
 
-  attr_accessor :sender_id, :receiver_ids, :leaderboard_id, :challenge_uuid, :sandbox
+  attr_accessor :sender_id, :receiver_ids, :leaderboard, :challenge_uuid, :sandbox
   attr_accessor :app
 
   def errors
@@ -27,7 +27,7 @@ class Challenge
   def save
     errors.push "sender_id is required"               unless sender_id
     errors.push "receiver_ids is required"            unless !receiver_ids.blank?
-    errors.push "leaderboard_id is required"          unless leaderboard_id
+    errors.push "leaderboard is required"             unless leaderboard
     errors.push "app is required"                     unless app
     errors.push "sender_id is not an accessible user" unless app.developer.has_user?(sender_id)
 
@@ -54,14 +54,14 @@ class Challenge
       @safe_receivers.each do |r_id|
         u = User.find_by_id(r_id)
         if u
-          t = u.tokens.where(app_id: app.id).uniq_by(&:apns_token)
+          t = u.send(tokens_association).where(app_id: app.id).uniq_by(&:apns_token)
           tokens |= t if !t.empty?
         end
       end
 
       if !tokens.empty?
         tokens.each do |token|
-          package = {aps: {alert: "Your friend #{sender.nick} beat you!", badge: 1, sound: "default"}, challenge_uuid: challenge_uuid}
+          package = {aps: {alert: "#{sender.nick} just beat your #{leaderboard.name} score.", sound: "default"}, challenge_uuid: challenge_uuid}
           entry = [app.app_key, token.apns_token, package]
           OKRedis.connection.lpush(pn_queue_key, entry.to_json)
         end
@@ -73,5 +73,9 @@ class Challenge
 
   def pn_queue_key
     sandbox ? 'sandbox_pn_queue' : 'pn_queue'
+  end
+
+  def tokens_association
+    sandbox ? :sandbox_tokens : :tokens
   end
 end

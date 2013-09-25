@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :subscriptions
   has_many :apps, :through => :subscriptions
   has_many :tokens
+  has_many :sandbox_tokens
   belongs_to :developer
 
   class << self

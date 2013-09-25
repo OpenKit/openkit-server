@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130919003905) do
+ActiveRecord::Schema.define(:version => 20130924235216) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -150,6 +150,20 @@ ActiveRecord::Schema.define(:version => 20130919003905) do
   add_index "sandbox_achievement_scores", ["user_id", "achievement_id"], :name => "index_sandbox_achievement_scores_on_user_id_and_achievement_id"
   add_index "sandbox_achievement_scores", ["user_id"], :name => "index_sandbox_achievement_scores_on_user_id"
 
+  create_table "sandbox_client_sessions", :force => true do |t|
+    t.string   "uuid"
+    t.string   "fb_id"
+    t.string   "google_id"
+    t.string   "custom_id"
+    t.string   "ok_id"
+    t.string   "push_token"
+    t.string   "client_db_version"
+    t.datetime "client_created_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "app_id"
+  end
+
   create_table "sandbox_scores", :force => true do |t|
     t.integer  "sort_value",            :limit => 8, :null => false
     t.integer  "user_id"
@@ -165,6 +179,15 @@ ActiveRecord::Schema.define(:version => 20130919003905) do
 
   add_index "sandbox_scores", ["leaderboard_id", "sort_value", "created_at"], :name => "index_sandbox_scores_composite_1"
   add_index "sandbox_scores", ["leaderboard_id", "user_id", "sort_value", "created_at"], :name => "index_sandbox_scores_composite_2"
+
+  create_table "sandbox_tokens", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "app_id"
+    t.string   "apns_token"
+    t.datetime "created_at", :null => false
+  end
+
+  add_index "sandbox_tokens", ["user_id", "app_id"], :name => "index_sandbox_tokens_on_user_id_and_app_id"
 
   create_table "scores", :force => true do |t|
     t.integer  "sort_value",            :limit => 8, :null => false

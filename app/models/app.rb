@@ -23,6 +23,8 @@ class App < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => :developer_id
   has_attached_file :icon, :default_url => '/assets/app_icon.png'
 
+  has_many :tokens
+  has_many :sandbox_tokens
 
   # First, see if the user already exists for the developer of this app, based
   # on user_params. If user already exists, subscribe him/her to this app.  If
