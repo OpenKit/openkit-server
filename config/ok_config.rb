@@ -20,8 +20,10 @@ module OKConfig
       :s3_attachment_bucket     => nil || ENV['OK_S3_ATTACHMENT_BUCKET'],
       :rails_secret_token       => nil || 'd793c6549176d97e349148dbdf8a5288d129313592117c8a4b4d80a328b2e1f4618d2ead0bf0fe84cb7df22a8d64ecbf8afc4b7cc815cf14f5473019b6184878',
       :rails_session_store_key  => nil || '_openkit_session',
-      :apns_host                => nil || 'gateway.sandbox.push.apple.com',
-      :apns_pem_path            => nil || '/var/openkit/apple_certs/sandbox',
+      :apns_host                => nil || 'gateway.push.apple.com',
+      :apns_pem_path            => nil || '/var/openkit/apple_certs/production',
+      :apns_sandbox_host        => nil || 'gateway.sandbox.push.apple.com',
+      :apns_sandbox_pem_path    => nil || '/var/openkit/apple_certs/sandbox',
       :pem_disk_pass            => nil || 'password'
     }
     end
@@ -31,14 +33,22 @@ module OKConfig
     config_hash[k]
   end
 
-  def pem_path(app_key)
-    File.join(config_hash[:apns_pem_path], "#{app_key}.pem")
+  def pem_path(app_key, in_sandbox = false)
+    File.join(pem_dir(in_sandbox), "#{app_key}.pem")
   end
 
-  def pem_pass_path(app_key)
-    File.join(config_hash[:apns_pem_path], "#{app_key}_p.txt.gpg")
+  def pem_pass_path(app_key, in_sandbox = false)
+    File.join(pem_dir(in_sandbox), "#{app_key}_p.txt.gpg")
+  end
+
+  def apns_host(in_sandbox)
+    in_sandbox && OKConfig[:apns_sandbox_host] || OKConfig[:apns_host]
+  end
+
+  private
+  def pem_dir(in_sandbox)
+    in_sandbox && OKConfig[:apns_sandbox_pem_path] || OKConfig[:apns_pem_path]
   end
 
 end
-
 

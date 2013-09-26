@@ -1,6 +1,6 @@
 # API:
 #
-#   p = PushService.new(app_key)
+#   p = PushService.new(app_key, {in_sandbox: true})
 #   p.connect
 #   p.write_message(token, message)
 #   p.write(token, payload)
@@ -20,21 +20,23 @@
 # $ gpg --force-mdc -c 1_p.txt
 # $ gpg --yes --batch -d --passphrase='password' 1_p.txt.gpg
 #
-# $ bundle exec ruby lib/push_loop.rb
 #
 require 'socket'
 require 'openssl'
 require 'json'
 require 'gpgme'
+require 'debugger'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'ok_config.rb'))
 
 class PushService
+
   def is_connected?
     @connected
   end
 
-  def initialize(app_key)
+  def initialize(app_key, opts = {})
     @app_key = app_key
+    @in_sandbox = opts[:in_sandbox]
     @connected = false
   end
 
@@ -54,7 +56,7 @@ class PushService
 
     retries = 0
     begin
-      @sock         = TCPSocket.new(OKConfig[:apns_host], 2195)
+      @sock         = TCPSocket.new(OKConfig.apns_host(@in_sandbox), 2195)   # 2195 by both sandbox and production?
       @ssl          = OpenSSL::SSL::SSLSocket.new(@sock, context)
       @ssl.connect
       @connected = true
@@ -101,7 +103,7 @@ class PushService
 
   class << self
     def chat_with_lou
-      p = PushService.new("doesnotwork")
+      p = PushService.new("doesnotwork", {in_sandbox: true})
       p.connect
       puts "ctrl+d to exit"
       while ((line = gets) && p.is_connected?)
@@ -124,10 +126,10 @@ class PushService
   end
 
   def pem_path
-    @pem_path ||= OKConfig.pem_path(@app_key)
+    @pem_path ||= OKConfig.pem_path(@app_key, @in_sandbox)
   end
 
   def pass_path
-    @pass_path ||= OKConfig.pem_pass_path(@app_key)
+    @pass_path ||= OKConfig.pem_pass_path(@app_key, @in_sandbox)
   end
 end

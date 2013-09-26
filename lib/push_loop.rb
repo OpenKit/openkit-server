@@ -1,3 +1,6 @@
+#
+# $ PUSH_ENV=sandbox bundle exec ruby lib/push_loop.rb
+#
 require 'thread'
 begin
   require 'fastthread'
@@ -19,8 +22,12 @@ class PushLoop
     $stdout.flush
   end
 
+  def initialize(in_sandbox = false)
+    @in_sandbox = in_sandbox
+  end
+
   def run
-    log "starting..."
+    log "starting in #{@in_sandbox ? 'sandbox' : 'production'}..."
     # Keyed by app_key
     pn_containers = {}
     last_write_mutexes = {}
@@ -34,7 +41,8 @@ class PushLoop
 
       begin
         while(1)
-          entry = OKRedis.connection.brpop('sandbox_pn_queue')  # 'pn_queue'
+          k = @in_sandbox ? 'sandbox_pn_queue' : 'pn_queue'
+          entry = OKRedis.connection.brpop(k)
           log "push_thread: Popped a push entry: #{entry}"
           app_key, token, payload = JSON.parse(entry[1])
 
@@ -42,7 +50,7 @@ class PushLoop
           if app_key.is_a?(String) && !app_key.empty? && token.is_a?(String) && token.length == 64 && payload.is_a?(Hash) && payload.has_key?('aps')
             log "push_thread: Push is sane for app_key #{app_key}"
 
-            pn_containers[app_key] ||= PNContainer.new(PushService.new(app_key), Mutex.new)
+            pn_containers[app_key] ||= PNContainer.new(PushService.new(app_key, {in_sandbox: @in_sandbox}), Mutex.new)
             last_write_mutexes[app_key] ||= Mutex.new
 
             active_ids_mutex.synchronize {
@@ -134,4 +142,4 @@ class PushLoop
   end
 end
 
-PushLoop.new.run
+PushLoop.new(ENV['PUSH_ENV'] == 'sandbox').run
