@@ -25,7 +25,7 @@ require 'socket'
 require 'openssl'
 require 'json'
 require 'gpgme'
-require 'debugger'
+# require 'debugger'
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'ok_config.rb'))
 
 class PushService
