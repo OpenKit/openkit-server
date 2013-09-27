@@ -23,7 +23,7 @@ class ChallengesController < ApplicationController
       challenge = Challenge.new(
           sender_id: sender_id,
           receiver_ids: receiver_ids,
-          leaderboard_id: @leaderboard,
+          leaderboard: @leaderboard,
           app: authorized_app,
           sandbox: in_sandbox?
       )
