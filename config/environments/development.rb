@@ -37,10 +37,4 @@ OKDashboard::Application.configure do
   # which prevents, "WARN could not determine content-length of response body" warning.
   config.assets.debug = false
   config.assets.logger = false
-
-  config.log_tags = [
-    :uuid,
-    :remote_ip,
-    ->req {req.authorization && req.authorization[/oauth_consumer_key=\"(.+?[^"])\"/, 1]}
-  ]
 end
