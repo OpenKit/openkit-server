@@ -184,7 +184,7 @@ DEPENDENCIES
   aws-sdk (= 1.9.5)
   coffee-rails (~> 3.2.1)
   daemons (= 1.1.9)
-  debugger (= 1.2.2)
+  debugger
   delayed_job (= 3.0.4)
   delayed_job_active_record (= 0.3.3)
   fog
