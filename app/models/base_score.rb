@@ -60,9 +60,11 @@ module BaseScore
       best_cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
       best_score = where(best_cond).order("sort_value DESC").limit(1)[0]
       if best_score
-        rank_cond = ["leaderboard_id = ? AND sort_value > ?", leaderboard_id, best_score.sort_value]
-        sanitized_rank_cond = ActiveRecord::Base.send(:sanitize_sql_array, rank_cond)
-        best_score.rank = connection.execute("select count(*) from (select * from #{table_name} where #{sanitized_rank_cond} group by user_id) t").first[0] + 1
+        if ENABLE_USER_RANK
+          rank_cond = ["leaderboard_id = ? AND sort_value > ?", leaderboard_id, best_score.sort_value]
+          sanitized_rank_cond = ActiveRecord::Base.send(:sanitize_sql_array, rank_cond)
+          best_score.rank = connection.execute("select count(*) from (select * from #{table_name} where #{sanitized_rank_cond} group by user_id) t").first[0] + 1
+        end
       end
       best_score
     end
