@@ -34,7 +34,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'debugger', '1.2.2'
+  gem 'debugger'
 end
 
 # Gems used only for assets and not required
