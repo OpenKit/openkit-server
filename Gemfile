@@ -27,6 +27,7 @@ group :development do
   gem 'simple_oauth',  '0.2.0'
   gem 'what_methods'
   gem 'tracer_bullet'
+  gem 'quiet_assets'
 end
 
 group :test do
