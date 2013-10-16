@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 #
 # Setup:
 #   $ rails c
@@ -74,7 +75,7 @@ if res.code != "200"
 end
 
 # Create some users
-res1 = post '/v1/users',              { user: {nick: "test user 1", custom_id: "454"} }
+res1 = post '/v1/users',              { user: {nick: "test utf8 user ěáð汉语", custom_id: "454"} }
 res2 = post '/v1/users',              { user: {nick: "test user 2", custom_id: "600"} }
 user1 = JSON.parse(res1.body)
 user2 = JSON.parse(res2.body)
