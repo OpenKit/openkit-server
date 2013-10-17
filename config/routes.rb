@@ -69,7 +69,9 @@ OKDashboard::Application.routes.draw do
       resources :developers,              only:  [:new, :create, :edit, :update, :show]
       resources :developer_sessions,      only:  [:create]
       resources :apps do
-        resources :leaderboards
+        resources :leaderboards do
+          delete :delete_scores
+        end
         resources :achievements
       end
 

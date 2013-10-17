@@ -12,7 +12,8 @@ class LeaderboardsController < ApplicationController
 
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    @top_scores = Score.bests_for('all_time', @leaderboard.id)
+    score_class = params[:sandbox] ? SandboxScore : Score
+    @top_scores = score_class.bests_1_0(@leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
   end
 
@@ -52,6 +53,22 @@ class LeaderboardsController < ApplicationController
       notice = "Leaderboard doesn't exist."
     end
     redirect_to app_leaderboards_url(@app), notice: notice
+  end
+
+  # The only way to delete live scores is to explicitly pass sandbox=0 as a param.
+  def delete_scores
+    @leaderboard = @app.leaderboards.find_by_id(params[:leaderboard_id].to_i)
+    if @leaderboard
+      if params[:sandbox].blank?
+        redirect_to :back, notice: "Please specify the environment."
+      else
+        k = (params[:sandbox] == '0') ? :scores : :sandbox_scores
+        @leaderboard.send(k).delete_all
+        redirect_to app_leaderboard_path(@app, @leaderboard), notice: "Deleted #{k.to_s.sub(/_/, ' ')}."
+      end
+    else
+      redirect_to :back, notice: "Nope."
+    end
   end
 end
 end
