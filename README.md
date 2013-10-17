@@ -1,9 +1,6 @@
 openkit-server
 ===============
 
-OpenKit is currently in private beta. <a href="http://openkit.io/beta">Sign up for a beta invite here!</a>
-
-
 After downloading build required gems with:
 ```
 	$ bundle install
