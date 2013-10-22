@@ -55,19 +55,13 @@ class LeaderboardsController < ApplicationController
     redirect_to app_leaderboards_url(@app), notice: notice
   end
 
-  # The only way to delete live scores is to explicitly pass sandbox=0 as a param.
-  def delete_scores
+  def delete_sandbox_scores
     @leaderboard = @app.leaderboards.find_by_id(params[:leaderboard_id].to_i)
     if @leaderboard
-      if params[:sandbox].blank?
-        redirect_to :back, notice: "Please specify the environment."
-      else
-        k = (params[:sandbox] == '0') ? :scores : :sandbox_scores
-        @leaderboard.send(k).delete_all
-        redirect_to app_leaderboard_path(@app, @leaderboard), notice: "Deleted #{k.to_s.sub(/_/, ' ')}."
-      end
+      @leaderboard.sandbox_scores.delete_all
+      redirect_to app_leaderboard_path(@app, @leaderboard), notice: "Deleted Sandbox Scores."
     else
-      redirect_to :back, notice: "Nope."
+      redirect_to :back, notice: "Could not find a leaderboard with that ID."
     end
   end
 end

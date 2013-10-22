@@ -9,9 +9,7 @@ These should be tabs:
 <div><%= link_to 'Production Scores', app_leaderboard_path(@app, @leaderboard) %></div>
 <div><%= link_to 'Sandbox Scores', app_leaderboard_path(@app, @leaderboard, sandbox: 1) %></div>
 
-
-<%= link_to 'Delete Production Scores - CAREFUL', app_leaderboard_delete_scores_path(@app, @leaderboard, sandbox: 0), :method => :delete, :confirm => "Are you sure? CAREFUL! " %>
-<%= link_to 'Delete Sandbox Scores', app_leaderboard_delete_scores_path(@app, @leaderboard, sandbox: 1), :method => :delete, :confirm => "Are you sure?" %>
+<%= link_to 'Delete Sandbox Scores', app_leaderboard_delete_sandbox_scores_path(@app, @leaderboard), :method => :delete, :confirm => "Are you sure?" %>
 
 <div class="two_col">
 

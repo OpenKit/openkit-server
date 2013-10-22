@@ -71,7 +71,7 @@ OKDashboard::Application.routes.draw do
       resources :developer_sessions,      only:  [:create]
       resources :apps do
         resources :leaderboards do
-          delete :delete_scores
+          delete :delete_sandbox_scores
         end
         resources :achievements
       end
