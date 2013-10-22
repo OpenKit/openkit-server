@@ -126,4 +126,7 @@ get '/v1/achievements',               { user_id: user1['id'] }
 # Update a user
 put "/v1/users/#{user1['id']}",       { gamecenter_id: "234500000", fb_id: "12345" }
 
+# Get a list of enabled features
+get '/v1/features'
+
 

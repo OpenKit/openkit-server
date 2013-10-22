@@ -11,6 +11,7 @@ OKDashboard::Application.routes.draw do
       resources :leaderboards,            only:  [:create, :index, :show] do
         resources :challenges,            only:  [:create]
       end
+      resources :features,                only:  [:index]
 
       match "client_sessions",            to: "client_sessions#create",  via: :post
       match "best_scores",                to: "best_scores#index",       via: :get
