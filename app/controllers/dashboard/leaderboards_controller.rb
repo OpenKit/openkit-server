@@ -12,7 +12,8 @@ class LeaderboardsController < ApplicationController
 
   def show
     @leaderboard = @app.leaderboards.find(params[:id].to_i)
-    @top_scores = Score.bests_for('all_time', @leaderboard.id)
+    score_class = params[:sandbox] ? SandboxScore : Score
+    @top_scores = score_class.bests_1_0(@leaderboard.id)
     ActiveRecord::Associations::Preloader.new(@top_scores, [:user]).run
   end
 
@@ -52,6 +53,16 @@ class LeaderboardsController < ApplicationController
       notice = "Leaderboard doesn't exist."
     end
     redirect_to app_leaderboards_url(@app), notice: notice
+  end
+
+  def delete_sandbox_scores
+    @leaderboard = @app.leaderboards.find_by_id(params[:leaderboard_id].to_i)
+    if @leaderboard
+      @leaderboard.sandbox_scores.delete_all
+      redirect_to app_leaderboard_path(@app, @leaderboard), notice: "Deleted Sandbox Scores."
+    else
+      redirect_to :back, notice: "Could not find a leaderboard with that ID."
+    end
   end
 end
 end

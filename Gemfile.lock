@@ -110,6 +110,8 @@ GEM
       cocaine (~> 0.4.0)
       mime-types
     polyglot (0.3.3)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -182,7 +184,7 @@ DEPENDENCIES
   aws-sdk (= 1.9.5)
   coffee-rails (~> 3.2.1)
   daemons (= 1.1.9)
-  debugger (= 1.2.2)
+  debugger
   delayed_job (= 3.0.4)
   delayed_job_active_record (= 0.3.3)
   fog
@@ -195,6 +197,7 @@ DEPENDENCIES
   mysql2 (= 0.3.11)
   oauth (= 0.4.7)
   paperclip (= 3.3.1)
+  quiet_assets
   rails (= 3.2.13)
   redis (= 3.0.2)
   sass-rails (~> 3.2.3)

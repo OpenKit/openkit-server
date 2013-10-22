@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924235216) do
+ActiveRecord::Schema.define(:version => 20131021235134) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(:version => 20130924235216) do
     t.datetime "icon_updated_at"
     t.string   "fbid"
     t.string   "secret_key",        :limit => 40
+    t.string   "feature_list"
   end
 
   add_index "apps", ["app_key"], :name => "index_apps_on_app_key", :unique => true

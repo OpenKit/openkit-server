@@ -51,6 +51,19 @@ class App < ActiveRecord::Base
     File.exist?(OKConfig.pem_path(app_key))
   end
 
+  def features
+    if feature_list.blank?
+      FeatureArray.new
+    else
+      FeatureArray.new(feature_list.split(',').collect(&:to_sym))
+    end
+  end
+
+  def features=(arr)
+    raise ArgumentError.new("Pass an array to App#features=") unless arr.is_a?(Array)
+    self.feature_list = arr.join(',')
+  end
+
   private
   def set_app_key
     begin

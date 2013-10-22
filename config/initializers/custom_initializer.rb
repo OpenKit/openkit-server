@@ -3,6 +3,7 @@ require 'ok_redis'
 require 'paperclip_helper.rb'
 require 'two_legged_oauth'
 require 'push_service'
+require 'feature_array.rb'
 
 module ActiveModel
   class Errors
