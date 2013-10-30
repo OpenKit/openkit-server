@@ -7,16 +7,108 @@
 #   > app = dev.apps.create!(:name => "End to end test")
 #   > app.update_attribute(:app_key, "end_to_end_test")
 #   > app.update_attribute(:secret_key, "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU")
-require 'debugger'
-require 'json'
-require 'rest-client'
-require 'pp'
-require 'oauth'
 
-EP = "http://sandbox.openkit.lan:3000"
-KEY = "end_to_end_test"        # Special app_key for running end to end tests on
-SECRET = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
-CONSUMER = OAuth::Consumer.new(KEY, SECRET, {:site => EP})
+
+#
+# Usage:
+#   $ SSL_CERT_FILE="/usr/local/etc/nginx/ssl/ok_wildcard.pem" ruby script/api_tester.rb
+# Or
+#   $ SSL_CERT_FILE="/usr/local/etc/nginx/ssl/ok_wildcard.pem" script/api_tester.rb
+# Notes:
+#   * Ruby wants the cert in pem format.
+
+require 'securerandom'
+require 'net/http'
+require 'digest/hmac'
+require 'base64'
+require 'cgi'
+require 'json'
+require 'debugger'
+
+
+class Req
+
+  def escape(s)
+    CGI.escape(s)
+  end
+
+  def initialize
+    @appKey = "end_to_end_test"
+    @secretKey = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
+    @timestamp = Time.now.to_i
+    @nonce = SecureRandom.uuid
+    @scheme = "https://"
+    @host = "local.openkit.io"
+  end
+
+
+  def get(path, params = {})
+    @verb = "GET"
+    query_string = params.empty? ? '' : params.collect { |k, v| "#{k.to_s}=#{v.to_s}" }.join('&')
+    builder = @scheme + @host + path
+    builder << "?#{query_string}" if !query_string.empty?
+    @uri = URI(builder)
+    @klass = Net::HTTP::Get
+    @include_params = params
+    request()
+  end
+
+  def delete(path)
+    @verb = "DELETE"
+    @uri = URI(@scheme + @host + path)
+    @klass = Net::HTTP::Delete
+    request()
+  end
+
+  def put(path, params)
+    @verb = "PUT"
+    @uri = URI(@scheme + @host + path)
+    @klass = Net::HTTP::Put
+    @request_body = params.to_json
+    request()
+  end
+
+
+  def post(path, params)
+    @verb = "POST"
+    @uri = URI(@scheme + @host + path)
+    @klass = Net::HTTP::Post
+    @request_body = params.to_json
+    request()
+  end
+
+  private
+  def request()
+    Net::HTTP.start(@uri.host, @uri.port, :use_ssl => true) do |http|
+      request = @klass.new(@uri.request_uri)
+      request.set_body_internal(@request_body) if @request_body
+      request['Content-Type'] = "application/json; charset=utf-8"
+      request['Accept'] = "application/json"
+
+      h_params = {
+        oauth_consumer_key:       @appKey,
+        oauth_nonce:              @nonce,
+        oauth_signature_method:   'HMAC-SHA1',
+        oauth_timestamp:          @timestamp,
+        oauth_version:            '1.0',
+      }
+      if @include_params && !@include_params.empty?
+        h_params.merge!(@include_params)
+      end
+
+      sorted_params_str = h_params.sort_by{|k, _| k}.collect{ |k,v| k.to_s + '=' + v.to_s }.join("&")
+      signatureBaseString = "#{@verb}&#{escape(@scheme + @host + @uri.path)}&#{escape(sorted_params_str)}"
+      k = "#{@secretKey}&"
+      hmac = Digest::HMAC.digest(signatureBaseString, k, Digest::SHA1)
+      signature = Base64.encode64(hmac).chomp
+
+      request['Authorization'] = "OAuth oauth_consumer_key=\"#{@appKey}\", oauth_nonce=\"#{@nonce}\", oauth_signature=\"#{escape(signature)}\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"#{@timestamp}\", oauth_version=\"1.0\""
+      http.request request do |response|
+      end
+    end
+  end
+end
+
 
 def blue(msg)
   printf "\n\e[44m #{msg} \e[0m\n"
@@ -37,31 +129,28 @@ end
 
 def post(path, req_params = {})
   blue "Response from POST to #{path}:"
-  res = CONSUMER.request(:post, path, nil, {}, req_params.to_json, { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
+  res = Req.new.post(path, req_params)
   response_log(res)
   res
 end
 
 def delete(path)
   blue "Response from DELETE to #{path}:"
-  res = CONSUMER.request(:delete, path, nil, {}, { 'Accept' => 'application/json' })
+  res = Req.new.delete(path)
   response_log(res)
   res
 end
 
 def put(path, req_params = {})
   blue "Response from PUT to #{path}:"
-  res = CONSUMER.request(:put, path, nil, {}, req_params.to_json, { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
+  res = Req.new.put(path, req_params)
   response_log(res)
   res
 end
 
 def get(path, req_params = {})
-  if !req_params.empty?
-    path += "?" + req_params.collect { |k, v| "#{k.to_s}=#{CGI::escape(v.to_s)}" }.join('&')
-  end
-  blue "Response from GET to #{path}:"
-  res = CONSUMER.request(:get, path, nil, {}, { 'Accept' => 'application/json' })
+  blue "Response from GET to path #{path} with params: #{req_params.inspect}:"
+  res = Req.new.get(path, req_params)
   response_log(res)
   res
 end
@@ -90,7 +179,7 @@ high_board = JSON.parse(res2.body)
 get '/v1/leaderboards'
 
 # List leaderboards with a certain tag:
-get '/v1/leaderboards',               { tag: "v2" }
+get '/v1/leaderboards',    {tag: 'v2'}
 
 # Show a leaderboard
 get "/v1/leaderboards/#{high_board['id']}"
@@ -128,5 +217,4 @@ put "/v1/users/#{user1['id']}",       { gamecenter_id: "234500000", fb_id: "1234
 
 # Get a list of enabled features
 get '/v1/features'
-
 
