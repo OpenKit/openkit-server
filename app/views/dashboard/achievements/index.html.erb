@@ -13,7 +13,6 @@
       <th>ID</th>
       <th>Goal</th>
       <th>Points</th>
-      <th>In Development?</th>
       <th></th>
     </tr>
   <% if @achievements.empty? %>
@@ -28,7 +27,6 @@
         <td class="id"><%= achievement.id %></td>
         <td class="goal"><%= achievement.goal %></td>
         <td class="points"><%= achievement.points %></td>
-        <td><%= achievement.in_development %></td>
         <td class="manage">
           <%= link_to edit_app_achievement_path(@app, achievement) do %>
             <i class="icon-edit"></i> Edit

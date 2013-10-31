@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131021235134) do
+ActiveRecord::Schema.define(:version => 20131031062709) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -26,8 +26,8 @@ ActiveRecord::Schema.define(:version => 20131021235134) do
   create_table "achievements", :force => true do |t|
     t.string   "name"
     t.integer  "app_id"
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
     t.string   "icon_locked_file_name"
     t.string   "icon_locked_content_type"
     t.integer  "icon_locked_file_size"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(:version => 20131021235134) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.boolean  "in_development",           :default => true
     t.text     "desc"
     t.integer  "points"
     t.integer  "goal"
@@ -117,17 +116,16 @@ ActiveRecord::Schema.define(:version => 20131021235134) do
   create_table "leaderboards", :force => true do |t|
     t.string   "name"
     t.integer  "app_id"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.string   "icon_file_name"
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
-    t.boolean  "in_development",                  :default => true
     t.string   "sort_type",         :limit => 20
     t.string   "gamecenter_id"
     t.string   "gpg_id"
-    t.integer  "priority",                        :default => 100,  :null => false
+    t.integer  "priority",                        :default => 100, :null => false
   end
 
   add_index "leaderboards", ["app_id"], :name => "index_leaderboards_on_game_id"
