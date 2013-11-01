@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131031062709) do
+ActiveRecord::Schema.define(:version => 20131031154407) do
 
   create_table "achievement_scores", :force => true do |t|
     t.integer  "user_id"
@@ -239,6 +239,17 @@ ActiveRecord::Schema.define(:version => 20131031062709) do
   end
 
   add_index "tokens", ["user_id", "app_id"], :name => "index_tokens_on_user_id_and_app_id"
+
+  create_table "turns", :force => true do |t|
+    t.string   "uuid"
+    t.integer  "user_id"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+    t.string   "meta_doc_file_name"
+    t.string   "meta_doc_content_type"
+    t.integer  "meta_doc_file_size"
+    t.datetime "meta_doc_updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "nick"

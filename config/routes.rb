@@ -76,6 +76,8 @@ OKDashboard::Application.routes.draw do
         resources :achievements
       end
 
+      resources :turns, only: [:new, :create]
+
       match "developer_sessions",         to: "developer_sessions#destroy",  as: :logout,           via: :delete
       match "developer_sessions/new",     to: "developer_sessions#new",      as: :login,            via: :get
       match "challenges/info",            to: "challenges#info",             as: :challenges_info,  via: :get
