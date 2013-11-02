@@ -24,7 +24,7 @@ class Leaderboard < ActiveRecord::Base
     }
   end
 
-  has_attached_file :icon, :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/leaderboard_icon.png'
+  has_attached_file :icon, :default_url => 'https://ok-shared.s3-us-west-2.amazonaws.com/leaderboard_icon.png'
 
   HIGH_VALUE_SORT_TYPE = "HighValue"
   LOW_VALUE_SORT_TYPE = "LowValue"

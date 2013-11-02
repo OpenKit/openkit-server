@@ -26,8 +26,8 @@ class Achievement < ActiveRecord::Base
     fields
   end
 
-  has_attached_file :icon,        :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_icon.png'
-  has_attached_file :icon_locked, :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_locked_icon.png'
+  has_attached_file :icon,        :default_url => 'https://ok-shared.s3-us-west-2.amazonaws.com/achievement_icon.png'
+  has_attached_file :icon_locked, :default_url => 'https://ok-shared.s3-us-west-2.amazonaws.com/achievement_locked_icon.png'
 
   def progress(user_id, sandbox)
     if sandbox
