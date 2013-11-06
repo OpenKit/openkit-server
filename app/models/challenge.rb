@@ -5,9 +5,7 @@
   > challenge.save
 =end
 class Challenge
-
-  attr_accessor :sender_id, :receiver_ids, :leaderboard, :challenge_uuid, :sandbox
-  attr_accessor :app
+  attr_accessor :sender_id, :receiver_ids, :leaderboard, :app, :challenge_uuid, :sandbox
 
   def errors
     @errors ||= []
@@ -24,55 +22,80 @@ class Challenge
     end
   end
 
+
+  def cert
+    sandbox ? app.sandbox_push_cert : app.production_push_cert
+  end
+
+
   def save
     errors.push "sender_id is required"               unless sender_id
     errors.push "receiver_ids is required"            unless !receiver_ids.blank?
     errors.push "leaderboard is required"             unless leaderboard
     errors.push "app is required"                     unless app
-    errors.push "sender_id is not an accessible user" unless app.developer.has_user?(sender_id)
 
-    @safe_receivers = []
-    receiver_ids.each do |r_id|
-      if app.developer.has_user?(r_id)
-        @safe_receivers << r_id
-      end
+    @sender = app.developer.users.find_by_id(sender_id)
+    if @sender.nil?
+      errors.push "Could not find a sender by that id"
+    end
+
+    if cert.nil?
+      errors.push("You have not uploaded a push certificate for the #{sandbox ? 'sandbox' : 'production'} environment")
+    end
+
+    @safe_receivers = get_safe_receivers()
+    if @safe_receivers.empty?
+      errors.push("receiver_ids are not accessible.")
     end
 
     if errors.empty?
-      if !enqueue
+      if !enqueue()
         errors.push "Could not enqueue challenge"
       end
     end
     errors.empty?
   end
 
-  private
-  def enqueue
-    tokens = []
-    sender = User.find_by_id(sender_id)
-    if sender
-      @safe_receivers.each do |r_id|
-        u = User.find_by_id(r_id)
-        if u
-          t = u.send(tokens_association).where(app_id: app.id).uniq_by(&:apns_token)
-          tokens |= t if !t.empty?
-        end
-      end
 
-      if !tokens.empty?
-        tokens.each do |token|
-          package = {aps: {alert: "#{sender.nick} just beat your #{leaderboard.name} score.", sound: "default"}, challenge_uuid: challenge_uuid}
-          entry = [app.app_key, token.apns_token, package]
-          OKRedis.connection.lpush(pn_queue_key, entry.to_json)
-        end
+  protected
+  def get_safe_receivers
+    safe_receivers = []
+    receiver_ids.each do |r_id|
+      if app.developer.has_user?(r_id)
+        safe_receivers << r_id
       end
     end
+    safe_receivers
+  end
 
+  def get_receivers_tokens
+    tokens = []
+    @safe_receivers.each do |r_id|
+      u = User.find_by_id(r_id)
+      if u
+        x = sandbox ? u.sandbox_tokens : u.tokens
+        t = x.where(app_id: app.id).uniq_by(&:apns_token)
+        tokens |= t if !t.empty?
+      end
+    end
+    tokens
+  end
+
+  private
+  def enqueue
+    tokens = get_receivers_tokens()
+    if !tokens.empty?
+      tokens.each do |token|
+        package = {aps: {alert: "#{@sender.nick} just beat your #{leaderboard.name} score.", sound: "default"}, challenge_uuid: challenge_uuid}
+        entry = [cert.pem_path, token.apns_token, package]
+        OKRedis.connection.lpush(pn_queue_key, entry.to_json)
+      end
+    end
     true
   end
 
   def pn_queue_key
-    sandbox ? 'sandbox_pn_queue' : 'pn_queue'
+    'pn_queue_2'
   end
 
   def tokens_association
