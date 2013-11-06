@@ -5,6 +5,12 @@
   <% end %>
 </div>
 
+<div>
+  <%= link_to 'add a sandbox push cert', new_app_sandbox_push_cert_path(@app) %>
+</div>
+<br />
+<br />
+
 
 
   <div class="col_75 left">
@@ -22,7 +28,7 @@
         <li>
           <%= image_tag ("push_dash.png") %>
           <a href="<%= challenges_info_path %>">
-            <label>Social Challenges</label>
+            <label>Push Challenges</label>
             <span>Configure your leaderboards to send push notifications as ranks change.</span>
           </a>
         </li>
@@ -43,12 +49,15 @@
   <div class="col_25 right">
     <div class="box details app">
       <div class="details_header">App Details</div>
+
+
       <ul>
         <li class="icon"><b>Icon:</b> <%= image_tag @app.icon.url, {:class=> 'app_icon'} %></li>
         <li><b>Name:</b> <span><%= @app.name %></span></li>
         <li><b>App Key:</b> <span><%= @app.app_key %></span></li>
         <li class="secret"><b>Secret Key:</b> <a href="#" id='show_secret'>show me</a><span style="display:none;"><%= @app.secret_key %></span></li>
         <li><b>Facebook App Key:</b> <span><%= @app.fbid %></span></li>
+
       </ul>
     </div>
 

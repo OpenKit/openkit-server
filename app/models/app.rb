@@ -26,6 +26,8 @@ class App < ActiveRecord::Base
   has_many :tokens
   has_many :sandbox_tokens
 
+
+
   # First, see if the user already exists for the developer of this app, based
   # on user_params. If user already exists, subscribe him/her to this app.  If
   # user does not yet exist, create both the user and the subscription.
@@ -47,10 +49,6 @@ class App < ActiveRecord::Base
     u
   end
 
-  def has_push_cert?
-    File.exist?(OKConfig.pem_path(app_key))
-  end
-
   def features
     if feature_list.blank?
       FeatureArray.new
@@ -63,6 +61,14 @@ class App < ActiveRecord::Base
     raise ArgumentError.new("Pass an array to App#features=") unless arr.is_a?(Array)
     self.feature_list = arr.join(',')
   end
+
+  def sandbox_push_cert
+    @sandbox_push_cert ||= SandboxPushCert.find_by_app_key(app_key)
+  end
+
+  #def has_production_push_cert?
+  #  @production_push_cert ||= ProductionPushCert.find_by_app_key(app_key)
+  #end
 
   private
   def set_app_key
