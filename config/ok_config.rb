@@ -24,7 +24,6 @@ module OKConfig
       :apns_pem_path            => nil || '/var/openkit/apple_certs/production',
       :apns_sandbox_host        => nil || 'gateway.sandbox.push.apple.com',
       :apns_sandbox_pem_path    => nil || '/var/openkit/apple_certs/sandbox',
-      :pem_disk_pass            => nil || 'password'
     }
     end
   end
@@ -32,23 +31,5 @@ module OKConfig
   def [](k)
     config_hash[k]
   end
-
-  def pem_path(app_key, in_sandbox = false)
-    File.join(pem_dir(in_sandbox), "#{app_key}.pem")
-  end
-
-  def pem_pass_path(app_key, in_sandbox = false)
-    File.join(pem_dir(in_sandbox), "#{app_key}_p.txt.gpg")
-  end
-
-  def apns_host(in_sandbox)
-    in_sandbox && OKConfig[:apns_sandbox_host] || OKConfig[:apns_host]
-  end
-
-  private
-  def pem_dir(in_sandbox)
-    in_sandbox && OKConfig[:apns_sandbox_pem_path] || OKConfig[:apns_pem_path]
-  end
-
 end
 
