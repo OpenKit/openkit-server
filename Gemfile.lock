@@ -80,7 +80,6 @@ GEM
     formatador (0.2.4)
     friendly_id (4.0.10.1)
       activerecord (>= 3.0, < 4.0)
-    gpgme (2.0.2)
     hike (1.2.3)
     hiredis (0.4.5)
     i18n (0.6.5)
@@ -192,7 +191,6 @@ DEPENDENCIES
   delayed_job_active_record (= 0.3.3)
   fog
   friendly_id (~> 4.0)
-  gpgme (~> 2.0)
   hiredis (~> 0.4)
   jquery-rails
   json (~> 1.7)

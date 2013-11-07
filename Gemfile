@@ -18,7 +18,6 @@ gem 'json',         '~>1.7'
 gem 'aws-sdk',      '~>1.9'
 gem 'oauth',        '~>0.4'
 gem 'acts-as-taggable-on', '~>2.4'
-gem 'gpgme',        '~>2.0'
 gem 'thin',         '~>1.6'
 gem 'unf',          '~>0.1'
 
