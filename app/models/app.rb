@@ -66,9 +66,9 @@ class App < ActiveRecord::Base
     @sandbox_push_cert ||= SandboxPushCert.find_by_app_key(app_key)
   end
 
-  #def has_production_push_cert?
-  #  @production_push_cert ||= ProductionPushCert.find_by_app_key(app_key)
-  #end
+  def production_push_cert
+    @production_push_cert ||= ProductionPushCert.find_by_app_key(app_key)
+  end
 
   private
   def set_app_key

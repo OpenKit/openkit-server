@@ -87,7 +87,7 @@ class Challenge
     if !tokens.empty?
       tokens.each do |token|
         package = {aps: {alert: "#{@sender.nick} just beat your #{leaderboard.name} score.", sound: "default"}, challenge_uuid: challenge_uuid}
-        entry = [cert.pem_path, token.apns_token, package]
+        entry = [cert.pem_path, token.apns_token, package, sandbox]
         OKRedis.connection.lpush(pn_queue_key, entry.to_json)
       end
     end
