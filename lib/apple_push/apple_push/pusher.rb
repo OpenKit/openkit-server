@@ -2,6 +2,11 @@
 # object around.  Connection list is keyed by combined_pem_path.
 
 # require 'debugger'
+require 'thread'
+begin
+  require 'fastthread'
+rescue LoadError
+end
 
 module ApplePush
 
