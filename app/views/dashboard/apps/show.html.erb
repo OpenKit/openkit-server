@@ -5,12 +5,38 @@
   <% end %>
 </div>
 
-<div>
-  <%= link_to 'add a sandbox push cert', new_app_sandbox_push_cert_path(@app) %>
-</div>
-<br />
-<br />
 
+<div class="one_col">
+  <table class="box">
+    <tr>
+      <th>Environment</th>
+      <th>Has Certificate?</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td>Sandbox</td>
+      <% if @app.sandbox_push_cert %>
+        <td>Yes</td>
+        <td><%= link_to 'Remove it', app_sandbox_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %></td>
+      <% else %>
+        <td>No</td>
+        <td><%= link_to 'Upload one', new_app_sandbox_push_cert_path(@app) %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td>Production</td>
+      <% if @app.production_push_cert %>
+        <td>Yes</td>
+        <td><%= link_to 'Remove it', app_production_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %></td>
+      <% else %>
+        <td>No</td>
+        <td><%= link_to 'Upload one', new_app_production_push_cert_path(@app) %></td>
+      <% end %>
+    </tr>
+  </table>
+</div>
+
+<br /><br />
 
 
   <div class="col_75 left">

@@ -75,6 +75,7 @@ OKDashboard::Application.routes.draw do
         end
         resources :achievements
         resource :sandbox_push_cert,          only: [:new, :create, :destroy]
+        resource :production_push_cert,       only: [:new, :create, :destroy]
       end
 
       resources :turns, only: [:new, :create]
