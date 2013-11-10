@@ -39,6 +39,14 @@ class PushCert
     @app_key = app_key
   end
 
+  def bundle_identifier
+    begin
+      File.read(pem_path).scan(/^subject=.*/)[0].split("\/").detect{|x| x=~/^UID*/}.split("=")[1]
+    rescue
+      nil
+    end
+  end
+
   def pem_path
     @pem_path ||= self.class.pem_path_for_app_key(@app_key)
   end
