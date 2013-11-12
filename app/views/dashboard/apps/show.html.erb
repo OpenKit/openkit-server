@@ -17,7 +17,10 @@
       <td>Sandbox</td>
       <% if @app.sandbox_push_cert %>
         <td>Yes</td>
-        <td><%= link_to 'Remove it', app_sandbox_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %></td>
+        <td>
+          <%= link_to 'Remove it', app_sandbox_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %>
+          <%= link_to 'Download test project', app_sandbox_test_project_path(@app) %>
+        </td>
       <% else %>
         <td>No</td>
         <td><%= link_to 'Upload one', new_app_sandbox_push_cert_path(@app) %></td>

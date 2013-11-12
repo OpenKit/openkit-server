@@ -20,6 +20,7 @@ gem 'oauth',        '~>0.4'
 gem 'acts-as-taggable-on', '~>2.4'
 gem 'thin',         '~>1.6'
 gem 'unf',          '~>0.1'
+gem 'mustache',     '~>0.99'
 
 group :development do
   gem 'fog'

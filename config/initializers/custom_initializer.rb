@@ -4,6 +4,8 @@ require 'paperclip_helper.rb'
 require 'two_legged_oauth'
 require 'feature_array.rb'
 require 'apple_push/apple_push.rb'
+require 'push_test_project.rb'
+
 
 module ActiveModel
   class Errors

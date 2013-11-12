@@ -76,6 +76,8 @@ OKDashboard::Application.routes.draw do
         resources :achievements
         resource :sandbox_push_cert,          only: [:new, :create, :destroy]
         resource :production_push_cert,       only: [:new, :create, :destroy]
+
+        match "sandbox_push_cert/test_project",   to: "sandbox_push_certs#test_project",  as: :sandbox_test_project,           via: :get
       end
 
       resources :turns, only: [:new, :create]

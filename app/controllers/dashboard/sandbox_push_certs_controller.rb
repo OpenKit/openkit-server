@@ -25,5 +25,20 @@ class SandboxPushCertsController < ApplicationController
       redirect_to @app, notice: 'Could not delete that push cert, contact lou@openkit.io for help.'
     end
   end
+
+  def test_project
+    if @app.sandbox_push_cert.nil?
+      render :text => "Please upload a sandbox push certificate first."
+    elsif @app.sandbox_push_cert.bundle_identifier.nil?
+      render :text => "Could not parse the bundle identifier from your push certificate.  Please contact lou@openkit.io"
+    else
+      p = PushTestProject.new(@app.sandbox_push_cert.bundle_identifier)
+      if !p.construct
+        render :text => "Could not create zip of project.  Please contact lou@openkit.io"
+      else
+        send_file p.path_to_zip
+      end
+    end
+  end
 end
 end
