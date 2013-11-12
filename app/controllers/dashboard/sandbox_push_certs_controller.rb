@@ -40,5 +40,18 @@ class SandboxPushCertsController < ApplicationController
       end
     end
   end
+
+  def test_push
+    if params['token'] && params['body']
+      @token = params['token'].to_s
+      body = params['body'].to_s
+      if !body.empty?
+        payload = {aps: {alert: body, badge: 0, sound: "default"}}
+        if PushQueue.add(@app.sandbox_push_cert.pem_path, @token, payload, true)
+          flash[:notice] = "Sending to Apple..."
+        end
+      end
+    end
+  end
 end
 end
