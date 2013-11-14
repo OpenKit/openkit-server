@@ -1,0 +1,44 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %>  <span>/</span>  Push Challenges</h1>
+</div>
+
+ <div class="box welcome">
+    <h1>Push Challenges</h1>
+    <h2>Configure your leaderboards to send push notifications as ranks change.</h2>
+
+    <div class="one_col">
+      <table class="box">
+        <tr>
+          <th>Environment</th>
+          <th>Has Certificate?</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td>Sandbox</td>
+          <% if @app.sandbox_push_cert %>
+            <td>Yes</td>
+            <td>
+              <%= link_to 'remove', app_sandbox_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %> &nbsp; | &nbsp;
+              <%= link_to 'send a test push', app_sandbox_test_push_path(@app) %>
+            </td>
+          <% else %>
+            <td>No</td>
+            <td><%= link_to 'upload', new_app_sandbox_push_cert_path(@app) %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>Production</td>
+          <% if @app.production_push_cert %>
+            <td>Yes</td>
+            <td><%= link_to 'remove', app_production_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %></td>
+          <% else %>
+            <td>No</td>
+            <td><%= link_to 'upload', new_app_production_push_cert_path(@app) %></td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+

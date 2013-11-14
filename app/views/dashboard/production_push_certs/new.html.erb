@@ -1,3 +1,10 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %> 
+    <span>/</span>  <%= link_to 'Push Challenges', app_push_notes_path(@app) %>
+    <span>/</span>  Upload Production Push Cert 
+  </h1>
+</div>
+
 <div id="push_cert_stuff">
   <% if @app.production_push_cert %>
     <div>You have already uploaded a production push cert. 

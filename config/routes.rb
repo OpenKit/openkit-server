@@ -79,13 +79,14 @@ OKDashboard::Application.routes.draw do
 
         match "sandbox_push_cert/test_project",   to: "sandbox_push_certs#test_project",  as: :sandbox_test_project,           via: :get
         match "sandbox_push_cert/test_push",      to: "sandbox_push_certs#test_push",     as: :sandbox_test_push,              via: [:get, :post]
+
+        match "push_notes",  to: "push_notes#info",  as: :push_notes,  via: :get
       end
 
       resources :turns, only: [:new, :create]
 
       match "developer_sessions",         to: "developer_sessions#destroy",  as: :logout,           via: :delete
       match "developer_sessions/new",     to: "developer_sessions#new",      as: :login,            via: :get
-      match "challenges/info",            to: "challenges#info",             as: :challenges_info,  via: :get
       root :to => 'apps#index'
     end
   end

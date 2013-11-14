@@ -1,3 +1,10 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %> 
+    <span>/</span>  <%= link_to 'Push Challenges', app_push_notes_path(@app) %>
+    <span>/</span>  Send Test Push
+  </h1>
+</div>
+
 <div>1. Download this <%= link_to 'test app', app_sandbox_test_project_path(@app) %>.
   Based on your push certificate, the bundle identifier in the test app has been set to <b><%= @app.sandbox_push_cert.bundle_identifier %></b>
 </div>

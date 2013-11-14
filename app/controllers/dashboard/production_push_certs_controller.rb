@@ -12,7 +12,7 @@ class ProductionPushCertsController < ApplicationController
     @production_push_cert.p12_pw =  params[:production_push_cert]['p12_pw']
 
     if @production_push_cert.save
-      redirect_to @app, notice: 'Production push cert was successfully created.'
+      redirect_to app_push_notes_path(@app), notice: 'Production push cert was successfully created.'
     else
       render action: 'new'
     end
@@ -20,9 +20,9 @@ class ProductionPushCertsController < ApplicationController
 
   def destroy
     if @app.production_push_cert.destroy
-      redirect_to @app, notice: 'Deleted the production push cert.'
+      redirect_to app_push_notes_path(@app), notice: 'Deleted the production push cert.'
     else
-      redirect_to @app, notice: 'Could not delete that push cert, contact lou@openkit.io for help.'
+      redirect_to app_push_notes_path(@app), notice: 'Could not delete that push cert, contact lou@openkit.io for help.'
     end
   end
 end

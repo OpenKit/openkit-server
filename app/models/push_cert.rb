@@ -56,13 +56,15 @@ class PushCert
   end
 
   def save
-    passing = true
+    passing = false
     if p12 && p12.tempfile
       passing = system("openssl pkcs12 -in #{p12.tempfile.path} -out #{pem_path} -passin pass:#{p12_pw} -nodes")
       if !passing
         FileUtils.rm(pem_path) rescue nil
         errors.add(:base, "Could not read your certificate.  Please enter the password that you used to create the .p12 file.")
       end
+    else
+      errors.add(:base, "Please upload a p12 file")
     end
     passing
   end

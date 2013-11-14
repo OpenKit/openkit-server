@@ -5,43 +5,6 @@
   <% end %>
 </div>
 
-
-<div class="one_col">
-  <table class="box">
-    <tr>
-      <th>Environment</th>
-      <th>Has Certificate?</th>
-      <th>Action</th>
-    </tr>
-    <tr>
-      <td>Sandbox</td>
-      <% if @app.sandbox_push_cert %>
-        <td>Yes</td>
-        <td>
-          <%= link_to 'remove', app_sandbox_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %> &nbsp; | &nbsp;
-          <%= link_to 'send a test push', app_sandbox_test_push_path(@app) %>
-        </td>
-      <% else %>
-        <td>No</td>
-        <td><%= link_to 'upload', new_app_sandbox_push_cert_path(@app) %></td>
-      <% end %>
-    </tr>
-    <tr>
-      <td>Production</td>
-      <% if @app.production_push_cert %>
-        <td>Yes</td>
-        <td><%= link_to 'remove', app_production_push_cert_path(@app), :method => :delete, :confirm => "Are you sure?" %></td>
-      <% else %>
-        <td>No</td>
-        <td><%= link_to 'upload', new_app_production_push_cert_path(@app) %></td>
-      <% end %>
-    </tr>
-  </table>
-</div>
-
-<br /><br />
-
-
   <div class="col_75 left">
     <div class="box no_table">
       <div class="details_header">Services</div>
@@ -56,7 +19,7 @@
         <!-- <li><%= image_tag ("invites_dash.png") %><a href="#">Smart Invites</a></li> -->
         <li>
           <%= image_tag ("push_dash.png") %>
-          <a href="<%= challenges_info_path %>">
+          <a href="<%= app_push_notes_path(@app) %>">
             <label>Push Challenges</label>
             <span>Configure your leaderboards to send push notifications as ranks change.</span>
           </a>
