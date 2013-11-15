@@ -1,0 +1,22 @@
+<%= form_for @turn, :url => :turns, :html => { :multipart => true } do |f| %>
+
+
+  <div class="field">
+    <%= f.label :meta_doc %>
+    <%= f.file_field :meta_doc %>
+  </div>
+
+  <div class="field">
+    <%= f.label :uuid %>
+    <%= f.text_field :uuid %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.text_field :user_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

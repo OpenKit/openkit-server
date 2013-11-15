@@ -1,5 +1,5 @@
 class Achievement < ActiveRecord::Base
-  attr_accessible :name, :desc, :icon, :icon_locked, :in_development, :points, :goal
+  attr_accessible :name, :desc, :icon, :icon_locked, :points, :goal
   attr_accessible :type
   #attr_accessor :user_id
   validates_presence_of :name
@@ -19,7 +19,6 @@ class Achievement < ActiveRecord::Base
       :goal => goal,
       :created_at => created_at,
       :updated_at => updated_at,
-      :in_development => in_development,
       :icon_url => PaperclipHelper.uri_for(icon, base_uri),
       :icon_locked_url => PaperclipHelper.uri_for(icon_locked, base_uri)
     }
@@ -27,8 +26,8 @@ class Achievement < ActiveRecord::Base
     fields
   end
 
-  has_attached_file :icon,        :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_icon.png'
-  has_attached_file :icon_locked, :default_url => 'http://ok-shared.s3-us-west-2.amazonaws.com/achievement_locked_icon.png'
+  has_attached_file :icon,        :default_url => 'https://ok-shared.s3-us-west-2.amazonaws.com/achievement_icon.png'
+  has_attached_file :icon_locked, :default_url => 'https://ok-shared.s3-us-west-2.amazonaws.com/achievement_locked_icon.png'
 
   def progress(user_id, sandbox)
     if sandbox

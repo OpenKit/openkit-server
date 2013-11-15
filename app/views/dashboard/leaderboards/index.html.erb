@@ -11,7 +11,6 @@
       <th>Icon</th>
       <th>Name</th>
       <th>ID</th>
-      <th>In Development?</th>
       <th>Game Center ID</th>
       <th>Google Play Games ID</th>
       <th>Tag List</th>
@@ -28,7 +27,6 @@
         <td class="icon"><%= image_tag leaderboard.icon.url, {:class=> 'leaderboard_icon'} %></td>
         <td class="name"><%= link_to leaderboard.name, [@app, leaderboard] %></td>
         <td class="id"><%= leaderboard.id %></td>
-        <td><%= leaderboard.in_development %></td>
         <td><%= leaderboard.gamecenter_id %></td>
         <td><%= leaderboard.gpg_id %></td>
         <td><%= leaderboard.tag_list %></td>

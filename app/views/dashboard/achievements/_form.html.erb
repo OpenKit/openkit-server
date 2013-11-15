@@ -43,13 +43,6 @@
     <%# image_tag @achievement.icon.url if @achievement.icon.file? %>
   <% end %>
 
-  <% if params[:action] == "edit" %>
-    <div class="field checkbox">
-      <%= f.check_box :in_development %>
-      <%= f.label :in_development %>
-    </div>
-  <% end %>
-
   <div class="actions">
     <%= f.submit %> <%= link_to 'Cancel', [@app, @achievement], {:class=> 'cancel'} %>
   </div>

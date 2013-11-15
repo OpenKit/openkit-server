@@ -1,5 +1,4 @@
 class ChangePassword
-  include ActiveModel::Validations
 
   attr_accessor :developer
   attr_accessor :current_password

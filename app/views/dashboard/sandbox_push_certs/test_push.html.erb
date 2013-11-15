@@ -1,0 +1,39 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %> 
+    <span>/</span>  <%= link_to 'Push Challenges', app_push_notes_path(@app) %>
+    <span>/</span>  Send Test Push
+  </h1>
+</div>
+
+<div>1. Download this <%= link_to 'test app', app_sandbox_test_project_path(@app) %>.
+  Based on your push certificate, the bundle identifier in the test app has been set to <b><%= @app.sandbox_push_cert.bundle_identifier %></b>
+</div>
+
+<div>
+  2. Build and run the test app on your iPhone.  If all goes well a push token will be logged to the console.
+</div>
+
+<div>
+  3. Copy the token from console and close the app.
+</div>
+
+<div>
+  4. Paste the token here and send a message to yourself!
+</div>
+
+<br />
+
+
+<%= form_tag(app_sandbox_test_push_path(@app), :method => :post) do %>
+  <div class="field">
+    <%= label_tag :token, "Token:" %>
+    <%= text_field_tag :token, @token, {:size => 100}%>
+  </div>
+  <div class="field">
+    <%= label_tag :body, "Push Body:" %>
+    <%= text_field_tag :body, '', {:size => 50} %>
+  </div>
+  <div>
+    <%= submit_tag("Send it!") %>
+  </div>
+<% end %>

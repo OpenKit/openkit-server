@@ -1,0 +1,38 @@
+<div class="header">
+  <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %> 
+    <span>/</span>  <%= link_to 'Push Challenges', app_push_notes_path(@app) %>
+    <span>/</span>  Upload Production Push Cert 
+  </h1>
+</div>
+
+<div id="push_cert_stuff">
+  <% if @app.production_push_cert %>
+    <div>You have already uploaded a production push cert. 
+    </div>
+  <% else %>
+    Upload a production push cert: 
+    <%= form_for(@production_push_cert, :url => app_production_push_cert_path) do |f| %>
+
+      <% if @production_push_cert.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@production_push_cert.errors.count, "error") %> prohibited the push cert from being saved:</h2>
+
+          <ul>
+          <% @production_push_cert.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="field">
+          <%= f.label :p12, "Production Push Cert in .p12 format:" %>
+          <%= f.file_field :p12 %>
+      </div>
+      <div class="field">
+          <%= f.label :p12_pw, "Password for .p12 file:" %>
+          <%= f.password_field :p12_pw %>
+      </div>
+      <%= f.submit %>
+    <% end %>
+  <% end %>
+</div>

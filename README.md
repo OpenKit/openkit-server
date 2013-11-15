@@ -22,6 +22,11 @@ Start server with:
 	$ rails server
 ```
 
+To start the server using a unix socket:
+```
+	$ bundle exec thin -V start --socket /tmp/thin.sock
+```
+
 License
 -------
 OpenKit Server

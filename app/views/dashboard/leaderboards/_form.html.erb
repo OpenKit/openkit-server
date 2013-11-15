@@ -55,14 +55,6 @@
     <%= f.text_field :tag_list, :value => @leaderboard.tag_list.presence || "v1" %>
   </div>
 
-  <% if params[:action] == "edit" %>
-    <div class="field checkbox">
-      <%= f.check_box :in_development %>
-      <%= f.label :in_development %>
-    </div>
-  <% end %>
-
-
   <div class="actions">
     <%= f.submit %> <%= link_to 'Cancel', [@app, @leaderboard], {:class=> 'cancel'} %>
   </div>
