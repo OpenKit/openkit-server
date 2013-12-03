@@ -87,4 +87,14 @@ namespace :maintenance do
       end
     end
   end
+
+  desc "Populate secret keys"
+  task :pop_secret => :environment do
+    STDOUT.print "You are in the #{Rails.env.upcase} environment.  Are you sure about this? (y/n) "
+    if STDIN.gets.chomp == "y"
+      App.all.each do |app|
+        app.send :store_secret_in_redis
+      end
+    end
+  end
 end
