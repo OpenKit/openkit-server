@@ -12,9 +12,10 @@
 #   $ rails c
 #   > dev = Developer.create!(:email => "end_to_end@example.com", :name => "Test Developer", :password => "password", :password_confirmation => "password")
 #   > app = dev.apps.create!(:name => "End to end test")
+#   > app.send(:remove_secret_from_redis)
 #   > app.update_attribute(:app_key, "end_to_end_test")
 #   > app.update_attribute(:secret_key, "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU")
-
+#   > app.send(:store_secret_in_redis)
 
 require 'securerandom'
 require 'net/http'
@@ -58,13 +59,15 @@ end
 
 class Req
 
+  class << self; attr_accessor :skip_https; end;
+
   def initialize
     @app_key    = "end_to_end_test"
     @secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
     @timestamp  = Time.now.to_i
     @nonce      = SecureRandom.uuid
-    @scheme     = "https"
-    @host       = "local.openkit.io"
+    @scheme     = self.class.skip_https ? "http" : "https"
+    @host       = "local.openkit.io:3000"
     @params_in_signature = {
       oauth_consumer_key:       @app_key,
       oauth_nonce:              @nonce,
@@ -179,7 +182,9 @@ class Req
       @request_body = req_params.to_json
     end
 
-    Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true unless self.class.skip_https
+    http.start do
       if is_multipart?
         flat_params = flatten_params(@req_params)
         request = Net::HTTP::Post::Multipart.new(@uri.request_uri, flat_params.merge(@upload.param_name => UploadIO.new(@upload.file, "application/octet-stream", "upload")))
@@ -268,6 +273,11 @@ def get(path, req_params = {})
   res = Req.new.get(path, req_params)
   response_log(res)
   res
+end
+
+Req.skip_https = !ENV['SSL_CERT_FILE']
+if Req.skip_https
+  puts "No SSL_CERT_FILE specified.  using http."
 end
 
 # Makes a special request to purge data associated with end_to_end_test app.  Hack.  In the future
