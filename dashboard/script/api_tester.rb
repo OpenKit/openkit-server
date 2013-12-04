@@ -1,21 +1,22 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 #
+# Setup:
+#   $ rake maintenance:api_test_setup
+#
 # Usage:
+#   $ script/api_tester.rb
+#
+# Without built-in server:
+#   $ HOST=localhost:3000 script/api_tester.rb
+#
+# With ssl:
 #   $ <start-nginx>
 #   $ bundle exec thin -V start --socket /tmp/thin.sock
-#   $ SSL_CERT_FILE="ok_wildcard.pem" script/api_tester.rb
+#   $ HOST=localhost SSL_CERT_FILE="ok_wildcard.pem" script/api_tester.rb
+#
 # Notes:
 #   * Ruby wants the cert in pem format.
-#
-# Setup:
-#   $ rails c
-#   > dev = Developer.create!(:email => "end_to_end@example.com", :name => "Test Developer", :password => "password", :password_confirmation => "password")
-#   > app = dev.apps.create!(:name => "End to end test")
-#   > app.send(:remove_secret_from_redis)
-#   > app.update_attribute(:app_key, "end_to_end_test")
-#   > app.update_attribute(:secret_key, "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU")
-#   > app.send(:store_secret_in_redis)
 
 require 'securerandom'
 require 'net/http'
@@ -25,6 +26,19 @@ require 'base64'
 require 'cgi'
 require 'json'
 require 'debugger'
+
+if !ENV['HOST']
+  puts "Starting thin..."
+  Dir.chdir(File.expand_path('../..', __FILE__)) do
+    @io = IO.popen("bundle exec thin start -p 3003")
+  end
+
+  while line = @io.gets
+    print line
+    break if line =~ /^Listening on/
+  end
+  sleep 0.2
+end
 
 
 class Upload
@@ -67,7 +81,7 @@ class Req
     @timestamp  = Time.now.to_i
     @nonce      = SecureRandom.uuid
     @scheme     = self.class.skip_https ? "http" : "https"
-    @host       = "local.openkit.io:3000"
+    @host       = ENV["HOST"] || "local.openkit.io:3003"
     @params_in_signature = {
       oauth_consumer_key:       @app_key,
       oauth_nonce:              @nonce,
@@ -349,4 +363,9 @@ meta_path = File.expand_path(File.join(File.dirname(__FILE__), 'immafile.txt'))
 upload = Upload.new "score[meta_doc]", meta_path
 multi_post '/v1/scores', { score: {leaderboard_id: low_board['id'], user_id: user1['id'], value: 11 }}, upload
 
+if defined?(@io)
+  Process.kill("INT", @io.pid)
+  Process.waitpid(@io.pid)
+  @io.close
+end
 
