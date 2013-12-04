@@ -27,7 +27,7 @@ class UserTest < ActiveSupport::TestCase
 
     @user = authorized_app.find_or_create_subscribed_user(user_params)
     assert_equal 1,   User.count
-    assert_equal 123, User.first.custom_id
+    assert_equal '123', User.first.custom_id
   end
 
   test "should require custom_id, twitter_id, fb_id, or google_id" do

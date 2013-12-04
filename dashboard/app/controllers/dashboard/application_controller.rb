@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_app
-    @app = params[:app_id] && current_developer.apps.find(params[:app_id].to_s)  # to_s because we use slug on app
+    @app = params[:app_id] && current_developer.apps.friendly.find(params[:app_id].to_s)  # to_s because we use slug on app
     if !@app
       render :status => :forbidden, :text => "Forbidden"
     end

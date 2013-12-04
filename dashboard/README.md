@@ -14,12 +14,12 @@ Start delayed _ job locally with:
 
 See a list of all rake-able jobs:
 ```
-	$ bundle exec rake -T
+	$ bin/rake -T
 ```
 
 Start server with:
 ```
-	$ rails server
+	$ bin/rails server
 ```
 
 To start the server using a unix socket:

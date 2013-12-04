@@ -13,11 +13,11 @@ OKDashboard::Application.routes.draw do
       end
       resources :features,                only:  [:index]
 
-      match "client_sessions",            to: "client_sessions#create",  via: :post
-      match "best_scores",                to: "best_scores#index",       via: :get
-      match "best_scores/user",           to: "best_scores#user",        via: :get
-      match "best_scores/social",         to: "best_scores#social",      via: :post
-      match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
+      post 'client_sessions',           to: 'client_sessions#create'
+      get 'best_scores',                to: 'best_scores#index'
+      get 'best_scores/user',           to: 'best_scores#user'
+      post 'best_scores/social',        to: 'best_scores#social'
+      delete '/purge_test_data',        to: 'apps#purge_test_data'
     end
 
     constraints :subdomain => /^$|(?:beta-)?(?:api|sandbox|local)/ do
@@ -35,10 +35,10 @@ OKDashboard::Application.routes.draw do
         resources :achievement_scores,      only:  [:create]
         resources :leaderboards,            only:  [:create, :index, :show]
 
-        match "best_scores",                to: "best_scores#index",       via: :get
-        match "best_scores/user",           to: "best_scores#user",        via: :get
-        match "best_scores/social",         to: "best_scores#social",      via: :post
-        match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
+        get 'best_scores',                to: 'best_scores#index'
+        get 'best_scores/user',           to: 'best_scores#user'
+        post 'best_scores/social',        to: 'best_scores#social'
+        delete '/purge_test_data',        to: 'apps#purge_test_data'
       end
     end
 
@@ -51,10 +51,10 @@ OKDashboard::Application.routes.draw do
         resources :achievement_scores,      only:  [:create]
         resources :leaderboards,            only:  [:create, :index]
 
-        match "best_scores",                to: "best_scores#index",       via: :get
-        match "best_scores/user",           to: "best_scores#user",        via: :get
-        match "best_scores/social",         to: "best_scores#social",      via: :post
-        match "/purge_test_data",           to: "apps#purge_test_data",    via: :delete
+        get 'best_scores',                to: 'best_scores#index'
+        get 'best_scores/user',           to: 'best_scores#user'
+        post 'best_scores/social',        to: 'best_scores#social'
+        delete '/purge_test_data',        to: 'apps#purge_test_data'
       end
     end
   end
@@ -77,23 +77,23 @@ OKDashboard::Application.routes.draw do
         resource :sandbox_push_cert,          only: [:new, :create, :destroy]
         resource :production_push_cert,       only: [:new, :create, :destroy]
 
-        match "sandbox_push_cert/test_project",   to: "sandbox_push_certs#test_project",  as: :sandbox_test_project,           via: :get
-        match "sandbox_push_cert/test_push",      to: "sandbox_push_certs#test_push",     as: :sandbox_test_push,              via: [:get, :post]
+        get 'sandbox_push_cert/test_project',  to: 'sandbox_push_certs#test_project',  as: :sandbox_test_project
+        match 'sandbox_push_cert/test_push',   via: [:get, :post],  to: 'sandbox_push_certs#test_push', as: :sandbox_test_push
 
-        match "push_notes",  to: "push_notes#info",  as: :push_notes,  via: :get
+        get 'push_notes',  to: 'push_notes#info',  as: :push_notes
       end
 
       resources :turns, only: [:new, :create]
 
-      match "developer_sessions",         to: "developer_sessions#destroy",  as: :logout,           via: :delete
-      match "developer_sessions/new",     to: "developer_sessions#new",      as: :login,            via: :get
+      delete 'developer_sessions',      to: 'developer_sessions#destroy',  as: :logout
+      get 'developer_sessions/new',     to: 'developer_sessions#new',      as: :login
       root :to => 'apps#index'
     end
   end
 
-  match '/404',  constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
-  match '/500',  constraints: {:format => :json}, to: proc {|env| [500, {}, [{message: "Internal Server Error."}.to_json]]}
+  match '/404',  via: :all, constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Sorry, that doesn't exist."}.to_json]]}
+  match '/500',  via: :all, constraints: {:format => :json}, to: proc {|env| [500, {}, [{message: "Internal Server Error."}.to_json]]}
 
   # Catch all.
-  match '*path', constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Nothing exists at that path."}.to_json]]}
+  match '*path', via: :all, constraints: {:format => :json}, to: proc {|env| [404, {}, [{message: "Nothing exists at that path."}.to_json]]}
 end

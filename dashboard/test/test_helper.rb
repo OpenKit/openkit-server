@@ -13,4 +13,5 @@ class ActiveSupport::TestCase
 end
 
 require 'authlogic/test_case'
+include Authlogic::TestCase
 require 'mocha/setup'
