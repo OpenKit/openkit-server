@@ -30,6 +30,7 @@ Prepare rails project:
 	bundle install
 	bin/rake setup:prereqs
 	bin/rake db:setup
+	bin/rake db:test:prepare
 	bin/rake test
 
 
