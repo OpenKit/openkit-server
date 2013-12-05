@@ -2,11 +2,8 @@
   <h1><%= link_to 'Your Apps', apps_path %> <span>/</span> <%= link_to @app.name, @app %>  <span>/</span>  Push Challenges</h1>
 </div>
 
- <div class="box welcome">
-    <h1>Push Challenges</h1>
-    <h2>Configure your leaderboards to send push notifications as ranks change.</h2>
+ <div class="col_75 left">
 
-    <div class="one_col">
       <table class="box">
         <tr>
           <th>Environment</th>
@@ -37,8 +34,13 @@
           <% end %>
         </tr>
       </table>
-    </div>
-  </div>
+
 </div>
 
+<div class="col_25 right">
+  <div class="box details">
+    <div class="details_header">What are Push Challenges?</div>
+    <ul><li>Configure your leaderboards to send push notifications as ranks change.</li></ul>
+  </div> 
+</div>
 
