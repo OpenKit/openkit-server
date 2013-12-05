@@ -1,3 +1,5 @@
+# To run only this test:
+# $ ruby -Itest test/unit/user_test.rb
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
