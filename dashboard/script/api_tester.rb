@@ -2,7 +2,7 @@
 # encoding: utf-8
 #
 # Setup:
-#   $ rake maintenance:api_test_setup
+#   $ rake setup:api_test_app
 #
 # Usage:
 #   $ script/api_tester.rb
