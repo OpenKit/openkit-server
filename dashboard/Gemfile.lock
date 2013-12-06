@@ -200,7 +200,6 @@ DEPENDENCIES
   hiredis (~> 0.4)
   jquery-rails
   json (~> 1.7)
-  minitest (~> 4.7)
   mocha
   mustache (~> 0.99)
   mysql2 (~> 0.3)

@@ -39,9 +39,9 @@ module OKDashboard
 
     I18n.enforce_available_locales = false
 
-    config.generators do |g|
-      g.test_framework :mini_test, spec: false, fixture: false
-    end
+    #config.generators do |g|
+    #  g.test_framework :mini_test, spec: true, fixture: false
+    #end
 
     if OKConfig[:s3_attachment_bucket]
       config.paperclip_defaults = {
