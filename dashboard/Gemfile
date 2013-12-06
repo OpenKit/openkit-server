@@ -8,7 +8,7 @@ gem 'protected_attributes'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2',       '~>0.3'
-gem 'authlogic',    '~>3.3'
+gem 'authlogic',    :git => 'git://github.com/binarylogic/authlogic.git', :ref => 'abc0997'
 gem 'friendly_id',  '~>5.0'
 gem 'paperclip',    '~>3.3'
 gem 'delayed_job',  '~>4.0'

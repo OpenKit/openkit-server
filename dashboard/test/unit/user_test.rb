@@ -21,7 +21,7 @@ class UserTest < ActiveSupport::TestCase
   test "can create via custom_id" do
     assert_equal 0, User.count
 
-    authorized_app = App.find_by_app_key(@app_key)
+    authorized_app = App.find_by(app_key: @app_key)
     user_params = {
       :nick => 'Foo',
       :custom_id => '123'
@@ -33,7 +33,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should require custom_id, twitter_id, fb_id, or google_id" do
-    authorized_app = App.find_by_app_key(@app_key)
+    authorized_app = App.find_by(app_key: @app_key)
 
     user = authorized_app.find_or_create_subscribed_user({:nick => 'Foo'})
     assert user.new_record?

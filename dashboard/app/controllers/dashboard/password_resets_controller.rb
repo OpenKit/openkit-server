@@ -7,7 +7,7 @@ class PasswordResetsController < ApplicationController
   end
 
   def create
-    @developer = Developer.find_by_email(params[:email].to_s)
+    @developer = Developer.find_by(emil: params[:email].to_s)
     if @developer
       @developer.deliver_password_reset_instructions!
       flash[:notice] = "Instructions have been sent.  Please check your spam folder if you do not see an email from us within a few minutes."

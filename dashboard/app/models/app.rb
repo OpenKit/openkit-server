@@ -33,11 +33,11 @@ class App < ActiveRecord::Base
   # on user_params. If user already exists, subscribe him/her to this app.  If
   # user does not yet exist, create both the user and the subscription.
   def find_or_create_subscribed_user(user_params)
-    u = (user_params[:fb_id]      && developer.users.find_by_fb_id(user_params[:fb_id].to_s)) ||
-        (user_params[:twitter_id] && developer.users.find_by_twitter_id(user_params[:twitter_id].to_s)) ||
-        (user_params[:google_id]  && developer.users.find_by_google_id(user_params[:google_id].to_s)) ||
-        (user_params[:custom_id]  && developer.users.find_by_custom_id(user_params[:custom_id].to_s)) ||
-        (user_params[:gamecenter_id]  && developer.users.find_by_gamecenter_id(user_params[:gamecenter_id].to_s))
+    u = (user_params[:fb_id]      && developer.users.find_by(fb_id: user_params[:fb_id].to_s)) ||
+        (user_params[:twitter_id] && developer.users.find_by(twitter_id: user_params[:twitter_id].to_s)) ||
+        (user_params[:google_id]  && developer.users.find_by(google_id: user_params[:google_id].to_s))||
+        (user_params[:custom_id]  && developer.users.find_by(custom_id: user_params[:custom_id].to_s)) ||
+        (user_params[:gamecenter_id]  && developer.users.find_by(gamecenter_id: user_params[:gamecenter_id].to_s))
 
     if !u
       u = developer.users.create(user_params)
@@ -75,7 +75,7 @@ class App < ActiveRecord::Base
   def set_app_key
     begin
       self.app_key = OAuth::Helper.generate_key(20)[0, 20]
-    end until App.count(:conditions => {:app_key => self.app_key}) == 0
+    end until App.where(:app_key => self.app_key).count == 0
   end
 
   def set_secret_key

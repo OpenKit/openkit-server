@@ -18,9 +18,9 @@ class TwoLeggedOAuth
       # Either authorized_app is set via old API whitelist, or access denied.
       if request.host == "stage.openkit.io"
         app_key = request.params["app_key"] || (env["action_dispatch.request.request_parameters"] && env["action_dispatch.request.request_parameters"]["app_key"])
-        if app_key && ::ApiWhitelist.find(:first, :conditions => {app_key: app_key, version: "0.8"})
+        if app_key && ::ApiWhitelist.where({app_key: app_key, version: "0.8"}).first
           # Made it!
-          request.env[:authorized_app] = App.find_by_app_key(app_key)
+          request.env[:authorized_app] = App.find_by(app_key: app_key)
           return @app.call(env)
         else
           return [401, {}, ["The developer dashboard is now at developer.openkit.io.  Please email team@openkit.io for help."]]
@@ -43,7 +43,7 @@ class TwoLeggedOAuth
         return [401, {}, ["Unauthorized. Please use OAuth 1.0"]]
       end
 
-      authorizing_app = App.find_by_app_key(req_proxy.consumer_key)
+      authorizing_app = App.find_by(app_key: req_proxy.consumer_key)
       [nil, authorizing_app && authorizing_app.secret_key]
     end
 

@@ -27,6 +27,8 @@ System dependencies:
 
 Prepare rails project:
 
+	git clone git@github.com:OpenKit/openkit-server.git
+	cd openkit-server/dashboard
 	bundle install
 	bin/rake setup:prereqs
 	bin/rake db:setup

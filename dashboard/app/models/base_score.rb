@@ -207,7 +207,7 @@ module BaseScore
 
     # index_scores_composite_2
     def is_users_best
-      !self.class.find(:first, :conditions => ["leaderboard_id = ? AND user_id = ? AND sort_value > ? ", leaderboard_id, user_id, sort_value])
+      !self.class.where("leaderboard_id = ? AND user_id = ? AND sort_value > ? ", leaderboard_id, user_id, sort_value).first
     end
   end
 end
