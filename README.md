@@ -32,8 +32,18 @@ Prepare rails project:
 	bundle install
 	bin/rake setup:prereqs
 	bin/rake db:setup
+
+Testing:
+
 	bin/rake db:test:prepare
 	bin/rake test
+
+Testing with Zeus:
+
+	bin/rake db:test:prepare
+    gem install zeus
+    zeus start
+    zeus t
 
 
 For running api_tester:
