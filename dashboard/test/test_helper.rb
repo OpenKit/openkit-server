@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path("../../config/environment", __FILE__)
 require "rails/test_help"
+require 'minitest/spec'
 
 
 # Uncomment for awesome colorful output
@@ -14,3 +15,8 @@ end
 require 'authlogic/test_case'
 include Authlogic::TestCase
 require 'mocha/setup'
+
+Turn.config do |c|
+ c.format  = :outline
+ c.natural = true
+end

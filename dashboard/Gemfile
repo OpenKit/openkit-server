@@ -36,6 +36,7 @@ end
 
 group :test do
   gem 'mocha', :require => false
+  gem 'turn'
 end
 
 group :development, :test do

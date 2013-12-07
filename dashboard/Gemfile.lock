@@ -36,6 +36,7 @@ GEM
       tzinfo (~> 0.3.37)
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
+    ansi (1.4.3)
     arel (4.0.1)
     atomic (1.1.14)
     aws-sdk (1.29.0)
@@ -171,6 +172,8 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
+    turn (0.9.6)
+      ansi
     tzinfo (0.3.38)
     uglifier (2.3.2)
       execjs (>= 0.3.0)
@@ -214,6 +217,7 @@ DEPENDENCIES
   sqlite3
   therubyracer
   thin (~> 1.6)
+  turn
   uglifier (>= 1.3.0)
   unf (~> 0.1)
   what_methods
