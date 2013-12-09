@@ -21,6 +21,8 @@
 require File.expand_path("../../../clients/ruby/openkit.rb", __FILE__)
 
 #require 'debugger'
+Req.app_key = "end_to_end_test"
+Req.secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
 
 if !ENV['HOST']
   puts "Starting thin..."
@@ -35,6 +37,9 @@ if !ENV['HOST']
   sleep 0.2
 end
 
+def yellow(msg)
+  printf "\n\e[33m #{msg} \e[0m\n"
+end
 
 def blue(msg)
   printf "\n\e[44m #{msg} \e[0m\n"
@@ -90,7 +95,7 @@ end
 
 Req.skip_https = !ENV['SSL_CERT_FILE']
 if Req.skip_https
-  puts "No SSL_CERT_FILE specified.  using http."
+  yellow "No SSL_CERT_FILE specified.  using http."
 end
 
 # Makes a special request to purge data associated with end_to_end_test app.  Hack.  In the future

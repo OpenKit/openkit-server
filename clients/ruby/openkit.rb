@@ -39,17 +39,18 @@ end
 
 class Req
 
-  class << self; attr_accessor :skip_https; end;
+  class << self
+    attr_accessor :skip_https
+    attr_accessor :app_key, :secret_key
+  end
 
   def initialize
-    @app_key    = "end_to_end_test"
-    @secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
     @timestamp  = Time.now.to_i
     @nonce      = SecureRandom.uuid
     @scheme     = self.class.skip_https ? "http" : "https"
     @host       = ENV["HOST"] || "local.openkit.io:3003"
     @params_in_signature = {
-      oauth_consumer_key:       @app_key,
+      oauth_consumer_key:       self.class.app_key,
       oauth_nonce:              @nonce,
       oauth_signature_method:   'HMAC-SHA1',
       oauth_timestamp:          @timestamp,
@@ -183,12 +184,12 @@ class Req
 
 
   def authorization_header
-    %|OAuth oauth_consumer_key="#{@app_key}", oauth_nonce="#{@nonce}", oauth_signature="#{escape(signature)}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="#{@timestamp}", oauth_version="1.0"|
+    %|OAuth oauth_consumer_key="#{self.class.app_key}", oauth_nonce="#{@nonce}", oauth_signature="#{escape(signature)}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="#{@timestamp}", oauth_version="1.0"|
   end
 
   def signature
     signatureBaseString = "#{@verb.to_s.upcase}&#{escape(base_uri + @uri.path)}&#{escape(params_string_for_signature)}"
-    k = "#{@secret_key}&"  # <-- note the &
+    k = "#{self.class.secret_key}&"  # <-- note the &
     hmac = Digest::HMAC.digest(signatureBaseString, k, Digest::SHA1)
     Base64.encode64(hmac).chomp
   end
