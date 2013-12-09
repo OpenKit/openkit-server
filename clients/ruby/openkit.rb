@@ -84,6 +84,38 @@ module OpenKit
       @scheme + "://" + @host
     end
 
+    def request(verb, path, query_params, req_params)
+      @verb = verb
+      @path = path
+      @query_params = query_params
+      @req_params = req_params
+
+      if is_get?
+        @params_in_signature.merge!(@query_params)
+      end
+
+      if is_put? || is_post?
+        @request_body = req_params.to_json
+      end
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true unless self.class.skip_https
+      http.start do
+        if is_multipart?
+          flat_params = flatten_params(@req_params)
+          request = Net::HTTP::Post::Multipart.new(@uri.request_uri, flat_params.merge(@upload.param_name => UploadIO.new(@upload.file, "application/octet-stream", "upload")))
+        else
+          request = net_klass.new(@uri.request_uri)
+          request.set_body_internal(@request_body) if @request_body
+          request['Content-Type'] = "application/json; charset=utf-8"
+        end
+        request['Accept'] = "application/json"
+        request['Authorization'] = authorization_header
+        response = http.request(request)
+        @upload.close if @upload
+        response
+      end
+    end
 
     private
     def params_to_query(h)
@@ -146,40 +178,6 @@ module OpenKit
       is_put?    && Net::HTTP::Put    ||
       is_delete? && Net::HTTP::Delete ||
       (raise "Doing it wrong.")
-    end
-
-
-    def request(verb, path, query_params, req_params)
-      @verb = verb
-      @path = path
-      @query_params = query_params
-      @req_params = req_params
-
-      if is_get?
-        @params_in_signature.merge!(@query_params)
-      end
-
-      if is_put? || is_post?
-        @request_body = req_params.to_json
-      end
-
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true unless self.class.skip_https
-      http.start do
-        if is_multipart?
-          flat_params = flatten_params(@req_params)
-          request = Net::HTTP::Post::Multipart.new(@uri.request_uri, flat_params.merge(@upload.param_name => UploadIO.new(@upload.file, "application/octet-stream", "upload")))
-        else
-          request = net_klass.new(@uri.request_uri)
-          request.set_body_internal(@request_body) if @request_body
-          request['Content-Type'] = "application/json; charset=utf-8"
-        end
-        request['Accept'] = "application/json"
-        request['Authorization'] = authorization_header
-        response = http.request(request)
-        @upload.close if @upload
-        response
-      end
     end
 
 
