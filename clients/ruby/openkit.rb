@@ -20,6 +20,14 @@ require 'pp'
 #   response = Req.new.multipart_post('/v1/scores', {:score => {:value => 100}}, upload
 module OpenKit
 
+  class Config
+    class << self
+      attr_accessor :app_key, :secret_key
+      attr_accessor :skip_https
+    end
+  end
+
+
   class Upload
     attr_accessor :param_name, :filepath
 
@@ -37,27 +45,23 @@ module OpenKit
     end
   end
 
-  class Request
 
-    class << self
-      attr_accessor :skip_https
-      attr_accessor :app_key, :secret_key
-    end
+  class Request
+    attr_accessor :upload
 
     def initialize
       @timestamp  = Time.now.to_i
       @nonce      = SecureRandom.uuid
-      @scheme     = self.class.skip_https ? "http" : "https"
+      @scheme     = Config.skip_https ? "http" : "https"
       @host       = ENV["HOST"] || "local.openkit.io:3003"
       @params_in_signature = {
-        oauth_consumer_key:       self.class.app_key,
+        oauth_consumer_key:       Config.app_key,
         oauth_nonce:              @nonce,
         oauth_signature_method:   'HMAC-SHA1',
         oauth_timestamp:          @timestamp,
         oauth_version:            '1.0',
       }
     end
-
 
     def get(path, query_params = {})
       request(:get, path, query_params, nil)
@@ -99,7 +103,7 @@ module OpenKit
       end
 
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true unless self.class.skip_https
+      http.use_ssl = true unless Config.skip_https
       http.start do
         if is_multipart?
           flat_params = flatten_params(@req_params)
@@ -180,14 +184,13 @@ module OpenKit
       (raise "Doing it wrong.")
     end
 
-
     def authorization_header
-      %|OAuth oauth_consumer_key="#{self.class.app_key}", oauth_nonce="#{@nonce}", oauth_signature="#{escape(signature)}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="#{@timestamp}", oauth_version="1.0"|
+      %|OAuth oauth_consumer_key="#{Config.app_key}", oauth_nonce="#{@nonce}", oauth_signature="#{escape(signature)}", oauth_signature_method="HMAC-SHA1", oauth_timestamp="#{@timestamp}", oauth_version="1.0"|
     end
 
     def signature
       signatureBaseString = "#{@verb.to_s.upcase}&#{escape(base_uri + @uri.path)}&#{escape(params_string_for_signature)}"
-      k = "#{self.class.secret_key}&"  # <-- note the &
+      k = "#{Config.secret_key}&"  # <-- note the &
       hmac = Digest::HMAC.digest(signatureBaseString, k, Digest::SHA1)
       Base64.encode64(hmac).chomp
     end
