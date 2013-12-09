@@ -37,7 +37,7 @@ module OpenKit
     end
   end
 
-  class Req
+  class Request
 
     class << self
       attr_accessor :skip_https
