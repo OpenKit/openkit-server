@@ -1,3 +1,19 @@
+# API
+# ===
+#
+# Get:
+#   response = OpenKit::Request.get('/v1/leaderboards')
+#
+# Post:
+#   response = OpenKit::Request.post('/v1/users', {:nick => 'lou'})
+#
+# Put:
+#   response = OpenKit::Request.put('/v1/users/:id', {:nick => 'lou z'})
+#
+# Multipart Post:
+#   upload = Upload.new('score[meta_doc]', 'path-to-file')    # The first param is the form param name to use for the file
+#   response = OpenKit::Request.multipart_post('/v1/scores', {:score => {:value => 100}}, upload
+#
 require 'securerandom'
 require 'net/http'
 require 'net/http/post/multipart'
@@ -7,17 +23,7 @@ require 'cgi'
 require 'json'
 require 'pp'
 
-# API:
-#
-# Get:
-#   response = Req.new.get('/v1/leaderboards')
-# Post:
-#   response = Req.new.post('/v1/users', {:nick => 'lou'})
-# Put:
-#   response = Req.new.put('/v1/users/:id', {:nick => 'lou z'})
-# Multipart Post:
-#   upload = Upload.new('score[meta_doc]', 'path-to-file')    # The first param is the form param name to use for the file
-#   response = Req.new.multipart_post('/v1/scores', {:score => {:value => 100}}, upload
+
 module OpenKit
 
   class Config
@@ -63,25 +69,28 @@ module OpenKit
       }
     end
 
-    def get(path, query_params = {})
-      request(:get, path, query_params, nil)
-    end
+    class << self
+      def get(path, query_params = {})
+        new.request(:get, path, query_params, nil)
+      end
 
-    def delete(path)
-      request(:delete, path, nil, nil)
-    end
+      def delete(path)
+        new.request(:delete, path, nil, nil)
+      end
 
-    def put(path, req_params)
-      request(:put, path, nil, req_params)
-    end
+      def put(path, req_params)
+        new.request(:put, path, nil, req_params)
+      end
 
-    def post(path, req_params)
-      request(:post, path, nil, req_params)
-    end
+      def post(path, req_params)
+        new.request(:post, path, nil, req_params)
+      end
 
-    def multipart_post(path, req_params, upload)
-      @upload = upload
-      request(:post, path, nil, req_params)
+      def multipart_post(path, req_params, upload)
+        r = new
+        r.upload = upload
+        r.request(:post, path, nil, req_params)
+      end
     end
 
     def base_uri
