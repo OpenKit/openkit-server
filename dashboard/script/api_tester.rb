@@ -18,7 +18,7 @@
 # Notes:
 #   * Ruby wants the cert in pem format.
 
-require File.expand_path("../../../clients/ruby/openkit.rb", __FILE__)
+require File.expand_path("../../../clients/ruby/lib/openkit.rb", __FILE__)
 require File.expand_path("../../lib/color_print.rb", __FILE__)
 include ColorPrint
 
@@ -57,35 +57,35 @@ end
 
 def post(path, req_params = {})
   blue "Response from POST to #{path}:"
-  res = OpenKit::Request.post(path, req_params)
+  res = OpenKit::Post.to(path, req_params)
   response_log(res)
   res
 end
 
 def multi_post(path, req_params, upload)
   blue "Response from Multipart POST to #{path}:"
-  res = OpenKit::Request.multipart_post(path, req_params, upload)
+  res = OpenKit::PostMultipart.to(path, req_params, upload)
   response_log(res)
   res
 end
 
 def delete(path)
   blue "Response from DELETE to #{path}:"
-  res = OpenKit::Request.delete(path)
+  res = OpenKit::Delete.from(path)
   response_log(res)
   res
 end
 
 def put(path, req_params = {})
   blue "Response from PUT to #{path}:"
-  res = OpenKit::Request.put(path, req_params)
+  res = OpenKit::Put.to(path, req_params)
   response_log(res)
   res
 end
 
 def get(path, req_params = {})
   blue "Response from GET to path #{path} with params: #{req_params.inspect}:"
-  res = OpenKit::Request.get(path, req_params)
+  res = OpenKit::Get.from(path, req_params)
   response_log(res)
   res
 end
