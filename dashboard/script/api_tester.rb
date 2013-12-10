@@ -19,13 +19,20 @@
 #   * Ruby wants the cert in pem format.
 
 require File.expand_path("../../../clients/ruby/openkit.rb", __FILE__)
+require File.expand_path("../../lib/color_print.rb", __FILE__)
+include ColorPrint
 
-#require 'debugger'
-Req.app_key = "end_to_end_test"
-Req.secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
+OpenKit::Config.app_key = "end_to_end_test"
+OpenKit::Config.secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
+OpenKit::Config.skip_https = !ENV['SSL_CERT_FILE']
+
+if OpenKit::Config.skip_https
+  yellow "No SSL_CERT_FILE specified.  using http."
+end
+
 
 if !ENV['HOST']
-  puts "Starting thin..."
+  yellow "HOST not specified.  Starting thin..."
   Dir.chdir(File.expand_path('../..', __FILE__)) do
     @io = IO.popen("bundle exec thin start -p 3003")
   end
@@ -37,17 +44,6 @@ if !ENV['HOST']
   sleep 0.2
 end
 
-def yellow(msg)
-  printf "\n\e[33m #{msg} \e[0m\n"
-end
-
-def blue(msg)
-  printf "\n\e[44m #{msg} \e[0m\n"
-end
-
-def red(msg)
-  printf "\n\e[41m #{msg} \e[0m\n"
-end
 
 def response_log(res)
   if res.code !~ /^20./
@@ -55,47 +51,43 @@ def response_log(res)
   end
   if res.body && res.body != " "  # When using 'head :ok', we get a response body of a single space.  Not sure why.
     pp JSON.parse(res.body)
+    print "\n"
   end
 end
 
 def post(path, req_params = {})
   blue "Response from POST to #{path}:"
-  res = Req.new.post(path, req_params)
+  res = OpenKit::Request.post(path, req_params)
   response_log(res)
   res
 end
 
 def multi_post(path, req_params, upload)
   blue "Response from Multipart POST to #{path}:"
-  res = Req.new.multipart_post(path, req_params, upload)
+  res = OpenKit::Request.multipart_post(path, req_params, upload)
   response_log(res)
   res
 end
 
 def delete(path)
   blue "Response from DELETE to #{path}:"
-  res = Req.new.delete(path)
+  res = OpenKit::Request.delete(path)
   response_log(res)
   res
 end
 
 def put(path, req_params = {})
   blue "Response from PUT to #{path}:"
-  res = Req.new.put(path, req_params)
+  res = OpenKit::Request.put(path, req_params)
   response_log(res)
   res
 end
 
 def get(path, req_params = {})
   blue "Response from GET to path #{path} with params: #{req_params.inspect}:"
-  res = Req.new.get(path, req_params)
+  res = OpenKit::Request.get(path, req_params)
   response_log(res)
   res
-end
-
-Req.skip_https = !ENV['SSL_CERT_FILE']
-if Req.skip_https
-  yellow "No SSL_CERT_FILE specified.  using http."
 end
 
 # Makes a special request to purge data associated with end_to_end_test app.  Hack.  In the future
@@ -164,7 +156,7 @@ get '/v1/features'
 
 # Post a score with metadata document
 meta_path = File.expand_path(File.join(File.dirname(__FILE__), 'immafile.txt'))
-upload = Upload.new "score[meta_doc]", meta_path
+upload = OpenKit::Upload.new "score[meta_doc]", meta_path
 multi_post '/v1/scores', { score: {leaderboard_id: low_board['id'], user_id: user1['id'], value: 11 }}, upload
 
 if defined?(@io)
