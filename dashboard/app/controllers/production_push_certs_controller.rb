@@ -1,4 +1,3 @@
-module Dashboard
 class ProductionPushCertsController < ApplicationController
   before_filter :set_app
 
@@ -25,5 +24,4 @@ class ProductionPushCertsController < ApplicationController
       redirect_to app_push_notes_path(@app), notice: 'Could not delete that push cert, contact lou@openkit.io for help.'
     end
   end
-end
 end

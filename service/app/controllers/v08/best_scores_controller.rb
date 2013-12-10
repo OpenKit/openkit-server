@@ -1,4 +1,4 @@
-module Api::V08
+module V08
 class BestScoresController < ApplicationController
   before_filter :set_leaderboard
 

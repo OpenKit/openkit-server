@@ -1,4 +1,3 @@
-module Dashboard
 class SandboxPushCertsController < ApplicationController
   before_filter :set_app
 
@@ -53,5 +52,4 @@ class SandboxPushCertsController < ApplicationController
       end
     end
   end
-end
 end

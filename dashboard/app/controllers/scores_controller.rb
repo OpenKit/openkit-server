@@ -1,4 +1,3 @@
-module Dashboard
 class ScoresController < ApplicationController
 
   def destroy
@@ -10,5 +9,4 @@ class ScoresController < ApplicationController
       redirect_to root_url, notice: "You can't delete that score."
     end
   end
-end
 end

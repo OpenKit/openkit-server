@@ -1,4 +1,3 @@
-module Dashboard
 class AchievementsController < ApplicationController
   before_filter :set_app
 
@@ -51,5 +50,4 @@ class AchievementsController < ApplicationController
     end
     redirect_to app_achievements_url(@app), notice: notice
   end
-end
 end

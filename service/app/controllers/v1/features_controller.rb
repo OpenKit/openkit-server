@@ -1,4 +1,4 @@
-module Api::V1
+module V1
   class FeaturesController < ApplicationController
     def index
       render :json => authorized_app.features

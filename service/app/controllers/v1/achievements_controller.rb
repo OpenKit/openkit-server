@@ -1,4 +1,4 @@
-module Api::V1
+module V1
 class AchievementsController < ApplicationController
 
   def index

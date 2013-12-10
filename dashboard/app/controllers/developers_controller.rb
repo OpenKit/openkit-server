@@ -1,4 +1,3 @@
-module Dashboard
 class DevelopersController < ApplicationController
   # Nothing required to hit the signup page.
   skip_before_filter :require_login, :only => [:new, :create]
@@ -44,5 +43,4 @@ class DevelopersController < ApplicationController
       render :text => "Forbidden", :status => :forbidden
     end
   end
-end
 end

@@ -1,4 +1,4 @@
-module Api::V09
+module V09
 class AppsController < ApplicationController
 
   def purge_test_data

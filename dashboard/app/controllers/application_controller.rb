@@ -1,4 +1,3 @@
-module Dashboard
 class ApplicationController < ActionController::Base
   layout 'application'
   protect_from_forgery
@@ -46,5 +45,4 @@ class ApplicationController < ActionController::Base
       render :status => :forbidden, :text => "Forbidden"
     end
   end
-end
 end

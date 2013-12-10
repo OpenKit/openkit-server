@@ -1,4 +1,3 @@
-module Dashboard
 class LeaderboardsController < ApplicationController
   before_filter :set_app
 
@@ -64,5 +63,4 @@ class LeaderboardsController < ApplicationController
       redirect_to :back, notice: "Could not find a leaderboard with that ID."
     end
   end
-end
 end

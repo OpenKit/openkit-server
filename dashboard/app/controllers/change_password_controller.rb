@@ -1,4 +1,3 @@
-module Dashboard
 class ChangePasswordController < ApplicationController
 
   # GET /change_password/new
@@ -16,5 +15,4 @@ class ChangePasswordController < ApplicationController
       render action: "new"
     end
   end
-end
 end

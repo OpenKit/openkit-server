@@ -1,4 +1,3 @@
-module Dashboard
 class AppsController < ApplicationController
 
   def index
@@ -42,5 +41,4 @@ class AppsController < ApplicationController
     @app.destroy
     redirect_to apps_url
   end
-end
 end

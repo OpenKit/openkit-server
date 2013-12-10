@@ -1,4 +1,3 @@
-module Dashboard
 class DeveloperSessionsController < ApplicationController
   skip_before_filter :require_login, :only => [:new, :create]
 
@@ -24,5 +23,4 @@ class DeveloperSessionsController < ApplicationController
     flash[:notice] = "Logout successful!"
     redirect_to root_url
   end
-end
 end
