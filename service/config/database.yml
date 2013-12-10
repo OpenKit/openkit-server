@@ -1,0 +1,29 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: leaderboard_dev
+  username: root
+  password: 
+  host: localhost
+  port: 3306
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: leaderboard_test 
+  host: 127.0.0.1 
+  port: 3306
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: <%= OKConfig[:database_name] %> 
+  username: <%= OKConfig[:database_username] %>
+  password: <%= OKConfig[:database_password] %>
+  host: <%= OKConfig[:database_host] %>
+  port: <%= OKConfig[:database_port] %>

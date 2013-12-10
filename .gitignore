@@ -11,6 +11,14 @@ dashboard/db/*.sqlite3
 dashboard/public/system/*
 dashboard/coverage/
 dashboard/spec/tmp/*
+service/.bundle
+service/vendor/bundle
+service/log/*
+service/tmp/*
+service/db/*.sqlite3
+service/public/system/*
+service/coverage/
+service/spec/tmp/*
 **.orig
 rerun.txt
 pickle-email-*.html

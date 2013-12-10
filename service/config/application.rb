@@ -13,6 +13,7 @@ Bundler.require(:default, Rails.env)
 
 module OKDashboard
   class Application < Rails::Application
+    config.middleware.use "TwoLeggedOAuth"
     config.exceptions_app = self.routes
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -28,7 +29,7 @@ module OKDashboard
     # config.i18n.default_locale = :de
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    config.autoload_paths += %W(#{config.root}/app/models/shared)
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
