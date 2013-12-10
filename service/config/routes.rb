@@ -20,10 +20,8 @@ OKDashboard::Application.routes.draw do
       delete '/purge_test_data',        to: 'apps#purge_test_data'
     end
 
-    constraints :subdomain => /^$|(?:beta-)?(?:api|sandbox|local)/ do
-      namespace :v1, &default_api_routes
-      scope :module => :v1, &default_api_routes
-    end
+    namespace :v1, &default_api_routes
+    scope :module => :v1, &default_api_routes
 
 
     # 0.9 API
