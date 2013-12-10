@@ -1,4 +1,3 @@
-require 'random_gen'
 require 'ok_redis'
 require 'paperclip_helper.rb'
 require 'feature_array.rb'
