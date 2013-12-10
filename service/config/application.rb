@@ -1,17 +1,14 @@
 require File.expand_path('../boot', __FILE__)
 require File.expand_path('../ok_config.rb', __FILE__)
 
-# Pick the frameworks you want:
 require "active_record/railtie"
 require "action_controller/railtie"
-require "action_mailer/railtie"
-require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
-module OKDashboard
+module OKService
   class Application < Rails::Application
     config.middleware.use "TwoLeggedOAuth"
     config.exceptions_app = self.routes
@@ -53,5 +50,10 @@ module OKDashboard
         }
       }
     end
+    
+    config.filter_parameters += [:password]
+    
+    # Would like to remove, and disable session entirely.
+    config.secret_key_base = "bd5ba5c96a1fbc76532fcad56811d06ccf93849edb5f2b3800d2e0990169bd93e0d265708e10cc076c9a5e2ab1c0db066067167ae243234f945df9421774e383"
   end
 end

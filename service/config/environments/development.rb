@@ -1,4 +1,4 @@
-OKDashboard::Application.configure do
+OKService::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -15,9 +15,6 @@ OKDashboard::Application.configure do
   # Disable caching
   config.action_controller.perform_caching = false
 
-  # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
-
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
@@ -28,10 +25,4 @@ OKDashboard::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
-  # Quiet asset logging in development, also applied this patch to webrick:
-  # https://bugs.ruby-lang.org/attachments/2300/204_304_keep_alive.patch
-  # which prevents, "WARN could not determine content-length of response body" warning.
-  # config.assets.debug = false
-  # config.assets.logger = false
 end

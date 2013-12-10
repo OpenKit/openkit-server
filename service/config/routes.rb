@@ -1,4 +1,4 @@
-OKDashboard::Application.routes.draw do
+OKService::Application.routes.draw do
 
   scope :defaults => {:format => :json} do
 

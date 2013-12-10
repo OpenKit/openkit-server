@@ -28,10 +28,4 @@ OKDashboard::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
-
-  # Quiet asset logging in development, also applied this patch to webrick:
-  # https://bugs.ruby-lang.org/attachments/2300/204_304_keep_alive.patch
-  # which prevents, "WARN could not determine content-length of response body" warning.
-  # config.assets.debug = false
-  # config.assets.logger = false
 end
