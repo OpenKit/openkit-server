@@ -26,7 +26,9 @@ module OKService
     # config.i18n.default_locale = :de
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/app/models/shared)
+    # config.autoload_paths += %W(#{config.root}/../shared/app/models)
+    # config.autoload_paths += %W(#{config.root}/app/models)
+
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
