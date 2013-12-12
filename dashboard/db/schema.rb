@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131031154407) do
+ActiveRecord::Schema.define(version: 20131212071708) do
 
   create_table "achievement_scores", force: true do |t|
     t.integer  "user_id"
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 20131031154407) do
     t.integer  "developer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slug"
     t.string   "app_key",           limit: 20
     t.string   "icon_file_name"
     t.string   "icon_content_type"
@@ -67,7 +66,6 @@ ActiveRecord::Schema.define(version: 20131031154407) do
   end
 
   add_index "apps", ["app_key"], name: "index_apps_on_app_key", unique: true, using: :btree
-  add_index "apps", ["developer_id", "slug"], name: "index_apps_on_developer_id_and_slug", using: :btree
   add_index "apps", ["developer_id"], name: "index_apps_on_developer_id", using: :btree
 
   create_table "client_sessions", force: true do |t|

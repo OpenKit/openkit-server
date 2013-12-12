@@ -83,8 +83,6 @@ GEM
       nokogiri (~> 1.5)
       ruby-hmac
     formatador (0.2.4)
-    friendly_id (5.0.1)
-      activerecord (~> 4.0.0)
     highline (1.6.20)
     hike (1.2.3)
     hiredis (0.4.5)
@@ -198,7 +196,6 @@ DEPENDENCIES
   delayed_job (~> 4.0)
   delayed_job_active_record (~> 4.0)
   fog
-  friendly_id (~> 5.0)
   highline
   hiredis (~> 0.4)
   jquery-rails

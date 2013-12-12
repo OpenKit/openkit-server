@@ -6,7 +6,7 @@ class AppsController < ApplicationController
   end
 
   def show
-    @app = current_developer.apps.friendly.find(params[:id].to_s)
+    @app = current_developer.apps.find(params[:id].to_i)
   end
 
   def new
@@ -14,7 +14,7 @@ class AppsController < ApplicationController
   end
 
   def edit
-    @app = current_developer.apps.friendly.find(params[:id].to_s)
+    @app = current_developer.apps.find(params[:id].to_i)
   end
 
   def create
@@ -29,7 +29,7 @@ class AppsController < ApplicationController
 
   def update
     params[:app].delete :developer_id
-    @app = current_developer.apps.friendly.find(params[:id].to_s)
+    @app = current_developer.apps.find(params[:id].to_i)
     if @app.update_attributes(params[:app])
       redirect_to @app, notice: 'App was successfully updated.'
     else
@@ -38,7 +38,7 @@ class AppsController < ApplicationController
   end
 
   def destroy
-    @app = current_developer.apps.friendly.find(params[:id].to_s)
+    @app = current_developer.apps.find(params[:id].to_i)
     @app.destroy
     redirect_to apps_url
   end

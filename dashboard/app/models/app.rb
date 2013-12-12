@@ -2,9 +2,6 @@
 # app.users
 # app.developer
 class App < ActiveRecord::Base
-  extend FriendlyId
-  friendly_id :name, :use => :scoped, :scope => :developer_id
-
   attr_accessible :name, :icon, :fbid
 
   belongs_to :developer
