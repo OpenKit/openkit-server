@@ -7,7 +7,6 @@ begin
 rescue LoadError
 end
 
-# require 'debugger'
 
 path = File.expand_path(File.dirname(__FILE__))
 require File.join(path, '..', 'config', 'ok_config.rb')

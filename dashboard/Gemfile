@@ -39,7 +39,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'debugger'
+  gem 'byebug'
 end
 
 gem 'sass-rails',   '~> 4.0.0'

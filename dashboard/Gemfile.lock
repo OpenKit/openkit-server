@@ -44,6 +44,9 @@ GEM
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
     builder (3.1.4)
+    byebug (2.4.1)
+      columnize (~> 0.3.6)
+      debugger-linecache (~> 1.2.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.3)
@@ -57,12 +60,7 @@ GEM
     coffee-script-source (1.6.3)
     columnize (0.3.6)
     daemons (1.1.9)
-    debugger (1.6.3)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.4)
     debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.4)
     delayed_job (4.0.0)
       activesupport (>= 3.0, < 4.1)
     delayed_job_active_record (4.0.0)
@@ -190,9 +188,9 @@ DEPENDENCIES
   acts-as-taggable-on (~> 2.4)
   authlogic!
   aws-sdk (~> 1.9)
+  byebug
   coffee-rails (~> 4.0.0)
   daemons (~> 1.1)
-  debugger
   delayed_job (~> 4.0)
   delayed_job_active_record (~> 4.0)
   fog

@@ -1,7 +1,6 @@
 # If we close or timeout a connection to Apple, we don't keep the connection
 # object around.  Connection list is keyed by combined_pem_path.
 
-# require 'debugger'
 require 'thread'
 begin
   require 'fastthread'
