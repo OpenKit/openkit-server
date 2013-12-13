@@ -6,7 +6,13 @@ require 'mocha/setup'
 require 'authlogic/test_case'
 include Authlogic::TestCase
 
+FactoryGirl.find_definitions
+
+class ActiveSupport::TestCase
+  self.use_transactional_fixtures = true
+end
+
+
 Turn.config do |c|
- c.format  = :outline
- c.natural = true
+ c.format  = :outline  # :progress
 end

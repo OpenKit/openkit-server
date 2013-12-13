@@ -14,7 +14,13 @@ module OpenKit
       end
 
       def params_in_signature
-        super.merge(@query_params)
+        super.merge(symbolize_keys(@query_params))
+      end
+
+      private
+      def symbolize_keys(hash)
+        hash.keys.each {|k| hash[k.to_sym] = hash.delete(k)}
+        hash
       end
     end
 

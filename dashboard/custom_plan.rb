@@ -15,7 +15,7 @@ class CustomPlan < Zeus::Rails
   # See lib/zeus/rails.rb in the Zeus gem to see default behavior.
   def test(argv=ARGV)
     if argv.empty?
-      Dir[Rails.root.join("test/**/*.rb")].each {|f| require f}
+      Dir[Rails.root.join("test/**/*_test.rb")].each {|f| require f}
     else
       argv.each {|f| require f}
     end
