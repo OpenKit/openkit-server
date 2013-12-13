@@ -4,17 +4,14 @@ The ruby client for OpenKit's gaming backend.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+    gem install 'openkit'
+
+Or add the following line to your application's Gemfile:
 
     gem 'openkit'
 
-And then execute:
+And run `bundle install` from your shell.
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install openkit
 
 ## Usage
 
