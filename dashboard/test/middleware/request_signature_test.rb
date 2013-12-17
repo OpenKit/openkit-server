@@ -18,8 +18,15 @@ class RequestSignatureTest < ActiveSupport::TestCase
   include Rack::Test::Methods
   include RequestSignatureTestHelper
 
+
   def app
-    request_signature_test_app
+    Rack::Builder.app do
+      use TwoLeggedOAuth
+      run -> env do
+        body = env[:authorized_app].name
+        [200, {}, [body]]
+      end
+    end
   end
 
 

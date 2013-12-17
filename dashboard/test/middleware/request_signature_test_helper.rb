@@ -5,15 +5,6 @@ module RequestSignatureTestHelper
     OpenKit::Config.host = "example.org"  # to match rack-test
   end
 
-  def request_signature_test_app
-    Rack::Builder.app do
-      use TwoLeggedOAuth
-      run -> env do
-        body = env[:authorized_app].name
-        [200, {}, [body]]
-      end
-    end
-  end
 
   # This creates a new GET request using the openkit gem, but it doesn't
   # perform the request.  We are using it to get the authorization header
