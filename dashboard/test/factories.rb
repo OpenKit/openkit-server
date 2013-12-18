@@ -25,7 +25,19 @@ FactoryGirl.define do
   factory :achievement do
     app
     sequence(:name) { |n| "achievement#{n}" }
-    desc "Get x foos and receive a bar"
-    points
+    desc "Reach a goal of X and get Y points"
+    goal 100
+    points 5
+  end
+
+  factory :user do
+    developer
+    sequence(:nick)      { |n| "Fake #{n}" }
+    sequence(:custom_id) { |n| n.to_s }
+  end
+
+  factory :subscription do
+    user
+    app
   end
 end
