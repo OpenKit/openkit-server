@@ -42,25 +42,23 @@ module BaseScore
     end
 
     def social(app, leaderboard, fb_friends)
-      # Work for now.  Disable rank!!  Pass leaderboard obj instead of id!
       raise ArgumentError.new("BaseScore#social takes an array of fb_friends.") unless fb_friends.is_a?(Array)
       return [] if fb_friends.empty?
-
       bests = []
       users = app.developer.users.where(:fb_id => fb_friends)
       users.each {|u|
-        if (score = best_for('all_time', leaderboard.id, u.id))
+        if (score = best_1_0(leaderboard.id, u.id, true))
           bests << score
         end
       }
-      bests
+      bests.sort {|x,y| y.sort_value <=> x.sort_value}
     end
 
-    def best_1_0(leaderboard_id, user_id)
+    def best_1_0(leaderboard_id, user_id, skip_rank=false)
       best_cond = ["leaderboard_id = ? AND user_id = ?", leaderboard_id, user_id]
       best_score = where(best_cond).order("sort_value DESC").limit(1)[0]
       if best_score
-        if ENABLE_USER_RANK
+        if ENABLE_USER_RANK && !skip_rank
           rank_cond = ["leaderboard_id = ? AND sort_value > ?", leaderboard_id, best_score.sort_value]
           sanitized_rank_cond = ActiveRecord::Base.send(:sanitize_sql_array, rank_cond)
           best_score.rank = connection.execute("select count(*) from (select * from #{table_name} where #{sanitized_rank_cond} group by user_id) t").first[0] + 1

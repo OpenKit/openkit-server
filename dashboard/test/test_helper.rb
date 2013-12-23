@@ -10,6 +10,7 @@ FactoryGirl.find_definitions
 
 class ActiveSupport::TestCase
   self.use_transactional_fixtures = true
+  include FactoryGirl::Syntax::Methods
 end
 
 class ActionDispatch::IntegrationTest
@@ -37,6 +38,16 @@ class ActionDispatch::IntegrationTest
   alias_method_chain :get, :signature
   alias_method_chain :post, :signature
   alias_method_chain :put, :signature
+
+  def create_subscribed_user_for(app)
+    user = create(:user, :developer => app.developer)
+    create(:subscription, :user => user, :app => app)
+    user
+  end
+
+  def random_alphanumeric(n)
+    Array.new(n){[*'0'..'9', *'a'..'z', *'A'..'Z'].sample}.join
+  end
 end
 
 Turn.config do |c|

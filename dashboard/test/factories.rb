@@ -30,6 +30,12 @@ FactoryGirl.define do
     points 5
   end
 
+  factory :achievement_score do
+    achievement
+    user
+    progress 1
+  end
+
   factory :user do
     developer
     sequence(:nick)      { |n| "Fake #{n}" }
@@ -39,5 +45,10 @@ FactoryGirl.define do
   factory :subscription do
     user
     app
+  end
+
+  factory :score do
+    leaderboard
+    user
   end
 end

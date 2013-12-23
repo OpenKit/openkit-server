@@ -2,13 +2,6 @@ require 'test_helper'
 
 class AchievementsApiTest < ActionDispatch::IntegrationTest
 
-  def create_subscribed_user_for(app)
-    user = FactoryGirl.create(:user, :developer => app.developer)
-    FactoryGirl.create(:subscription, :user => user, :app => app)
-    user
-  end
-
-
   def setup
     @game = FactoryGirl.create(:app)
     OpenKit::Config.app_key    = @game.app_key
@@ -33,7 +26,7 @@ class AchievementsApiTest < ActionDispatch::IntegrationTest
 
 
   test "user progress returned in list of achievements if user_id included in GET" do
-    achievement = FactoryGirl.create(:achievement, :app => @game, :goal => 4)
+    achievement = create(:achievement, :app => @game, :goal => 4)
     user = create_subscribed_user_for(@game)
 
     get "/achievements"
@@ -45,16 +38,7 @@ class AchievementsApiTest < ActionDispatch::IntegrationTest
     assert a2.keys.include? 'progress'
     assert_equal 0, a2['progress']
 
-    # Post an achievement score
-    score_json = {
-      achievement_score: {
-        achievement_id: achievement.id,
-         user_id: user.id,
-         progress: 1
-      }
-    }
-    post '/achievement_scores', score_json
-
+    create(:achievement_score, :achievement => achievement, :user => user, :progress => 1)
     get "/achievements?user_id=#{user.id}"
     a3 = JSON.parse(response.body).first
     assert a3.keys.include? 'progress'
