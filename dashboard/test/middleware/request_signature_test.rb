@@ -5,7 +5,7 @@
 # with valid signatures make it through.
 #
 # Run by iteslf with:
-#   ruby -Itest test/middleware/request_signatures.rb
+#   ruby -Itest test/middleware/request_signature_test.rb
 # or
 #   zeus t test/middleware/request_signature_test.rb
 # or

@@ -6,12 +6,24 @@ class TwoLeggedOAuth
     @app = app
   end
 
-  def call(env)
-    # In our application controller, we will check for an App at request.env[:authorized_app].
-    # If it doesn't exist, then the developer must provide credentials (i.e. access through dashboard)
-    request = Rack::Request.new(env)
-    request.env[:authorized_app] = nil
+  def h
+    {"Content-Type" => "application/json"}
+  end
 
+  def redis
+    OKRedis.connection
+  end
+
+  def call(env)
+    request = Rack::Request.new(env)
+    req_proxy = OAuth::RequestProxy.proxy(request)
+
+    # TODO: Add...
+    #unless env['HTTP_AUTHORIZATION']
+    #  return [401, h, [{message: "This service requires an oauth 1.0a authorization header. Email lou@openkit.io."}.to_json]]
+    #end
+
+    # TODO: Remove...
     if env['HTTP_AUTHORIZATION'].nil?
       return @app.call(env) if request.host =~ /^(beta-)?developer/   # Rely on developer creds for dashboard access.
 
@@ -29,35 +41,36 @@ class TwoLeggedOAuth
       return [401, {}, ["You must use oauth 1.0a to access this API.  Please email team@openkit.io for help."]]
     end
 
-    # For debug, may inspect oauth params with:
-    # oauth_params = SimpleOAuth::Header.parse(env['HTTP_AUTHORIZATION'])
-
-    authorizing_app = nil
-    req_proxy = OAuth::RequestProxy.proxy(request)
-
-    # There is no auth token for two-legged, so we return nil for token_secret in block.
-    # See OAuth::Signature::Base#initialize of the oauth gem for format.
-    signature = OAuth::Signature::HMAC::SHA1.new(req_proxy, {}) do |req_proxy|
-
-      if req_proxy.oauth_version != '1.0'
-        return [401, {}, ["Unauthorized. Please use OAuth 1.0"]]
-      end
-
-      authorizing_app = App.find_by(app_key: req_proxy.consumer_key)
-      [nil, authorizing_app && authorizing_app.secret_key]
+    missing_header = %w(oauth_consumer_key oauth_nonce oauth_signature_method oauth_timestamp oauth_version oauth_signature).detect { |x|
+      val = req_proxy.send(x)
+      (val == nil || val.length < 1)
+    }
+    unless !missing_header
+      return [401, h, [{message: 'Bad authorization header'}.to_json]]
     end
 
-    if !OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
-      return [401, {}, ["Bad Request.  Nonce has already been used."]]
+    unless (req_proxy.oauth_timestamp.to_i - Time.now.to_i).abs < 172800   # purge window
+      return [401, h, [{message: 'Invalid time in authorization header'}.to_json]]
     end
 
-    if !signature.verify
-      return [401, {}, ["Unauthorized.  OAuth 1.0 signature failed."]]
+    sk = redis.get("sk:#{req_proxy.consumer_key}")
+    unless sk
+      return [401, h, [{message: "No secret key found! Email lou@openkit.io"}.to_json]]
     end
 
-    # Made it!
-    request.env[:authorized_app] = authorizing_app
+    signature = OAuth::Signature::HMAC::SHA1.new(req_proxy, {}) { |req_proxy|
+      [nil, sk]
+    }
+
+    unless signature.verify
+      return [401, h, [{message: "Request signature failed"}.to_json]]
+    end
+
+    unless redis.sadd("oauth_nonce", "#{req_proxy.oauth_timestamp}:#{req_proxy.oauth_nonce}")
+      return [401, h, [{message: "Nonce has already been used."}.to_json]]
+    end
+
+    request.env[:authorized_app] = App.find_by(app_key: req_proxy.consumer_key)
     @app.call(env)
   end
-
 end

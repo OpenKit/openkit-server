@@ -27,7 +27,6 @@ gem 'highline'
 group :development do
   gem 'fog'
   gem 'wirble'
-  gem 'simple_oauth'
   gem 'what_methods'
   # gem 'tracer_bullet'
   gem 'quiet_assets'
