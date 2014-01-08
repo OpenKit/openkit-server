@@ -62,9 +62,10 @@ class TwoLeggedOAuth
       return [401, h, [{message: "Request signature failed"}.to_json]]
     end
 
-    unless OKRedis.sadd("oauth_nonce", "#{req_proxy.oauth_timestamp}:#{req_proxy.oauth_nonce}")
+    unless !OKRedis.zscore("request_nonces", req_proxy.oauth_nonce)
       return [401, h, [{message: "Nonce has already been used."}.to_json]]
     end
+    OKRedis.zadd("request_nonces", Time.now.to_i, req_proxy.oauth_nonce)
 
     request.env[:authorized_app] = App.find_by(app_key: req_proxy.consumer_key)
     @app.call(env)
