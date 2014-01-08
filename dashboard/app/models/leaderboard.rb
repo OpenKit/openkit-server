@@ -41,7 +41,7 @@ class Leaderboard < ActiveRecord::Base
 
   def player_count(sandbox)
     k = sandbox ? "leaderboard:#{id}:sandbox_players" : "leaderboard:#{id}:players"
-    OKRedis.connection.scard(k)
+    OKRedis.scard(k)
   end
 
   private

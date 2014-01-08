@@ -5,7 +5,7 @@ class Score < ActiveRecord::Base
   private
   def add_player_to_set
     k = "leaderboard:#{leaderboard_id}:players"
-    OKRedis.connection.sadd(k, user_id)
+    OKRedis.sadd(k, user_id)
   end
 end
 

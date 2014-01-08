@@ -80,7 +80,7 @@ namespace :maintenance do
         Score.where(:leaderboard_id => leaderboard.id).group(:user_id).each do |score|
           k = "leaderboard:#{leaderboard.id}:players"
           if !score.user_id.blank? && score.user_id != 0
-            OKRedis.connection.sadd(k, score.user_id)
+            OKRedis.sadd(k, score.user_id)
           end
         end
         STDOUT.print "done.\n"

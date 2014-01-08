@@ -80,11 +80,11 @@ class App < ActiveRecord::Base
   end
 
   def store_secret_in_redis
-    OKRedis.connection.set(secret_location, secret_key)
+    OKRedis.set(secret_location, secret_key)
   end
 
   def remove_secret_from_redis
-    OKRedis.connection.del(secret_location)
+    OKRedis.del(secret_location)
   end
 
   def secret_location

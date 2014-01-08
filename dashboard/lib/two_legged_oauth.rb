@@ -10,10 +10,6 @@ class TwoLeggedOAuth
     {"Content-Type" => "application/json"}
   end
 
-  def redis
-    OKRedis.connection
-  end
-
   def call(env)
     request = Rack::Request.new(env)
     req_proxy = OAuth::RequestProxy.proxy(request)
@@ -53,7 +49,7 @@ class TwoLeggedOAuth
       return [401, h, [{message: 'Invalid time in authorization header'}.to_json]]
     end
 
-    sk = redis.get("sk:#{req_proxy.consumer_key}")
+    sk = OKRedis.get("sk:#{req_proxy.consumer_key}")
     unless sk
       return [401, h, [{message: "No secret key found! Email lou@openkit.io"}.to_json]]
     end
@@ -66,7 +62,7 @@ class TwoLeggedOAuth
       return [401, h, [{message: "Request signature failed"}.to_json]]
     end
 
-    unless redis.sadd("oauth_nonce", "#{req_proxy.oauth_timestamp}:#{req_proxy.oauth_nonce}")
+    unless OKRedis.sadd("oauth_nonce", "#{req_proxy.oauth_timestamp}:#{req_proxy.oauth_nonce}")
       return [401, h, [{message: "Nonce has already been used."}.to_json]]
     end
 

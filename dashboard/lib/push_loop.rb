@@ -26,7 +26,7 @@ class PushLoop
 
     k = 'pn_queue_2'
     while 1
-      entry = OKRedis.connection.brpop(k)
+      entry = OKRedis.brpop(k)
       log "push_thread: Popped a push entry: #{entry}"
       pem_path, token, payload, in_sandbox = JSON.parse(entry[1])
 
