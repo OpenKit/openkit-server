@@ -17,14 +17,15 @@
 #
 # Notes:
 #   * Ruby wants the cert in pem format.
-
 require File.expand_path("../../../clients/ruby/lib/openkit.rb", __FILE__)
 require File.expand_path("../../lib/color_print.rb", __FILE__)
+include OpenKit::Request
 include ColorPrint
 
 OpenKit::Config.app_key = "end_to_end_test"
 OpenKit::Config.secret_key = "TL5GGqzfItqZErcibsoYrNAuj7K33KpeWUEAYyyU"
 OpenKit::Config.skip_https = !ENV['SSL_CERT_FILE']
+OpenKit::Config.host = ENV['HOST'] || 'localhost:3003'
 
 if OpenKit::Config.skip_https
   yellow "No SSL_CERT_FILE specified.  using http."
@@ -57,44 +58,50 @@ end
 
 def post(path, req_params = {})
   blue "Response from POST to #{path}:"
-  res = OpenKit::Post.to(path, req_params)
+  req = Post.new(path, req_params)
+  res = req.perform
   response_log(res)
   res
 end
 
 def multi_post(path, req_params, upload)
   blue "Response from Multipart POST to #{path}:"
-  res = OpenKit::PostMultipart.to(path, req_params, upload)
+  req = PostMultipart.new(path, req_params, upload)
+  res = req.perform
   response_log(res)
   res
 end
 
 def delete(path)
   blue "Response from DELETE to #{path}:"
-  res = OpenKit::Delete.from(path)
+  req = Delete.new(path)
+  res = req.perform
   response_log(res)
   res
 end
 
 def put(path, req_params = {})
   blue "Response from PUT to #{path}:"
-  res = OpenKit::Put.to(path, req_params)
+  req = Put.new(path, req_params)
+  res = req.perform
   response_log(res)
   res
 end
 
 def get(path, req_params = {})
   blue "Response from GET to path #{path} with params: #{req_params.inspect}:"
-  res = OpenKit::Get.from(path, req_params)
+  req = Get.new(path, req_params)
+  res = req.perform
   response_log(res)
   res
 end
+
 
 # Makes a special request to purge data associated with end_to_end_test app.  Hack.  In the future
 # we'll have a test instance up to blast with data.
 res = delete '/v1/purge_test_data'
 if res.code != "200"
-  puts "Could not purge test data.  Try 'rake setup:api_test_app'"
+  puts "Could not purge test data.  Try 'bin/rake setup:api_test_app'"
   exit 1
 end
 
@@ -156,7 +163,7 @@ get '/v1/features'
 
 # Post a score with metadata document
 meta_path = File.expand_path(File.join(File.dirname(__FILE__), 'immafile.txt'))
-upload = OpenKit::Upload.new "score[meta_doc]", meta_path
+upload = OpenKit::Request::Upload.new "score[meta_doc]", meta_path
 multi_post '/v1/scores', { score: {leaderboard_id: low_board['id'], user_id: user1['id'], value: 11 }}, upload
 
 if defined?(@io)
