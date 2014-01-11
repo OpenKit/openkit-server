@@ -83,4 +83,6 @@ OKDashboard::Application.configure do
     :remote_ip,
     ->req {req.authorization && req.authorization[/oauth_consumer_key=\"(.+?[^"])\"/, 1]}
   ]
+
+  config.paths['log'] = "/var/log/rails/#{parent_name.underscore}-production.log"
 end
