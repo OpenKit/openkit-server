@@ -53,10 +53,10 @@ GEM
     byebug (2.5.0)
       columnize (~> 0.3.6)
       debugger-linecache (~> 1.2.0)
-    capistrano (3.0.1)
+    capistrano (3.1.0)
       i18n
       rake (>= 10.0.0)
-      sshkit (>= 0.0.23)
+      sshkit (~> 1.3)
     capistrano-bundler (1.1.1)
       capistrano (~> 3.0)
       sshkit (>= 1.2.0)
@@ -220,7 +220,7 @@ DEPENDENCIES
   authlogic!
   aws-sdk (~> 1.9)
   byebug
-  capistrano (~> 3.0.1)
+  capistrano (~> 3.1)
   capistrano-rails (~> 1.1)
   coffee-rails (~> 4.0.0)
   daemons (~> 1.1)

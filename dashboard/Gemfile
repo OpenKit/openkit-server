@@ -30,8 +30,8 @@ group :development do
   gem 'what_methods'
   # gem 'tracer_bullet'
   gem 'quiet_assets'
-  gem 'capistrano',         '~> 3.0.1', require: false
-  gem 'capistrano-rails',   '~> 1.1',   require: false
+  gem 'capistrano',         '~> 3.1',  require: false
+  gem 'capistrano-rails',   '~> 1.1',  require: false
 end
 
 group :test do

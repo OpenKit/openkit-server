@@ -1,6 +1,9 @@
 set :application,  'openkit'
 set :repo_url,     'git@github.com:OpenKit/openkit-server.git'
 set :deploy_to,    "/var/www/#{fetch(:application)}"
+set :git_strategy, GitStrategy
+set :subdir,       'dashboard'
+set :branch,       'lzell-provisioning'
 
 set :ssh_options,  {
    keys:            %w(~/.ssh/openkit.pub),
