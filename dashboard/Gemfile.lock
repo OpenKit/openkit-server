@@ -7,12 +7,6 @@ GIT
       activerecord (>= 3.2)
       activesupport (>= 3.2)
 
-PATH
-  remote: ../clients/ruby
-  specs:
-    openkit (0.0.1)
-      multipart-post
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -129,6 +123,8 @@ GEM
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     oauth (0.4.7)
+    openkit (0.0.2)
+      multipart-post (~> 2.0)
     paperclip (3.5.2)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -238,7 +234,7 @@ DEPENDENCIES
   mustache (~> 0.99)
   mysql2 (~> 0.3)
   oauth (~> 0.4)
-  openkit!
+  openkit (~> 0.0.2)
   paperclip (~> 3.3)
   protected_attributes
   quiet_assets

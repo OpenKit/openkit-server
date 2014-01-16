@@ -37,8 +37,8 @@ end
 
 group :test do
   gem 'mocha', :require => false
+  gem 'openkit', '~> 0.0.2'   #, :path => '../clients/ruby'
   gem 'turn'
-  gem 'openkit', :path => '../clients/ruby'
   gem 'factory_girl'
 end
 
