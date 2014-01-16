@@ -38,7 +38,7 @@ end
 group :test do
   gem 'mocha', :require => false
   gem 'turn'
-  gem 'openkit', :path => File.expand_path('../../clients/ruby', __FILE__)
+  gem 'openkit', :path => '../clients/ruby'
   gem 'factory_girl'
 end
 

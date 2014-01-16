@@ -8,7 +8,7 @@ GIT
       activesupport (>= 3.2)
 
 PATH
-  remote: /Users/manu/dev/OK/openkit-server/clients/ruby
+  remote: ../clients/ruby
   specs:
     openkit (0.0.1)
       multipart-post
