@@ -31,7 +31,11 @@ pid "/var/www/openkit/shared/tmp/pids/unicorn.pid"
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
 stderr_path "/var/www/openkit/shared/log/unicorn.stderr.log"
-stdout_path "/var/www/openkit/shared/log/unicorn.stdout.log"
+
+# With this uncommented, application logging goes to unicorn.stderr.log (?).
+# Commenting it out gives us unicorn errors at shared/log/unicorn.stderr.log,
+# and application logging at /shared/log/production.log.
+# stdout_path "/var/www/openkit/shared/log/unicorn.stdout.log"
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
