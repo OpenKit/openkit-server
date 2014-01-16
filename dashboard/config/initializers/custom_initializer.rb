@@ -7,9 +7,6 @@ require 'apple_push/apple_push.rb'
 require 'push_test_project.rb'
 require 'push_queue.rb'
 
-module Kernel
-  alias :debugger :byebug  # transition
-end
 
 module ActiveModel
   class Errors
