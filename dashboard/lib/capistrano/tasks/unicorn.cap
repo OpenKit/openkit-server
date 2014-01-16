@@ -1,0 +1,86 @@
+require_relative 'unicorn_helper'
+include UnicornHelper
+
+# cap <stage> unicorn:upgrade
+# cap <stage> unicorn:ps
+# cap <stage> unicorn:shutdown_old
+#
+# Signal reference here:
+#   http://unicorn.bogomips.org/SIGNALS.html
+#
+namespace :unicorn do
+
+  set :pid_file,     -> {"#{shared_path}/tmp/pids/unicorn.pid"}
+  set :old_pid_file, -> {"#{shared_path}/tmp/pids/unicorn.pid.oldbin"}
+
+  desc 'start'
+  task :start do
+    on roles(:app), in: :sequence do |host|
+      if file_exists? fetch(:pid_file)
+        error "pid file already exists on #{host}, skipping."
+      else
+        clean_start fetch(:stage)
+      end
+    end
+  end
+
+  desc 'graceful shutdown'
+  task :graceful_shutdown do
+    on roles(:app), in: :sequence do |host|
+      f = fetch :pid_file
+      if file_exists? f
+        pid = contents_of_file(f)
+        info "killing pid #{pid} on host #{host}"
+        kill(pid)
+      else
+        error "can't find pid file at #{p} on #{host}"
+      end
+    end
+  end
+
+  desc 'prepare the unicorns'
+  task :upgrade do
+    on roles(:app) do |host|
+      f = fetch :pid_file
+      if file_exists? f
+        pid = contents_of_file(f)
+        execute :kill, "-s USR2", pid
+      else
+        clean_start fetch(:stage)
+      end
+    end
+  end
+
+  desc 'shutdown old'
+  task :shutdown_old do
+    on roles(:app) do |host|
+      f = fetch :old_pid_file
+      if file_exists? f
+        pid = contents_of_file(f)
+        execute :kill, "-s QUIT", pid
+      else
+        warn "There is no old pid file at #{f} on #{host}.  Skipping..."
+      end
+    end
+  end
+
+  desc 'ps status'
+  task :ps do
+    on roles(:app), in: :sequence, wait: 5 do |host|
+      puts "\nStatus on host #{host}...\n"
+      output = capture "ps -fp $(pgrep -d, -f unicorn)"
+      puts output unless fetch(:log_level) == :debug   # Don't display twice
+    end
+  end
+
+  desc 'say hi'
+  task :say_hi do
+    on roles(:app), in: :sequence, wait: 1 do |host|
+      puts %Q(Host is: #{host}
+              node_label is: #{host.properties.node_label}
+              stage is: #{fetch :stage})
+
+      execute "echo 'hello!'"
+    end
+  end
+end
