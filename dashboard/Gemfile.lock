@@ -232,7 +232,7 @@ DEPENDENCIES
   json (~> 1.7)
   mocha
   mustache (~> 0.99)
-  mysql2 (~> 0.3)
+  mysql2 (= 0.3.14)
   oauth (~> 0.4)
   openkit (~> 0.0.2)
   paperclip (~> 3.3)
