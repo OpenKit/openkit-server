@@ -19,17 +19,19 @@ gem 'json',         '~>1.7'
 gem 'aws-sdk',      '~>1.9'
 gem 'oauth',        '~>0.4'
 gem 'acts-as-taggable-on', '~>2.4'
-gem 'thin',         '~>1.6'
 gem 'unf',          '~>0.1'
 gem 'mustache',     '~>0.99'
 gem 'highline'
 
 group :development do
+  gem 'thin'
   gem 'fog'
   gem 'wirble'
   gem 'what_methods'
   # gem 'tracer_bullet'
   gem 'quiet_assets'
+  gem 'capistrano',         '~> 3.0.1', require: false
+  gem 'capistrano-rails',   '~> 1.1',   require: false
 end
 
 group :test do
@@ -61,7 +63,7 @@ gem 'therubyracer', :platforms => :ruby
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn'
 
 # To use debugger
 # gem 'debugger'
