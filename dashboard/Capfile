@@ -6,3 +6,6 @@ require 'capistrano/rails/migrations'
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 
 require_relative 'lib/capistrano/git_strategy'
+require_relative 'lib/capistrano/log_invocations'
+
+LogInvocations.enable

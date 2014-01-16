@@ -22,6 +22,7 @@ gem 'acts-as-taggable-on', '~>2.4'
 gem 'unf',          '~>0.1'
 gem 'mustache',     '~>0.99'
 gem 'highline'
+gem 'colorize'
 
 group :development do
   gem 'thin'

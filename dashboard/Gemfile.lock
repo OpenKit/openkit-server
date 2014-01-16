@@ -74,6 +74,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    colorize (0.6.0)
     columnize (0.3.6)
     daemons (1.1.9)
     debugger-linecache (1.2.0)
@@ -223,6 +224,7 @@ DEPENDENCIES
   capistrano (~> 3.1)
   capistrano-rails (~> 1.1)
   coffee-rails (~> 4.0.0)
+  colorize
   daemons (~> 1.1)
   delayed_job (~> 4.0)
   delayed_job_active_record (~> 4.0)
