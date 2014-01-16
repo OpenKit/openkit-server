@@ -37,10 +37,10 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test)/})
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "bundler",  "~> 1.3"
+  spec.add_development_dependency "rake",     "~> 10.1"
   spec.add_development_dependency "minitest", "~> 4.7"
-  spec.add_development_dependency "turn"
+  spec.add_development_dependency "turn",     "~> 0"
 
-  spec.add_dependency 'multipart-post'
+  spec.add_dependency 'multipart-post', "~> 2.0"
 end
