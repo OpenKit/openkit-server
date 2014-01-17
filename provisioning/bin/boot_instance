@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+# 
+# Dependencies:
+#  * http://aws.amazon.com/cli
+#
+
+SCRIPT_DIR=`dirname $0`
+
+AZ="us-west-2a"
+AMI_OREGON_32="ami-90f297a0"
+AMI_OREGON_64="ami-8ef297be"
+
+ALLOWED_SECURITY_GROUPS=( "HTTP" "HTTPS" "SSH" "OK_NETWORK" )
+DEFAULT_GROUPS=( "SSH" "OK_NETWORK" )
+
+
+function usage()
+{
+cat <<EOF
+
+	Boots a bare instance.  Make sure your public key is in the bootstrap_min
+	userdata file before booting.
+
+	Usage: 
+		$0 <size> [-a <groups>]
+
+	Options:
+		<size>
+			Instance size. One of: small, medium, large, xlarge, 2xlarge
+
+		-a <groups>
+			A comma-delimited list of security groups to add to the booting
+			instance.  A group's name reflects which protocol is being opened
+			up to the outside world.  For example, the HTTP and HTTPS groups
+			open ports 80 and 443 to the outside world, respectively.  The
+			security group SSH will always be applied; do not list it here.
+			OK_NETWORK (the default group) is also added automatically.
+
+	Example: 
+	  $0 small -a HTTP,HTTPS
+
+EOF
+}
+
+
+case $1 in
+	small)
+		size="m1.small"
+		launch_ami=$AMI_OREGON_32
+		;;
+	medium)
+		size="m1.medium"
+		launch_ami=$AMI_OREGON_32
+		;;
+	large)
+		size="m1.large"
+		launch_ami=$AMI_OREGON_64
+		;;
+	xlarge)
+		size="m3.xlarge"
+		launch_ami=$AMI_OREGON_64
+		;;
+	2xlarge)
+		size="m3.2xlarge"
+		launch_ami=$AMI_OREGON_64
+		;;
+	*)
+		usage
+		exit 1
+		;;
+esac
+
+
+shift
+until [[ $# == 0 ]]; do
+	key="$1"
+	case $key in
+		-a)
+			shift
+			IFS=',' read -a additions <<< "$1"
+			;;
+		-h|--help)
+			usage
+			exit 0
+			;;
+		*)
+			echo "Unknown flag $key"
+			exit 1 
+			;;
+	esac
+	shift
+done
+
+
+# All security groups
+security_groups=( "${DEFAULT_GROUPS[@]}" "${additions[@]}" )
+
+# Uppercase all elements:
+security_groups=( "${security_groups[@]^^}" )
+
+# Make sure they are valid groups
+for arg in ${security_groups[*]}; do
+	match=false
+	for valid in ${ALLOWED_SECURITY_GROUPS[*]}; do
+		if [ $arg == $valid ]; then
+		match=true
+		break;
+		fi
+	done
+	if ! $match; then
+		echo "$arg is not a valid security group."
+		exit 1
+	fi
+done
+
+
+group_list="${security_groups[@]:0}"
+echo "Launch AMI: $launch_ami"
+echo "Size: $size"
+echo "Security groups: $group_list"
+echo "booting... "
+aws ec2 run-instances --image-id $launch_ami \
+					  --count 1 \
+					  --placement AvailabilityZone=$AZ \
+					  --instance-type $size \
+					  --user-data "file://$SCRIPT_DIR/bootstrap_min.userdata" \
+					  --security-groups $group_list
+
