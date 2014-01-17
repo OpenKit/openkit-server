@@ -9,14 +9,15 @@ module UnicornHelper
     test("[ -e #{f} ]")
   end
 
-  def contents_of_file(f)
-    capture :cat, f
+  def contents_of(file)
+    return nil unless file_exists?(file)
+    capture :cat, file
   end
 
-  def kill(pid)
+  def kill(pid, signal)
     begin
-      execute :kill, "-s QUIT", pid
-      info "Sent QUIT"
+      execute :kill, "-s #{signal}", pid
+      info "Sent #{signal}"
     rescue => e
       error "Something went wrong: #{e}"
     end

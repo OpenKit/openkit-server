@@ -3,7 +3,6 @@ include UnicornHelper
 
 # cap <stage> unicorn:upgrade
 # cap <stage> unicorn:ps
-# cap <stage> unicorn:shutdown_old
 #
 # Signal reference here:
 #   http://unicorn.bogomips.org/SIGNALS.html
@@ -27,13 +26,11 @@ namespace :unicorn do
   desc 'graceful shutdown'
   task :graceful_shutdown do
     on roles(:app), in: :sequence do |host|
-      f = fetch :pid_file
-      if file_exists? f
-        pid = contents_of_file(f)
-        info "killing pid #{pid} on host #{host}"
-        kill(pid)
+      pid = contents_of fetch(:pid_file)
+      if pid
+        kill pid, 'QUIT'
       else
-        error "can't find pid file at #{p} on #{host}"
+        error "No unicorn.pid found on #{host}, not shutting down."
       end
     end
   end
@@ -41,10 +38,16 @@ namespace :unicorn do
   desc 'prepare the unicorns'
   task :upgrade do
     on roles(:app) do |host|
-      f = fetch :pid_file
-      if file_exists? f
-        pid = contents_of_file(f)
-        execute :kill, "-s USR2", pid
+      pid = contents_of fetch(:pid_file)
+      if pid
+        kill pid, 'USR2'
+        sleep 5
+        old_pid = contents_of fetch(:old_pid_file)
+        if old_pid
+          kill old_pid, 'QUIT'
+        else
+          error "Can't shutdown old master!  You now have some workers with stale application code"
+        end
       else
         clean_start fetch(:stage)
       end
@@ -54,12 +57,11 @@ namespace :unicorn do
   desc 'shutdown old'
   task :shutdown_old do
     on roles(:app) do |host|
-      f = fetch :old_pid_file
-      if file_exists? f
-        pid = contents_of_file(f)
-        execute :kill, "-s QUIT", pid
+      old_pid = contents_of fetch(:old_pid_file)
+      if old_pid
+        kill old_pid, 'QUIT'
       else
-        warn "There is no old pid file at #{f} on #{host}.  Skipping..."
+        warn "No unicorn.pid.oldbin found on #{host}, skipping."
       end
     end
   end

@@ -25,4 +25,5 @@ set :keep_releases, 10
 
 namespace :deploy do
   after :finishing, 'deploy:cleanup'
+  after :finishing, 'unicorn:upgrade'
 end
