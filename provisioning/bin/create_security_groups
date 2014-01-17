@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# 
+# Dependencies:
+#  * http://aws.amazon.com/cli
+#
+
+aws ec2 create-security-group --group-name OK_NETWORK --description "Apply to all instances"
+aws ec2 authorize-security-group-ingress --source-group OK_NETWORK --group-name OK_NETWORK --protocol tcp --port 22
+aws ec2 authorize-security-group-ingress --source-group OK_NETWORK --group-name OK_NETWORK --protocol tcp --port 3306
+aws ec2 authorize-security-group-ingress --source-group OK_NETWORK --group-name OK_NETWORK --protocol tcp --port 6379
+aws ec2 authorize-security-group-ingress --source-group OK_NETWORK --group-name OK_NETWORK --protocol tcp --port 80
+aws ec2 authorize-security-group-ingress --source-group OK_NETWORK --group-name OK_NETWORK --protocol tcp --port 443
+
+aws ec2 create-security-group --group-name SSH --description "public ssh"
+aws ec2 authorize-security-group-ingress --group-name SSH --protocol tcp --cidr 0.0.0.0/0 --port 22
+aws ec2 create-security-group --group-name HTTP --description "public http"
+aws ec2 authorize-security-group-ingress --group-name HTTP --protocol tcp --cidr 0.0.0.0/0 --port 80
+aws ec2 create-security-group --group-name HTTPS --description "public https"
+aws ec2 authorize-security-group-ingress --group-name HTTPS --protocol tcp --cidr 0.0.0.0/0 --port 443
