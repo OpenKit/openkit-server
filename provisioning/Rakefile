@@ -1,0 +1,20 @@
+setup_deps = [
+  :system_dependency_check,
+  :write_bootstrap_file
+]
+
+task :setup => setup_deps do
+    puts "You are now ready to launch instances with bin/boot_instance"
+end
+
+task :system_dependency_check do
+  require_relative 'lib/dependency_check'
+  DependencyCheck.new.run
+end
+
+task :write_bootstrap_file do
+  require_relative 'lib/bootstrap_file_writer'
+  BootstrapFileWriter.new.run
+end
+
+task :default => ['setup']

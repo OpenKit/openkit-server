@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "<%= @public_key %>" >> /home/ec2-user/.ssh/authorized_keys
+yum update -y
+
+# Prepare for ssh forward agent across sudo
+# echo 'Defaults    env_keep += SSH_AUTH_SOCK' >> /etc/sudoers
+
+# Notify <%= @email %> that we're done.
+PUBLIC_HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/public-hostname)
+sendmail -t <<EOM
+to:<%= @email %>
+subject:Server Bootstrapped
+Instance is up.  Access with:
+ssh ec2-user@$PUBLIC_HOSTNAME
+EOM

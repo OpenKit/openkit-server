@@ -1,0 +1,9 @@
+GEM
+  specs:
+    colorize (0.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  colorize

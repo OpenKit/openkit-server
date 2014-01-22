@@ -113,6 +113,14 @@ for arg in ${security_groups[*]}; do
 	fi
 done
 
+bootstrap_file="$SCRIPT_DIR/../tmp/bootstrap_min.userdata"
+
+if [ ! -e $bootstrap_file ]; then
+	echo "No bootstrap file, did you run rake?"
+	exit 1
+fi
+
+
 
 group_list="${security_groups[@]:0}"
 echo "Launch AMI: $launch_ami"
@@ -123,6 +131,6 @@ aws ec2 run-instances --image-id $launch_ami \
 					  --count 1 \
 					  --placement AvailabilityZone=$AZ \
 					  --instance-type $size \
-					  --user-data "file://$SCRIPT_DIR/bootstrap_min.userdata" \
+					  --user-data "file://$SCRIPT_DIR/../tmp/bootstrap_min.userdata" \
 					  --security-groups $group_list
 

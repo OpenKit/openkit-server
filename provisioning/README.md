@@ -17,4 +17,6 @@ One time configuration:
 
 Boot an instance: 
 
-	$ bin/boot_instance small -a HTTP
+    $ bundle install
+    $ rake
+    $ bin/boot_instance small -a HTTP

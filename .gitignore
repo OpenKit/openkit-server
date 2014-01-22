@@ -15,3 +15,5 @@ dashboard/spec/tmp/*
 rerun.txt
 pickle-email-*.html
 .zeus.sock
+tmp/
+system.yml
