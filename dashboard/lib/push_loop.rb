@@ -38,7 +38,7 @@ class PushLoop
           ApplePush::Sandbox.deliver(token, payload, pem_path)
         else
           puts '------sending to production'
-          # ApplePush::Production.deliver(token, payload, pem_path)
+          ApplePush::Production.deliver(token, payload, pem_path)
         end
       end
     end
