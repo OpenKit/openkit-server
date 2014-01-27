@@ -49,11 +49,11 @@ case $1 in
 		launch_ami=$AMI_OREGON_32
 		;;
 	medium)
-		size="m1.medium"
-		launch_ami=$AMI_OREGON_32
+		size="m3.medium"
+		launch_ami=$AMI_OREGON_64
 		;;
 	large)
-		size="m1.large"
+		size="m3.large"
 		launch_ami=$AMI_OREGON_64
 		;;
 	xlarge)
