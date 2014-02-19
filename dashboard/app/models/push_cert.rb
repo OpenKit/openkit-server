@@ -41,7 +41,7 @@ class PushCert
 
   def bundle_identifier
     begin
-      File.read(pem_path).scan(/^subject=.*/)[0].split("\/").detect{|x| x=~/^UID*/}.split("=")[1]
+      File.read(pem_path, :encoding => "ISO-8859-1").scan(/^subject=.*/)[0].split("\/").detect{|x| x=~/^UID*/}.split("=")[1]
     rescue
       nil
     end
