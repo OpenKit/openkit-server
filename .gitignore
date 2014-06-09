@@ -17,3 +17,4 @@ pickle-email-*.html
 .zeus.sock
 tmp/
 system.yml
+provisioning/tmp/

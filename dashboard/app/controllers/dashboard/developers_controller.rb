@@ -15,12 +15,7 @@ class DevelopersController < ApplicationController
   end
 
   def create
-    @developer = Developer.new(params[:developer])
-    if @developer.save
-      redirect_to root_url, notice: 'Developer was successfully created.'
-    else
-      render action: "new"
-    end
+    render text: "Sorry, OpenKit has been shutdown and is not accepting new users."
   end
 
   def update
